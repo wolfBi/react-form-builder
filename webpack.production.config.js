@@ -1,12 +1,14 @@
 var path = require('path');
-var webpack = require( 'webpack');
+var webpack = require('webpack');
 
 module.exports = {
-  entry: './src/index.jsx',
-
+  entry: {
+    'react-form-builder': './src/index.jsx'
+  },
+  devtool: '#cheap-module-source-map',
   output: {
     path: path.resolve('./dist'),
-    filename: 'app.js',
+    filename: '[name].js',
     library: 'ReactFormBuilder',
     libraryTarget: 'umd'
   },
@@ -28,7 +30,6 @@ module.exports = {
       "jquery": path.join(__dirname, "./jquery-stub.js")
     }
   },
-
   plugins: [
     new webpack.optimize.UglifyJsPlugin({
       compress: {
@@ -43,7 +44,7 @@ module.exports = {
         exclude: /node_modules/,
         test: /\.js|.jsx?$/,
         use: [
-          { loader: 'babel-loader' }
+          {loader: 'babel-loader'}
         ]
       },
       {
@@ -57,8 +58,8 @@ module.exports = {
           },
           {
             loader: 'sass-loader', options: {
-              includePaths: ['./node_modules']
-            }
+            includePaths: ['./node_modules']
+          }
           }
         ]
       },

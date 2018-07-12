@@ -1,5 +1,5 @@
 import React from 'react';
-import PropTypes from 'prop-types'; 
+import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
 import cx from 'classnames';
 
@@ -43,7 +43,7 @@ export default class StarRating extends React.Component {
   getStars() {
     var stars = '';
     var numRating = this.props.ratingAmount;
-    for(var i = 0; i < numRating; i++) {
+    for (var i = 0; i < numRating; i++) {
       stars += '\u2605';
     }
     return stars;
@@ -92,7 +92,7 @@ export default class StarRating extends React.Component {
 
   getWidthFromValue(val) {
     var min = this.min,
-        max = this.max;
+      max = this.max;
     if (val <= min || min === max) {
       return 0;
     }
@@ -115,7 +115,7 @@ export default class StarRating extends React.Component {
 
   calculate(pos) {
     var val = this.getValueFromPosition(pos),
-        width = this.getWidthFromValue(val);
+      width = this.getWidthFromValue(val);
 
     width += '%';
     return {width, val};
@@ -135,7 +135,8 @@ export default class StarRating extends React.Component {
     return (
       <svg className="react-star-rating__star" viewBox="0 0 286 272" version="1.1" xmlns="http://www.w3.org/2000/svg">
         <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-          <polygon id="star-flat" points="143 225 54.8322122 271.352549 71.6707613 173.176275 0.341522556 103.647451 98.9161061 89.3237254 143 0 187.083894 89.3237254 285.658477 103.647451 214.329239 173.176275 231.167788 271.352549 "></polygon>
+          <polygon id="star-flat"
+                   points="143 225 54.8322122 271.352549 71.6707613 173.176275 0.341522556 103.647451 98.9161061 89.3237254 143 0 187.083894 89.3237254 285.658477 103.647451 214.329239 173.176275 231.167788 271.352549 "></polygon>
         </g>
       </svg>
     );
@@ -225,20 +226,22 @@ export default class StarRating extends React.Component {
     if (this.state.editing) {
       starRating = (
         <div ref={c => this.node = c}
-          className="rating-container rating-gly-star"
-          data-content={this.state.glyph}
-          onMouseMove={this.handleMouseMove.bind(this)}
-          onMouseLeave={this.handleMouseLeave.bind(this)}
-          onClick={this.handleClick.bind(this)}>
+             className="rating-container rating-gly-star"
+             data-content={this.state.glyph}
+             onMouseMove={this.handleMouseMove.bind(this)}
+             onMouseLeave={this.handleMouseLeave.bind(this)}
+             onClick={this.handleClick.bind(this)}>
           <div className="rating-stars" data-content={this.state.glyph} style={{width: this.state.pos}}></div>
-          <input type="number" name={this.props.name} value={this.state.ratingCache.rating} style={{display: 'none !important'}} min={this.min} max={this.max} readOnly />
+          <input type="number" name={this.props.name} value={this.state.ratingCache.rating}
+                 style={{display: 'none !important'}} min={this.min} max={this.max} readOnly/>
         </div>
       );
     } else {
       starRating = (
         <div ref={c => this.node = c} className="rating-container rating-gly-star" data-content={this.state.glyph}>
           <div className="rating-stars" data-content={this.state.glyph} style={{width: this.state.pos}}></div>
-          <input type="number" name={this.props.name} value={this.state.ratingCache.rating} style={{display: 'none !important'}} min={this.min} max={this.max} readOnly />
+          <input type="number" name={this.props.name} value={this.state.ratingCache.rating}
+                 style={{display: 'none !important'}} min={this.min} max={this.max} readOnly/>
         </div>
       );
     }
@@ -267,6 +270,7 @@ StarRating.propTypes = {
 StarRating.defaultProps = {
   step: 0.5,
   ratingAmount: 5,
-  onRatingClick() {},
+  onRatingClick() {
+  },
   disabled: false
 };

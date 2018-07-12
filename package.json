@@ -1,15 +1,23 @@
 {
-  "name": "react-form-builder2",
-  "version": "0.0.7",
+  "name": "react-form-builder3",
+  "version": "0.0.1",
   "description": "A complete form builder for react.",
-  "main": "dist/app.js",
+  "main": "./lib/index.js",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/kiho/react-form-builder.git"
+    "url": "git+https://github.com/wolfBi/react-form-builder.git"
   },
   "files": [
-    "dist"
+    "README.md",
+    "lib/",
+    "dist/",
+    "css/"
+  ],
+  "tags": [
+    "react form",
+    "form builder",
+    "react form builder"
   ],
   "keywords": [
     "react",
@@ -20,7 +28,7 @@
     "drag",
     "drop"
   ],
-  "author": "Jason Kadrmas",
+  "author": "Mel Bi",
   "dependencies": {
     "classnames": "^2.2.5",
     "fbemitter": "^2.1.1",

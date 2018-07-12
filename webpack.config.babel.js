@@ -23,7 +23,7 @@ export default {
         exclude: /node_modules/,
         test: /\.js|.jsx?$/,
         use: [
-          { loader: 'babel-loader' }
+          {loader: 'babel-loader'}
         ]
       },
       {
@@ -37,8 +37,8 @@ export default {
           },
           {
             loader: 'sass-loader', options: {
-              includePaths: ['./node_modules']
-            }
+            includePaths: ['./node_modules']
+          }
           }
         ]
       },
@@ -49,9 +49,9 @@ export default {
     host: "localhost",
     historyApiFallback: true,
     headers: {
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, PATCH, OPTIONS",
-        "Access-Control-Allow-Headers": "X-Requested-With, content-type, Authorization"
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, PATCH, OPTIONS",
+      "Access-Control-Allow-Headers": "X-Requested-With, content-type, Authorization"
     },
     watchOptions: {aggregateTimeout: 300, poll: 1000},
     contentBase: './public',

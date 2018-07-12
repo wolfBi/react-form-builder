@@ -1,12 +1,13 @@
 /**
-  * <Form />
-  */
+ * <Form />
+ */
 
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {EventEmitter} from 'fbemitter';
 import FormValidator from './form-validator';
-import {Header,Paragraph,Label,LineBreak,TextInput,NumberInput,TextArea,Dropdown,Image,Checkboxes,DatePicker,RadioButtons,Rating,Tags,Signature,HyperLink,Download,Camera,Range} from './form-elements';
+import {Image, Checkboxes, Signature, Download} from './form-elements';
+//Header,Paragraph,Label,LineBreak,TextInput,NumberInput,TextArea,Dropdown,DatePicker,RadioButtons,Rating,Tags,HyperLink,Camera,Range,
 import * as FormElements from './form-elements';
 
 export default class ReactForm extends React.Component {
@@ -50,7 +51,7 @@ export default class ReactForm extends React.Component {
           if (item.element === 'Tags') {
             $item = {};
             $item.value = ref.inputField.current.state.value
-          } else if(item.element === 'DatePicker') {
+          } else if (item.element === 'DatePicker') {
             $item = {};
             $item.value = ref.inputField.current.state.value
           } else {
@@ -95,7 +96,7 @@ export default class ReactForm extends React.Component {
           if (item.element === 'Tags') {
             $item = {};
             $item.value = ref.inputField.current.state.value
-          } else if(item.element === 'DatePicker') {
+          } else if (item.element === 'DatePicker') {
             $item = {};
             $item.value = ref.inputField.current.state.value
           } else {
@@ -144,7 +145,7 @@ export default class ReactForm extends React.Component {
     let errors = [];
     let data_items = this.props.data;
 
-    if(this.props.display_short) {
+    if (this.props.display_short) {
       data_items = this.props.data.filter((i) => i.alternateForm === true);
     }
 
@@ -167,19 +168,19 @@ export default class ReactForm extends React.Component {
 
   getInputElement(item) {
     const Input = FormElements[item.element];
-    return (<Input 
+    return (<Input
       handleChange={this.handleChange}
       ref={c => this.inputs[item.field_name] = c}
       mutable={true}
       key={`form_${item.id}`}
       data={item}
       read_only={this.props.read_only}
-      defaultValue={this.props.answer_data[item.field_name]} />);
+      defaultValue={this.props.answer_data[item.field_name]}/>);
   }
 
   getSimpleElement(item) {
     const Element = FormElements[item.element];
-    return (<Element mutable={true} key={`form_${item.id}`} data={item} />);
+    return (<Element mutable={true} key={`form_${item.id}`} data={item}/>);
   }
 
   render() {
@@ -195,7 +196,7 @@ export default class ReactForm extends React.Component {
       }
     });
 
-    let items = data_items.map( item => {
+    let items = data_items.map(item => {
       switch (item.element) {
 
         case 'TextInput':
@@ -209,13 +210,16 @@ export default class ReactForm extends React.Component {
         case 'Range':
           return this.getInputElement(item);
         case 'Checkboxes':
-          return <Checkboxes ref={c => this.inputs[item.field_name] = c} read_only={this.props.read_only} handleChange={this.handleChange} mutable={true} key={`form_${item.id}`} data={item} defaultValue={this._checkboxesDefaultValue(item)} />
-         case 'Image':
-          return <Image ref={c => this.inputs[item.field_name] = c} handleChange={this.handleChange} mutable={true} key={`form_${item.id}`} data={item} defaultValue={this.props.answer_data[item.field_name]} />
+          return <Checkboxes ref={c => this.inputs[item.field_name] = c} read_only={this.props.read_only}
+                             handleChange={this.handleChange} mutable={true} key={`form_${item.id}`} data={item}
+                             defaultValue={this._checkboxesDefaultValue(item)}/>
+        case 'Image':
+          return <Image ref={c => this.inputs[item.field_name] = c} handleChange={this.handleChange} mutable={true}
+                        key={`form_${item.id}`} data={item} defaultValue={this.props.answer_data[item.field_name]}/>
         case 'Download':
-          return <Download download_path={this.props.download_path} mutable={true} key={`form_${item.id}`} data={item} />
-        default: 
-          return this.getSimpleElement(item);  
+          return <Download download_path={this.props.download_path} mutable={true} key={`form_${item.id}`} data={item}/>
+        default:
+          return this.getSimpleElement(item);
       }
     })
 
@@ -228,23 +232,24 @@ export default class ReactForm extends React.Component {
 
     return (
       <div>
-        <FormValidator emitter={this.emitter} />
+        <FormValidator emitter={this.emitter}/>
         <div className='react-form-builder-form'>
-          <form encType='multipart/form-data' ref={c => this.form = c} action={this.props.form_action} onSubmit={this.handleSubmit.bind(this)} method={this.props.form_method}>
+          <form encType='multipart/form-data' ref={c => this.form = c} action={this.props.form_action}
+                onSubmit={this.handleSubmit.bind(this)} method={this.props.form_method}>
             { this.props.authenticity_token &&
-              <div style={formTokenStyle}>
-                <input name='utf8' type='hidden' value='&#x2713;' />
-                <input name='authenticity_token' type='hidden' value={this.props.authenticity_token} />
-                <input name='task_id' type='hidden' value={this.props.task_id} />
-              </div>
+            <div style={formTokenStyle}>
+              <input name='utf8' type='hidden' value='&#x2713;'/>
+              <input name='authenticity_token' type='hidden' value={this.props.authenticity_token}/>
+              <input name='task_id' type='hidden' value={this.props.task_id}/>
+            </div>
             }
             {items}
             <div className='btn-toolbar'>
               { !this.props.hide_actions &&
-                <input type='submit' className='btn btn-school btn-big btn-agree' value={actionName} />
+              <input type='submit' className='btn btn-school btn-big btn-agree' value={actionName}/>
               }
               { !this.props.hide_actions && this.props.back_action &&
-                <a href={this.props.back_action} className='btn btn-default btn-cancel btn-big'>{backName}</a>
+              <a href={this.props.back_action} className='btn btn-default btn-cancel btn-big'>{backName}</a>
               }
             </div>
           </form>
@@ -254,4 +259,4 @@ export default class ReactForm extends React.Component {
   }
 }
 
-ReactForm.defaultProps = { validateForCorrectness: false };
+ReactForm.defaultProps = {validateForCorrectness: false};

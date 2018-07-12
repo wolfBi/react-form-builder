@@ -8,14 +8,14 @@ import * as variables from './variables'
 require('./css/application.css.scss');
 
 ReactDOM.render(
-  <FormBuilder.ReactFormBuilder variables={variables} 
-    url='/api/formdata'
-    saveUrl='/api/formdata'
+  <FormBuilder.ReactFormBuilder variables={variables}
+                                url='/api/formdata'
+                                saveUrl='/api/formdata'
   />,
   document.getElementById('form-builder')
 )
 
 ReactDOM.render(
-  <DemoBar variables={variables} />,
+  <DemoBar variables={variables}/>,
   document.getElementById('demo-bar')
 )

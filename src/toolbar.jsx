@@ -1,6 +1,6 @@
 /**
-  * <Toolbar />
-  */
+ * <Toolbar />
+ */
 
 import React from 'react';
 import ToolbarItem from './toolbar-draggable-item';
@@ -20,7 +20,7 @@ export default class Toolbar extends React.Component {
   }
 
   static _defaultItemOptions(element) {
-    switch(element) {
+    switch (element) {
       case "Dropdown":
         return [
           {value: '', text: '', key: 'dropdown_option_' + ID.uuid()},
@@ -222,7 +222,7 @@ export default class Toolbar extends React.Component {
       required: false
     };
 
-    if(item.static) {
+    if (item.static) {
       elementOptions['bold'] = false;
       elementOptions['italic'] = false;
     }
@@ -287,7 +287,8 @@ export default class Toolbar extends React.Component {
         <ul>
           {
             this.state.items.map(item => {
-              return <ToolbarItem data={item} key={item.key} onClick={this._onClick.bind(this, item)} onCreate={this.create} />;
+              return <ToolbarItem data={item} key={item.key} onClick={this._onClick.bind(this, item)}
+                                  onCreate={this.create}/>;
             })
           }
         </ul>

@@ -1,6 +1,6 @@
 /**
-  * <Preview />
-  */
+ * <Preview />
+ */
 
 import React from 'react';
 import ElementStore from './stores/ElementStore';
@@ -10,7 +10,7 @@ import FormElementsEdit from './form-elements-edit';
 import * as SortableFormElements from './sortable-form-elements';
 
 import update from 'immutability-helper';
-import { DragDropContext } from 'react-dnd';
+import {DragDropContext} from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 
 export default class Preview extends React.Component {
@@ -41,7 +41,7 @@ export default class Preview extends React.Component {
     let data = this.state.data;
     let found = false;
 
-    for(var i=0, len=data.length; i < len; i++) {
+    for (var i = 0, len = data.length; i < len; i++) {
       if (element.id === data[i].id) {
         data[i] = element;
         found = true;
@@ -72,21 +72,21 @@ export default class Preview extends React.Component {
   _onDestroy(item) {
     ElementActions.deleteElement(item);
   }
-  
+
   insertCard(item, hoverIndex) {
-    const { data } = this.state
+    const {data} = this.state
     data.splice(hoverIndex, 0, item)
     this.saveData(item, hoverIndex, hoverIndex)
   }
 
   moveCard(dragIndex, hoverIndex) {
-    const { data } = this.state
-		const dragCard = data[dragIndex]
+    const {data} = this.state
+    const dragCard = data[dragIndex]
     this.saveData(dragCard, dragIndex, hoverIndex)
   }
 
   saveData(dragCard, dragIndex, hoverIndex) {
-    const newData =	update(this.state, {
+    const newData = update(this.state, {
       data: {
         $splice: [[dragIndex, 1], [hoverIndex, 0, dragCard]],
       },
@@ -97,12 +97,17 @@ export default class Preview extends React.Component {
 
   getElement(item, index) {
     const SortableFormElement = SortableFormElements[item.element]
-    return <SortableFormElement id={item.id} index={index} moveCard={this.moveCard} insertCard={this.insertCard} mutable={false}  parent={this.props.parent} editModeOn={this.props.editModeOn} isDraggable={true} key={item.id} sortData={item.id} data={item} _onDestroy={this._onDestroy} />
+    return <SortableFormElement id={item.id} index={index} moveCard={this.moveCard} insertCard={this.insertCard}
+                                mutable={false} parent={this.props.parent} editModeOn={this.props.editModeOn}
+                                isDraggable={true} key={item.id} sortData={item.id} data={item}
+                                _onDestroy={this._onDestroy}/>
   }
 
   render() {
     let classes = this.props.className;
-    if (this.props.editMode) { classes += ' is-editing'; }
+    if (this.props.editMode) {
+      classes += ' is-editing';
+    }
     let items = this.state.data.map((item, index) => {
       return this.getElement(item, index);
     })
@@ -110,7 +115,9 @@ export default class Preview extends React.Component {
       <div className={classes}>
         <div className="edit-form">
           { this.props.editElement !== null &&
-            <FormElementsEdit showCorrectColumn={this.props.showCorrectColumn} files={this.props.files} manualEditModeOff={this.props.manualEditModeOff} preview={this} element={this.props.editElement} updateElement={this.updateElement} />
+          <FormElementsEdit showCorrectColumn={this.props.showCorrectColumn} files={this.props.files}
+                            manualEditModeOff={this.props.manualEditModeOff} preview={this}
+                            element={this.props.editElement} updateElement={this.updateElement}/>
           }
         </div>
         {/* <SortableContainer items={items} /> */}
@@ -119,4 +126,10 @@ export default class Preview extends React.Component {
     )
   }
 }
-Preview.defaultProps = { showCorrectColumn: false, files: [], editMode: false, editElement: null, className: 'react-form-builder-preview pull-left'}
+Preview.defaultProps = {
+  showCorrectColumn: false,
+  files: [],
+  editMode: false,
+  editElement: null,
+  className: 'react-form-builder-preview pull-left'
+}
