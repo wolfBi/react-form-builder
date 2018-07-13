@@ -33,7 +33,7 @@ export default {
             loader: 'style-loader'
           },
           {
-            loader: 'css-loader', options: {
+            loader: 'css-loader',options: {
               includePaths: ['./node_modules']
             }
           },
@@ -45,8 +45,8 @@ export default {
         ]
       },
       {
-        test: /\.jpg|.gif|.png?$/,
-        use: [ 'file-loader' ]
+        test: /\.(jpg|gif|png)?$/,
+        loader: 'url-loader?limit=4000'
       }
     ]
   },

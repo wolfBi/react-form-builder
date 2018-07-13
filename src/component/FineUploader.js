@@ -1,15 +1,15 @@
 import React, { Component } from 'react';
 import PropTypes from "prop-types";
 import { Col } from "react-bootstrap";
-import Dropzone from 'react-fine-uploader-ta/components/dropzone';
-import FileInput from 'react-fine-uploader-ta/components/file-input';
-import Filename from 'react-fine-uploader-ta/components/filename';
-import Filesize from 'react-fine-uploader-ta/components/filesize';
-import Filestatus from 'react-fine-uploader-ta/components/status';
-import FileDelete from 'react-fine-uploader-ta/components/delete-button';
-import FileRetry from 'react-fine-uploader-ta/components/retry-button';
-import FileCancel from 'react-fine-uploader-ta/components/cancel-button';
-import FineUploaderTraditional from 'react-fine-uploader-ta';
+import Dropzone from 'react-fine-uploader/dropzone';
+import FileInput from 'react-fine-uploader/file-input';
+import Filename from 'react-fine-uploader/filename';
+import Filesize from 'react-fine-uploader/filesize';
+import Filestatus from 'react-fine-uploader/status';
+import FileDelete from 'react-fine-uploader/delete-button';
+import FileRetry from 'react-fine-uploader/retry-button';
+import FileCancel from 'react-fine-uploader/cancel-button';
+import FineUploaderTraditional from 'fine-uploader-wrappers';
 import CommonUtils from "../CommonUtils";
 import HeaderBar from '../header-bar';
 
@@ -28,6 +28,7 @@ export default class FileUploader extends Component{
             completeFiles:[],
             emptyFiles:[],
             submittedFiles: [],
+            completeFilesInfo:[],
             errorMsg:'',
             uploader:this.initUploader(props)
         };
@@ -62,16 +63,17 @@ export default class FileUploader extends Component{
     }
 
     componentWillReceiveProps(nextprops){
-        let  {completeFiles, emptyFiles, submittedFiles } = this.state;
+        let  {completeFiles, emptyFiles, submittedFiles, completeFilesInfo } = this.state;
         if( nextprops.clearAttachs ){
-                completeFiles=[];
-                emptyFiles=[];
-                submittedFiles= [];
+            completeFiles=[];
+            emptyFiles=[];
+            submittedFiles= [];
+            completeFilesInfo=[];
         }
         this.setState({
             completeFiles,
             emptyFiles,
-            submittedFiles,
+            submittedFiles,completeFilesInfo,
             uploader : this.initUploader(nextprops)
         })
 
@@ -91,7 +93,7 @@ export default class FileUploader extends Component{
                 deleteFile: {
                     enabled: !CommonUtils.isEmpty(props.deleteUrl),
                     endpoint: props.deleteUrl,
-                    method:props.method!==undefined&&props.method!==null&&props.method!==''?props.method:'POST'
+                    method:props.method
                 },
                 form:{
                     autoUpload: this.props.autoUpload || false,
@@ -112,7 +114,9 @@ export default class FileUploader extends Component{
                         if(response.success){
                             const completeFiles = this.state.completeFiles;
                             completeFiles.push(id);
-                            this.setState({ completeFiles });
+                            const completeFilesInfo = this.state.completeFilesInfo;
+                            completeFilesInfo.push(response);
+                            this.setState({ completeFiles,completeFilesInfo });
                             if(this.props.onCloseCallback!==undefined){
                                 this.props.onCloseCallback(response);
                             }
@@ -123,9 +127,9 @@ export default class FileUploader extends Component{
                     }
                 },
                 validation:{
-                    allowedExtensions: props.allowedExtensions!==undefined&&props.allowedExtensions!==null?props.allowedExtensions:'',
-                    sizeLimit: props.sizeLimit!==undefined&&props.sizeLimit!==null?props.sizeLimit:100*1024*1024*1024,
-                    itemLimit: props.itemLimit!==undefined&&props.itemLimit!==null?props.itemLimit:10000,
+                    allowedExtensions: props.allowedExtensions,
+                    sizeLimit: props.sizeLimit,
+                    itemLimit: props.itemLimit,
                     allowEmpty:false
                 }
             }
@@ -181,17 +185,18 @@ export default class FileUploader extends Component{
                 <div className={'right_section'+(this.props.dropable?'Drop':'')}>
                     <div>
                         <div>
-                            <FileInput className="file_input" multiple={this.props.multiple?true:false} accept={this.props.accept} uploader={this.state.uploader}>
+                            <FileInput className="file_input" multiple={this.props.multiple} accept={this.props.accept} uploader={this.state.uploader}>
                                 <span className="button blue qq-upload-choose">Browse</span>
                             </FileInput>
                         </div>
-                        <a className='close_button right' onClick={this.closeModal} />
+                      <a className='close_button right' onClick={this.closeModal} >
+                      </a>
                         <div style={{color:'red'}}>{this.state.errorMsg}</div>
                     </div>
                     {this.props.dropable===false?
                         null:
                         <div>
-                            <Dropzone multiple={this.props.multiple?true:false} accept={this.props.accept}
+                            <Dropzone multiple={this.props.multiple} accept={this.props.accept}
                                className="qq-uploader" uploader={this.state.uploader}>
                               {dropFileSection}
                             </Dropzone>
@@ -208,11 +213,11 @@ export default class FileUploader extends Component{
         </div>:false;
         let filesListDiv = !this.props.hiddenFilesListDiv ?
             <div className="clearfix">
-                <Col xs={4} md={2} className="padding0Px " >
-                    <span className={"file-attachment"} onClick={this.addFileClick}>{this.props.addFileText ?this.props.addFileText : 'Add File'}{form}</span>
+                <Col xs={4} >
+                    <span className={"file-attachment btn btn-info"} onClick={this.addFileClick}>{this.props.addFileText }{form}</span>
                     { modalDialog }
                 </Col>
-                <Col id='dropzoneOut' xs={8} md={10} className="padding0Px " style={{marginTop:'5px'}}>
+                <Col id='dropzoneOut' xs={8} className="padding0Px " style={{marginTop:'5px'}}>
                     {this.state.submittedFiles.map(id => (
                         <div className="attachments-list" key={id}>
                             <div className="attachment editable">
@@ -235,15 +240,15 @@ export default class FileUploader extends Component{
             </div>
             :
             <span >
-                <span className="file-attachment" onClick={this.addFileClick}>{this.props.addFileText ?this.props.addFileText : 'Add File'}{form}</span>
+                <span className="file-attachment btn btn-info	" onClick={this.addFileClick}>{this.props.addFileText}{form}</span>
                 { modalDialog }
             </span>
         let renderReturn =
-            this.props.directlyUpload ?<span onClick={()=>{
+            this.props.directlyUpload ?<span className="file-attachment btn btn-info	" onClick={()=>{
                 let directlyUploadFileInput = document.getElementById(this.props.directlyUploadFileInputID);
                 directlyUploadFileInput.click();
             }}>
-                {this.props.addFileText ?this.props.addFileText : 'Upload File'}
+                {this.props.addFileText}
                 <div display style={{display:'none'}}>
                     {form}
                     <FileInput className="file_input" style={{display:'none'}} id={this.props.directlyUploadFileInputID} multiple={this.props.multiple?true:false} accept={this.props.accept} uploader={this.state.uploader}>
@@ -270,7 +275,7 @@ export default class FileUploader extends Component{
                 { (this.props.data.hasOwnProperty('required') && this.props.data.required === true && !this.props.read_only) &&
                 <span className="label-required label label-danger">Required</span>
                 }
-                <input type="hidden" name={this.props.data.field_name } value={JSON.stringify(this.state.files)}/>
+                <input type="hidden" name={this.props.data.field_name } value={JSON.stringify(this.state.completeFilesInfo)}/>
               </label>
 
               <div className="image-upload-container">
@@ -282,13 +287,15 @@ export default class FileUploader extends Component{
     }
     static defaultProps = {
         directlyUploadFileInputID:"directlyUploadFileInput",
+        allowedExtensions:[],
+        addFileText : 'Add File',
         method:"POST",
         itemLimit:20,
         sizeLimit:20*1024*1024*1024,
         hiddenFilesListDiv: false,
         clearAttachs: false,
         multiple: false,
-        dropable: false,
+        dropable: true,
         autoUpload: true,
         directlyUpload: false,
         needForm: false,
@@ -310,7 +317,7 @@ export default class FileUploader extends Component{
         needForm: PropTypes.bool,
         formData: PropTypes.object,
         accept: PropTypes.object,
-        addFileText: PropTypes.object,
+        addFileText: PropTypes.any,
         onCloseCallback: PropTypes.func,
         onAllCompleteCallback: PropTypes.func,
     }
