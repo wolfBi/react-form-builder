@@ -14,7 +14,7 @@ import {
   Image,
   Rating,
   Tags,
-  Signature,
+  UploadFile,
   HyperLink,
   Download,
   Camera,
@@ -31,7 +31,6 @@ FormElements.TextInput = SortableElement(TextInput);
 FormElements.NumberInput = SortableElement(NumberInput);
 FormElements.TextArea = SortableElement(TextArea);
 FormElements.Dropdown = SortableElement(Dropdown);
-// FormElements.Signature = Signature);
 FormElements.Checkboxes = SortableElement(Checkboxes);
 FormElements.DatePicker = SortableElement(DatePicker);
 FormElements.RadioButtons = SortableElement(RadioButtons);
@@ -41,6 +40,7 @@ FormElements.Tags = SortableElement(Tags);
 FormElements.HyperLink = SortableElement(HyperLink);
 FormElements.Download = SortableElement(Download);
 FormElements.Camera = SortableElement(Camera);
+FormElements.UploadFile = SortableElement(UploadFile);
 FormElements.Range = Range;
 
 module.exports = FormElements;

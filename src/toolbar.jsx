@@ -63,6 +63,7 @@ export default class Toolbar extends React.Component {
         key: 'Label',
         name: 'Label',
         static: true,
+        compWidth:'12',
         icon: 'fa fa-font',
         content: 'Placeholder Text...'
       },
@@ -80,9 +81,37 @@ export default class Toolbar extends React.Component {
         icon: 'fa fa-arrows-h'
       },
       {
+        key: 'TextInput',
+        canHaveAnswer: true,
+        name: 'Text Input',
+        compWidth:'12',
+        label: 'Placeholder Label',
+        icon: 'fa fa-font',
+        field_name: 'text_input_'
+      },
+      {
+        key: 'NumberInput',
+        canHaveAnswer: true,
+        name: 'Number Input',
+        compWidth:'12',
+        label: 'Placeholder Label',
+        icon: 'fa fa-plus',
+        field_name: 'number_input_'
+      },
+      {
+        key: 'TextArea',
+        canHaveAnswer: true,
+        compWidth:'12',
+        name: 'TextArea',
+        label: 'Placeholder Label',
+        icon: 'fa fa-text-height',
+        field_name: 'text_area_'
+      },
+      {
         key: 'Dropdown',
         canHaveAnswer: true,
         name: 'Dropdown',
+        compWidth:'12',
         icon: 'fa fa-caret-square-o-down',
         label: 'Placeholder Label',
         field_name: 'dropdown_',
@@ -91,7 +120,8 @@ export default class Toolbar extends React.Component {
       {
         key: 'Tags',
         canHaveAnswer: true,
-        name: 'Tags',
+        name: 'ListBox',
+        compWidth:'12',
         icon: 'fa fa-tags',
         label: 'Placeholder Label',
         field_name: 'tags_',
@@ -101,6 +131,7 @@ export default class Toolbar extends React.Component {
         key: 'Checkboxes',
         canHaveAnswer: true,
         name: 'Checkboxes',
+        compWidth:'12',
         icon: 'fa fa-check-square-o',
         label: 'Placeholder Label',
         field_name: 'checkboxes_',
@@ -109,55 +140,17 @@ export default class Toolbar extends React.Component {
       {
         key: 'RadioButtons',
         canHaveAnswer: true,
-        name: 'Multiple Choice',
+        name: 'Radio Buttons',
+        compWidth:'12',
         icon: 'fa fa-dot-circle-o',
         label: 'Placeholder Label',
         field_name: 'radio_buttons_',
         options: []
       },
       {
-        key: 'TextInput',
-        canHaveAnswer: true,
-        name: 'Text Input',
-        label: 'Placeholder Label',
-        icon: 'fa fa-font',
-        field_name: 'text_input_'
-      },
-      {
-        key: 'NumberInput',
-        canHaveAnswer: true,
-        name: 'Number Input',
-        label: 'Placeholder Label',
-        icon: 'fa fa-plus',
-        field_name: 'number_input_'
-      },
-      {
-        key: 'TextArea',
-        canHaveAnswer: true,
-        name: 'Multi-line Input',
-        label: 'Placeholder Label',
-        icon: 'fa fa-text-height',
-        field_name: 'text_area_'
-      },
-      {
-        key: 'Image',
-        name: 'Image',
-        label: '',
-        icon: 'fa fa-photo',
-        field_name: 'image_',
-        src: ''
-      },
-      {
-        key: 'Rating',
-        canHaveAnswer: true,
-        name: 'Rating',
-        label: 'Placeholder Label',
-        icon: 'fa fa-star',
-        field_name: 'rating_'
-      },
-      {
         key: 'DatePicker',
         canDefaultToday: true,
+        compWidth:'12',
         canReadOnly: true,
         name: 'Date',
         icon: 'fa fa-calendar',
@@ -165,34 +158,54 @@ export default class Toolbar extends React.Component {
         field_name: 'date_picker_'
       },
       {
-        key: 'Signature',
-        canReadOnly: true,
-        name: 'Signature',
-        icon: 'fa fa-pencil-square-o',
-        label: 'Signature',
-        field_name: 'signature_'
-      },
-      {
         key: 'HyperLink',
         name: 'Web site',
+        compWidth:'12',
         icon: 'fa fa-link',
         static: true,
         content: 'Placeholder Web site link ...',
         href: 'http://www.example.com'
       },
       {
+        key: 'Image',
+        name: 'Image',
+        compWidth:'12',
+        label: '',
+        icon: 'fa fa-photo',
+        field_name: 'image_',
+        src: ''
+      },
+      {
+        key: 'Camera',
+        name: 'Camera',
+        compWidth:'12',
+        icon: 'fa fa-camera',
+        label: 'Placeholder Label',
+        field_name: 'camera_'
+      },
+      {
+        key: 'UploadFile',
+        name: 'File Upload',
+        compWidth:'12',
+        icon: 'fa fa-upload',
+        label: 'Placeholder Label',
+        field_name: 'uploadfile_',
+        addFileText:"Add Attachments"
+      },
+      {
         key: 'Download',
-        name: 'File Attachment',
-        icon: 'fa fa-file',
+        name: 'File Download',
+        compWidth:'12',
+        icon: 'fa fa-download',
         static: true,
         content: 'Placeholder file name ...',
-        field_name: 'download_',
         file_path: '',
         _href: ''
       },
       {
         key: 'Range',
         name: 'Range',
+        compWidth:'12',
         icon: 'fa fa-sliders',
         label: 'Placeholder Label',
         field_name: 'range_',
@@ -204,12 +217,23 @@ export default class Toolbar extends React.Component {
         max_label: 'Difficult'
       },
       {
-        key: 'Camera',
-        name: 'Camera',
-        icon: 'fa fa-camera',
+        key: 'Rating',
+        canHaveAnswer: true,
+        compWidth:'12',
+        name: 'Rating',
         label: 'Placeholder Label',
-        field_name: 'camera_'
+        icon: 'fa fa-star',
+        field_name: 'rating_'
       }
+      /* ,{
+       key: 'Signature',
+       canReadOnly: true,
+       compWidth:'12',
+       name: 'Signature',
+       icon: 'fa fa-pencil-square-o',
+       label: 'Signature',
+       field_name: 'signature_'
+       }*/
     ]
   }
 
@@ -260,11 +284,14 @@ export default class Toolbar extends React.Component {
       elementOptions['max_label'] = item.max_label;
     }
 
+    if (item.compWidth)
+      elementOptions['compWidth'] = item.compWidth;
+
     if (item.defaultValue)
       elementOptions['defaultValue'] = item.defaultValue;
 
     if (item.field_name)
-      elementOptions['field_name'] = item.field_name + ID.uuid();
+      elementOptions['field_name'] = item.field_name;// + ID.uuid()
 
     if (item.label)
       elementOptions['label'] = item.label;

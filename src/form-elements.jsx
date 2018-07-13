@@ -1,13 +1,15 @@
 import React from 'react';
-import HeaderBar from './header-bar';
-import Select from 'react-select';
-// import SignaturePad from 'react-signature-pad';
-// import SortableItemMixin from 'react-anything-sortable/SortableItemMixin';
-import ReactBootstrapSlider from  'react-bootstrap-slider';
-import ReactDatePicker from 'react-datepicker';
-import StarRating from './star-rating';
 import xss from 'xss';
 import moment from 'moment';
+import update from 'immutability-helper';
+import Select from 'react-select';
+import ReactDatePicker from 'react-datepicker';
+// import SortableItemMixin from 'react-anything-sortable/SortableItemMixin';
+import ReactBootstrapSlider from  'react-bootstrap-slider';
+import HeaderBar from './header-bar';
+import StarRating from './component/star-rating';
+import FineUploader from './component/FineUploader';
+import CommonUtils from './CommonUtils';
 
 let FormElements = {};
 let myxss = new xss.FilterXSS({
@@ -16,6 +18,8 @@ let myxss = new xss.FilterXSS({
     br: [],
     b: [],
     i: [],
+    a: [],
+    ins: [],
     ol: ['style'],
     ul: ['style'],
     li: [],
@@ -41,10 +45,7 @@ class Header extends React.Component {
       classNames += ' italic';
     }
 
-    let baseClasses = 'SortableItem rfb-item';
-    if (this.props.data.pageBreakBefore) {
-      baseClasses += ' alwaysbreak';
-    }
+    let baseClasses = CommonUtils.getElementsClass(this.props.data);
 
     return (
       <div className={baseClasses}>
@@ -75,10 +76,7 @@ class Paragraph extends React.Component {
       classNames += ' italic';
     }
 
-    let baseClasses = 'SortableItem rfb-item';
-    if (this.props.data.pageBreakBefore) {
-      baseClasses += ' alwaysbreak';
-    }
+    let baseClasses = CommonUtils.getElementsClass(this.props.data);
 
     return (
       <div className={baseClasses}>
@@ -109,11 +107,7 @@ class Label extends React.Component {
       classNames += ' italic';
     }
 
-    let baseClasses = 'SortableItem rfb-item';
-    if (this.props.data.pageBreakBefore) {
-      baseClasses += ' alwaysbreak';
-    }
-
+    let baseClasses = CommonUtils.getElementsClass(this.props.data);
     return (
       <div className={baseClasses}>
         { !this.props.mutable &&
@@ -136,10 +130,7 @@ class LineBreak extends React.Component {
   // mixins: [SortableItemMixin],
   render() {
 
-    let baseClasses = 'SortableItem rfb-item';
-    if (this.props.data.pageBreakBefore) {
-      baseClasses += ' alwaysbreak';
-    }
+    let baseClasses = CommonUtils.getElementsClass(this.props.data);
 
     return (
       <div className={baseClasses}>
@@ -175,10 +166,7 @@ class TextInput extends React.Component {
       props.ref = this.inputField;
     }
 
-    let baseClasses = 'SortableItem rfb-item';
-    if (this.props.data.pageBreakBefore) {
-      baseClasses += ' alwaysbreak';
-    }
+    let baseClasses = CommonUtils.getElementsClass(this.props.data);
 
     if (this.props.read_only) {
       props.disabled = "disabled";
@@ -228,14 +216,16 @@ class NumberInput extends React.Component {
       props.ref = this.inputField;
     }
 
+    if (this.props.data.width) {
+      baseClasses += ' col-xs-' + this.props.data.width;
+    } else {
+      baseClasses += ' col-xs-12 ';
+    }
     if (this.props.read_only) {
       props.disabled = "disabled";
     }
 
-    let baseClasses = 'SortableItem rfb-item';
-    if (this.props.data.pageBreakBefore) {
-      baseClasses += ' alwaysbreak';
-    }
+    let baseClasses = CommonUtils.getElementsClass(this.props.data);
 
     return (
       <div className={baseClasses}>
@@ -284,10 +274,7 @@ class TextArea extends React.Component {
       props.ref = this.inputField;
     }
 
-    let baseClasses = 'SortableItem rfb-item';
-    if (this.props.data.pageBreakBefore) {
-      baseClasses += ' alwaysbreak';
-    }
+    let baseClasses = CommonUtils.getElementsClass(this.props.data);
 
     return (
       <div className={baseClasses}>
@@ -335,7 +322,7 @@ class DatePicker extends React.Component {
     this.state = {
       value: value,
       internalValue: internalValue,
-      placeholder: 'mm/dd/yyyy',
+      placeholder: 'MM/DD/YYYY',
       defaultToday: props.data.defaultToday
     };
   }
@@ -343,7 +330,7 @@ class DatePicker extends React.Component {
   handleChange = (dt) => {
     if (dt && dt.target) {
 
-      var placeholder = (dt && dt.target && dt.target.value === '') ? 'mm/dd/yyyy' : '';
+      var placeholder = (dt && dt.target && dt.target.value === '') ? 'MM/DD/YYYY' : '';
       var formattedDate = (dt.target.value) ? moment(dt.target.value).format('YYYY-MM-DD') : '';
 
       this.setState({
@@ -391,10 +378,7 @@ class DatePicker extends React.Component {
       props.disabled = "disabled";
     }
 
-    let baseClasses = 'SortableItem rfb-item';
-    if (this.props.data.pageBreakBefore) {
-      baseClasses += ' alwaysbreak';
-    }
+    let baseClasses = CommonUtils.getElementsClass(this.props.data);
 
     return (
       <div className={baseClasses}>
@@ -446,7 +430,7 @@ class DatePicker extends React.Component {
               className="form-control"
               isClearable={true}
               dateFormat="MM/DD/YYYY"
-              placeholderText='mm/dd/yyyy'/>
+              placeholderText={this.state.placeholder}/>
             }
           </div>
         </div>
@@ -475,10 +459,7 @@ class Dropdown extends React.Component {
       props.disabled = "disabled";
     }
 
-    let baseClasses = 'SortableItem rfb-item';
-    if (this.props.data.pageBreakBefore) {
-      baseClasses += ' alwaysbreak';
-    }
+    let baseClasses = CommonUtils.getElementsClass(this.props.data);
 
     return (
       <div className={baseClasses}>
@@ -511,67 +492,6 @@ class Dropdown extends React.Component {
   }
 }
 
-// let Signature = React.createClass({
-//   // mixins: [SortableItemMixin],
-//   componentDidMount() {
-//     if (this.props.defaultValue !== undefined && this.props.defaultValue.length > 0 && !this.props.read_only) {
-//       let canvas = this.refs['canvas_'+this.props.data.field_name];
-//       canvas.fromDataURL('data:image/png;base64,' + this.props.defaultValue);
-//     }
-//   },
-//   render() {
-//     let props = {};
-//     props.type = "hidden";
-//     props.name = this.props.data.field_name;
-
-//     if (this.props.mutable) {
-//       props.defaultValue = this.props.defaultValue;
-// props.ref = this.inputField;
-//       props.ref = "child_ref_" + this.props.data.field_name;
-//     }
-//     let pad_props = {};
-//     pad_props.clearButton = true;
-//     if (this.props.mutable) {
-//       pad_props.defaultValue = this.props.defaultValue;
-//       pad_props.ref = 'canvas_'+this.props.data.field_name;
-//     }
-
-//     let baseClasses = 'SortableItem rfb-item';
-//     if (this.props.data.pageBreakBefore) { baseClasses += ' alwaysbreak'; }
-
-//     let sourceDataURL
-//     if (this.props.read_only === true && this.props.defaultValue && this.props.defaultValue.length > 0) {
-//       sourceDataURL = `data:image/png;base64,${this.props.defaultValue}`
-//     }
-
-//     return (
-//       <div className={baseClasses}>
-//         { !this.props.mutable &&
-//           <div>
-//             { this.props.data.pageBreakBefore &&
-//               <div className="preview-page-break">Page Break</div>
-//             }
-//             <HeaderBar parent={this.props.parent} editModeOn={this.props.editModeOn} data={this.props.data} onDestroy={this.props._onDestroy} onEdit={this.props.onEdit} static={this.props.data.static} required={this.props.data.required} />
-//           </div>
-//         }
-//         <div className="form-group">
-//           <label>
-//             <span dangerouslySetInnerHTML={{__html: myxss.process(this.props.data.label) }} />
-//             { (this.props.data.hasOwnProperty('required') && this.props.data.required === true  && !this.props.read_only) &&
-//               <span className="label-required label label-danger">Required</span>
-//             }
-//           </label>
-//           {this.props.read_only === true && this.props.defaultValue && this.props.defaultValue.length > 0
-//             ? (<div><img src={sourceDataURL} /></div>)
-//             : (<SignaturePad {...pad_props} />)
-//           }
-//           <input {...props} />
-//         </div>
-//       </div>
-//     );
-//   }
-// })
-
 class Tags extends React.Component {
   constructor(props) {
     super(props);
@@ -603,11 +523,7 @@ class Tags extends React.Component {
       props.ref = this.inputField;
     }
 
-    let baseClasses = 'SortableItem rfb-item';
-    if (this.props.data.pageBreakBefore) {
-      baseClasses += ' alwaysbreak';
-    }
-
+    let baseClasses = CommonUtils.getElementsClass(this.props.data);
     return (
       <div className={baseClasses}>
         { !this.props.mutable &&
@@ -647,10 +563,7 @@ class Checkboxes extends React.Component {
       classNames += ' option-inline';
     }
 
-    let baseClasses = 'SortableItem rfb-item';
-    if (this.props.data.pageBreakBefore) {
-      baseClasses += ' alwaysbreak';
-    }
+    let baseClasses = CommonUtils.getElementsClass(this.props.data);
 
     return (
       <div className={baseClasses}>
@@ -710,10 +623,7 @@ class RadioButtons extends React.Component {
       classNames += ' option-inline';
     }
 
-    let baseClasses = 'SortableItem rfb-item';
-    if (this.props.data.pageBreakBefore) {
-      baseClasses += ' alwaysbreak';
-    }
+    let baseClasses = CommonUtils.getElementsClass(this.props.data);
 
     return (
       <div className={baseClasses}>
@@ -763,12 +673,9 @@ class RadioButtons extends React.Component {
 class Image extends React.Component {
   // mixins: [SortableItemMixin],
   render() {
-    var style = (this.props.data.center) ? {textAlign: 'center'} : '';
+    var style = (this.props.data.center) ? {textAlign: 'center'} : {};
 
-    let baseClasses = 'SortableItem rfb-item';
-    if (this.props.data.pageBreakBefore) {
-      baseClasses += ' alwaysbreak';
-    }
+    let baseClasses = CommonUtils.getElementsClass(this.props.data);
 
     return (
       <div className={baseClasses} style={style}>
@@ -804,10 +711,7 @@ class Rating extends React.Component {
       props.ref = this.inputField;
     }
 
-    let baseClasses = 'SortableItem rfb-item';
-    if (this.props.data.pageBreakBefore) {
-      baseClasses += ' alwaysbreak';
-    }
+    let baseClasses = CommonUtils.getElementsClass(this.props.data);
 
     return (
       <div className={baseClasses}>
@@ -838,10 +742,7 @@ class Rating extends React.Component {
 class HyperLink extends React.Component {
   // mixins: [SortableItemMixin],
   render() {
-    let baseClasses = 'SortableItem rfb-item';
-    if (this.props.data.pageBreakBefore) {
-      baseClasses += ' alwaysbreak';
-    }
+    let baseClasses = CommonUtils.getElementsClass(this.props.data);
 
     return (
       <div className={baseClasses}>
@@ -856,7 +757,9 @@ class HyperLink extends React.Component {
         </div>
         }
         <div className="form-group">
-          <a target="_blank" href={this.props.data.href}>{this.props.data.content}</a>
+          <a target="_blank" href={this.props.data.href}>
+            <span dangerouslySetInnerHTML={{__html: myxss.process(this.props.data.content)}}/>
+          </a>
         </div>
       </div>
     );
@@ -866,10 +769,7 @@ class HyperLink extends React.Component {
 class Download extends React.Component {
   // mixins: [SortableItemMixin],
   render() {
-    let baseClasses = 'SortableItem rfb-item';
-    if (this.props.data.pageBreakBefore) {
-      baseClasses += ' alwaysbreak';
-    }
+    let baseClasses = CommonUtils.getElementsClass(this.props.data);
 
     return (
       <div className={baseClasses}>
@@ -884,7 +784,9 @@ class Download extends React.Component {
         </div>
         }
         <div className="form-group">
-          <a href={this.props.download_path + '?id=' + this.props.data.file_path}>{this.props.data.content}</a>
+          <a href={this.props.download_path + '?id=' + this.props.data.file_path}>
+            <span dangerouslySetInnerHTML={{__html: myxss.process(this.props.data.content)}}/>
+          </a>
         </div>
       </div>
     );
@@ -921,10 +823,7 @@ class Camera extends React.Component {
   };
 
   render() {
-    let baseClasses = 'SortableItem rfb-item';
-    if (this.props.data.pageBreakBefore) {
-      baseClasses += ' alwaysbreak';
-    }
+    let baseClasses = CommonUtils.getElementsClass(this.props.data);
 
     return (
       <div className={baseClasses}>
@@ -1018,10 +917,7 @@ class Range extends React.Component {
       return <label {...option_props}>{d}</label>
     })
 
-    let baseClasses = 'SortableItem rfb-item';
-    if (this.props.data.pageBreakBefore) {
-      baseClasses += ' alwaysbreak';
-    }
+    let baseClasses = CommonUtils.getElementsClass(this.props.data);
 
     return (
       <div className={baseClasses}>
@@ -1074,7 +970,6 @@ FormElements.TextInput = TextInput;
 FormElements.NumberInput = NumberInput;
 FormElements.TextArea = TextArea;
 FormElements.Dropdown = Dropdown;
-// FormElements.Signature = Signature;
 FormElements.Checkboxes = Checkboxes;
 FormElements.DatePicker = DatePicker;
 FormElements.RadioButtons = RadioButtons;
@@ -1083,6 +978,7 @@ FormElements.Rating = Rating;
 FormElements.Tags = Tags;
 FormElements.HyperLink = HyperLink;
 FormElements.Download = Download;
+FormElements.UploadFile = FineUploader;
 FormElements.Camera = Camera;
 FormElements.Range = Range;
 

@@ -4,9 +4,9 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {EventEmitter} from 'fbemitter';
+import { EventEmitter } from 'fbemitter';
 import FormValidator from './form-validator';
-import {Image, Checkboxes, Signature, Download} from './form-elements';
+import { Image, Checkboxes, Download } from './form-elements';
 //Header,Paragraph,Label,LineBreak,TextInput,NumberInput,TextArea,Dropdown,DatePicker,RadioButtons,Rating,Tags,HyperLink,Camera,Range,
 import * as FormElements from './form-elements';
 
@@ -198,7 +198,6 @@ export default class ReactForm extends React.Component {
 
     let items = data_items.map(item => {
       switch (item.element) {
-
         case 'TextInput':
         case 'NumberInput':
         case 'TextArea':

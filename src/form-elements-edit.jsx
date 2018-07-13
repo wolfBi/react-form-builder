@@ -78,9 +78,10 @@ export default class FormElementsEdit extends React.Component {
   }
 
   render() {
-    let this_checked = this.props.element.hasOwnProperty('required') ? this.props.element.required : false;
     let this_read_only = this.props.element.hasOwnProperty('readOnly') ? this.props.element.readOnly : false;
-    let this_default_today = this.props.element.hasOwnProperty('defaultToday') ? this.props.element.defaultToday : false;
+    let this_default_today = this.props.element.hasOwnProperty('defaultToday') ? this.props.element.defaultToday : false
+
+    let this_checked_required = this.props.element.hasOwnProperty('required') ? this.props.element.required : false;
     let this_checked_inline = this.props.element.hasOwnProperty('inline') ? this.props.element.inline : false;
     let this_checked_bold = this.props.element.hasOwnProperty('bold') ? this.props.element.bold : false;
     let this_checked_italic = this.props.element.hasOwnProperty('italic') ? this.props.element.italic : false;
@@ -101,11 +102,21 @@ export default class FormElementsEdit extends React.Component {
     }
 
     return (
-      <div>
+      <form role="form" className="form-horizontal">
         <div className="clearfix">
           <h4 className="pull-left">{this.props.element.text}</h4>
           <i className="pull-right fa fa-times dismiss-edit" onClick={this.props.manualEditModeOff}></i>
         </div>
+
+        { this.props.element.hasOwnProperty('field_name') &&
+        <div className="form-group">
+          <label htmlFor="srcInput">ID/Name:</label>
+          <input id="nameIdInput" type="text" className="form-control"  style={{width:'220px'}}
+                 defaultValue={this.props.element.field_name}
+                 onBlur={this.updateElement.bind(this)}
+                 onChange={this.editElementProp.bind(this, 'field_name', 'value')}/>
+        </div>}
+
         { this.props.element.hasOwnProperty('content') &&
         <div className="form-group">
           <label className="control-label">Text to display:</label>
@@ -155,13 +166,13 @@ export default class FormElementsEdit extends React.Component {
           </div>
           <div className="row">
             <div className="col-sm-3">
-              <label className="control-label" htmlFor="elementWidth">Width:</label>
+              <label className="control-label" htmlFor="elementWidth">Image Width:</label>
               <input id="elementWidth" type="text" className="form-control" defaultValue={this.props.element.width}
                      onBlur={this.updateElement.bind(this)}
                      onChange={this.editElementProp.bind(this, 'width', 'value')}/>
             </div>
             <div className="col-sm-3">
-              <label className="control-label" htmlFor="elementHeight">Height:</label>
+              <label className="control-label" htmlFor="elementHeight">Image Height:</label>
               <input id="elementHeight" type="text" className="form-control" defaultValue={this.props.element.height}
                      onBlur={this.updateElement.bind(this)}
                      onChange={this.editElementProp.bind(this, 'height', 'value')}/>
@@ -181,7 +192,7 @@ export default class FormElementsEdit extends React.Component {
           <br />
           <div className="checkbox">
             <label>
-              <input type="checkbox" checked={this_checked} value={true}
+              <input type="checkbox" checked={this_checked_required} value={true}
                      onChange={this.editElementProp.bind(this, 'required', 'checked')}/>
               Required
             </label>
@@ -229,29 +240,6 @@ export default class FormElementsEdit extends React.Component {
           )
           : (<div/>)
         }
-
-
-        <div className="form-group">
-          <label className="control-label">Print Options</label>
-          <div className="checkbox">
-            <label>
-              <input type="checkbox" checked={this_checked_page_break} value={true}
-                     onChange={this.editElementProp.bind(this, 'pageBreakBefore', 'checked')}/>
-              Page Break Before Element?
-            </label>
-          </div>
-        </div>
-
-        <div className="form-group">
-          <label className="control-label">Alternate/Signature Page</label>
-          <div className="checkbox">
-            <label>
-              <input type="checkbox" checked={this_checked_alternate_form} value={true}
-                     onChange={this.editElementProp.bind(this, 'alternateForm', 'checked')}/>
-              Display on alternate/signature Page?
-            </label>
-          </div>
-        </div>
 
         { this.props.element.hasOwnProperty('step') &&
         <div className="form-group">
@@ -317,6 +305,15 @@ export default class FormElementsEdit extends React.Component {
           </div>
         </div>
         }
+        { this.props.element.hasOwnProperty('compWidth') &&
+        <div className="form-group ">
+          <label className="control-label" htmlFor="compWidth">Width:</label>
+          <input id="compWidth" type="number" min={0} max={12} style={{width:'240px'}}
+                 className="form-control" defaultValue={this.props.element.compWidth}
+                 onBlur={this.updateElement.bind(this)}
+                 onChange={this.editElementProp.bind(this, 'compWidth', 'value')}/>
+        </div>
+        }
 
         { this.props.showCorrectColumn && this.props.element.canHaveAnswer && !this.props.element.hasOwnProperty('options') &&
         <div className="form-group">
@@ -330,7 +327,30 @@ export default class FormElementsEdit extends React.Component {
                            updateElement={this.props.updateElement} preview={this.props.preview}
                            element={this.props.element} key={this.props.element.options.length}/>
         }
-      </div>
+
+        <div className="form-group">
+          <label className="control-label">Print Options</label>
+          <div className="checkbox">
+            <label>
+              <input type="checkbox" checked={this_checked_page_break} value={true}
+                     onChange={this.editElementProp.bind(this, 'pageBreakBefore', 'checked')}/>
+              Page Break Before Element?
+            </label>
+          </div>
+        </div>
+
+        <div className="form-group">
+          <label className="control-label">Alternate/Short Form</label>
+          <div className="checkbox">
+            <label>
+              <input type="checkbox" checked={this_checked_alternate_form} value={true}
+                     onChange={this.editElementProp.bind(this, 'alternateForm', 'checked')}/>
+              Display on Alternate/Short Form?
+            </label>
+          </div>
+        </div>
+
+      </form>
     );
   }
 }

@@ -48,21 +48,27 @@ module.exports = {
         ]
       },
       {
-        test: /\.scss$/,
+        test: /\.scss|.css?$/,
         use: [
           {
             loader: 'style-loader'
           },
           {
-            loader: 'css-loader'
+            loader: 'css-loader', options: {
+              includePaths: ['./node_modules']
+            }
           },
           {
             loader: 'sass-loader', options: {
-            includePaths: ['./node_modules']
-          }
+              includePaths: ['./node_modules']
+            }
           }
         ]
       },
+      {
+        test: /\.jpg|.gif|.png?$/,
+        use: [ 'file-loader' ]
+      }
     ]
   }
 };
