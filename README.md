@@ -1,8 +1,8 @@
-[![npm package](https://img.shields.io/badge/npm-0.0.3-orange.svg?style=flat-square)](https://www.npmjs.com/package/react-forms-builder)
+[![init npm package](https://img.shields.io/badge/npm-0.0.3-orange.svg?style=flat-square)](https://www.npmjs.com/package/react-forms-builder)
 [![Build Status](https://api.travis-ci.org/blackjk3/react-form-builder.svg?branch=master)](https://travis-ci.org/blackjk3/react-form-builder)
 # React Form Builder 2
 A complete react form builder that interfaces with a json endpoint to load and save generated forms.
-- Upgraded to React 16.4.1
+- Upgraded to React 16.x.x
 - Use react-dnd for Drag & Drop 
 - Save form data with dummy api server.
 
@@ -25,6 +25,7 @@ React.render(
 
 # Props
 
+Toolbar._defaultItems
 ```javascript
 var items = [{
   key: 'Header',
@@ -85,17 +86,13 @@ display_short | boolean | Optional | Display an optional "shorter page/form" whi
 read_only | boolean | Optional | Shows a read only version which has fields disabled and removes "required" labels.
 variables | object | Optional | Key/value object that can be used for Signature variable replacement.
 
-### Read only Signatures
+### Form Elements
+![](FormElements1.png)
+![](FormElements2.png)
 
-Read only signatures allow you to use a saved/canned signature to be placed into the form. The signature will be passed in through the `variables` property to `ReactFormGenerator` and `ReactFormBuilder`.
-
-To use a read only signature, choose the "Read only" option and enter the key value of the variable that will be used to pass in the signature.
-
-![](screenshot3.png)
-
-The signature data should be in base 64 format.
-
-There is a `variables.js` file that contains a sample base 64 signature. This variable is passed into the demo builder and generator for testing. Use the variable key "JOHN" to test the variable replacement.
+### Form Elements Props
+Name | Type | Required? | Description
+--- | --- | --- | ---
 
 # Vendor Dependencies
 In order to make the form builder look pretty, there are a few dependencies other than React.  See the example code in index.html for more details.

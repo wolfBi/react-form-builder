@@ -1,5 +1,5 @@
 import React from 'react';
-import HeaderBar from './header-bar';
+import HeaderBar from './HeaderBar';
 import TextAreaAutosize from 'react-textarea-autosize';
 // var SortableItemMixin = require('react-anything-sortable/SortableItemMixin')
 

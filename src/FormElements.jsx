@@ -6,8 +6,8 @@ import Select from 'react-select';
 import ReactDatePicker from 'react-datepicker';
 // import SortableItemMixin from 'react-anything-sortable/SortableItemMixin';
 import ReactBootstrapSlider from  'react-bootstrap-slider';
-import HeaderBar from './header-bar';
-import StarRating from './component/star-rating';
+import HeaderBar from './HeaderBar';
+import StarRating from './component/StarRating';
 import FineUploader from './component/FineUploader';
 import CommonUtils from './CommonUtils';
 

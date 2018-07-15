@@ -1,4 +1,4 @@
-import SortableElement from './sortable-element';
+import SortableElement from './SortableElement';
 import {
   Header,
   Paragraph,
@@ -19,7 +19,7 @@ import {
   Download,
   Camera,
   Range
-} from './form-elements';
+} from './FormElements';
 
 const FormElements = {};
 

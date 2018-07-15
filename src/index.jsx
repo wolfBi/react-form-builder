@@ -4,7 +4,7 @@
 
 import React from 'react';
 import Preview from './preview'
-import Toolbar from './toolbar'
+import Toolbar from './Toolbar'
 import ElementActions from './actions/ElementActions';
 import ElementStore from './stores/ElementStore';
 import ReactFormGenerator from './form';

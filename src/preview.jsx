@@ -5,9 +5,9 @@
 import React from 'react';
 import ElementStore from './stores/ElementStore';
 import ElementActions from './actions/ElementActions';
-import FormElementsEdit from './form-elements-edit';
+import FormElementsEdit from './FormElementsEdit';
 
-import * as SortableFormElements from './sortable-form-elements';
+import * as SortableFormElements from './SortableFormElements';
 
 import update from 'immutability-helper';
 import {DragDropContext} from 'react-dnd';

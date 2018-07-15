@@ -1,5 +1,5 @@
 import React from 'react';
-import DynamicOptionList from './dynamic-option-list';
+import DynamicOptionList from './DynamicOptionList';
 import TextAreaAutosize from 'react-textarea-autosize';
 
 import {ContentState, EditorState, convertFromHTML, convertToRaw} from 'draft-js';

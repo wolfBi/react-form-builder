@@ -5,10 +5,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { EventEmitter } from 'fbemitter';
-import FormValidator from './form-validator';
-import { Image, Checkboxes, Download } from './form-elements';
+import FormValidator from './FormValidator';
+import { Image, Checkboxes, Download } from './FormElements';
 //Header,Paragraph,Label,LineBreak,TextInput,NumberInput,TextArea,Dropdown,DatePicker,RadioButtons,Rating,Tags,HyperLink,Camera,Range,
-import * as FormElements from './form-elements';
+import * as FormElements from './FormElements';
 
 export default class ReactForm extends React.Component {
 
