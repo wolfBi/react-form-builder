@@ -87,8 +87,8 @@ read_only | boolean | Optional | Shows a read only version which has fields disa
 variables | object | Optional | Key/value object that can be used for Signature variable replacement.
 
 ### Form Elements
-![](FormElements1.png)
-![](FormElements2.png)
+![](screenshot3.png)
+![](screenshot4.png)
 
 ### Form Elements Props
 Name | Type | Required? | Description
