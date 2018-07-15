@@ -88,6 +88,8 @@ export default class FormElementsEdit extends React.Component {
     let this_checked_center = this.props.element.hasOwnProperty('center') ? this.props.element.center : false;
     let this_checked_page_break = this.props.element.hasOwnProperty('pageBreakBefore') ? this.props.element.pageBreakBefore : false;
     let this_checked_alternate_form = this.props.element.hasOwnProperty('alternateForm') ? this.props.element.alternateForm : false;
+    let this_checked_multiple = this.props.element.hasOwnProperty('multiple') ? this.props.element.multiple : false;
+    let this_checked_dropable = this.props.element.hasOwnProperty('dropable') ? this.props.element.dropable : false;
 
     let this_files = this.props.files.length ? this.props.files : [];
     if (this_files.length < 1 || this_files.length > 0 && this_files[0].id !== "")
@@ -226,7 +228,31 @@ export default class FormElementsEdit extends React.Component {
           }
         </div>
         }
-
+        { this.state.element.element === 'UploadFile' &&
+        <div >
+          <div className="checkbox">
+            <label>
+              <label className="control-label" htmlFor="addFileText">Upload Button Text:</label>
+              <input id="addFileText" type="text" className="form-control" defaultValue={this.props.element.addFileText}
+                     onBlur={this.updateElement.bind(this)} onChange={this.editElementProp.bind(this, 'addFileText', 'value')}/>
+            </label>
+          </div>
+          <div className="checkbox">
+            <label>
+              <input type="checkbox" checked={this_checked_multiple} value={true}
+                     onChange={this.editElementProp.bind(this, 'multiple', 'checked')}/>
+              Multiple
+            </label>
+          </div>
+          <div className="checkbox">
+            <label>
+              <input type="checkbox" checked={this_checked_dropable} value={true}
+                     onChange={this.editElementProp.bind(this, 'dropable', 'checked')}/>
+              Dropable
+            </label>
+          </div>
+        </div>
+        }
         {this.state.element.element === 'Signature' && this.props.element.readOnly
           ? (
             <div className="form-group">

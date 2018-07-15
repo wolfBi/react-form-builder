@@ -6,11 +6,11 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { EventEmitter } from 'fbemitter';
 import FormValidator from './FormValidator';
-import { Image, Checkboxes, Download } from './FormElements';
+import { Image, Checkboxes, Download, UploadFile } from './FormElements';
 //Header,Paragraph,Label,LineBreak,TextInput,NumberInput,TextArea,Dropdown,DatePicker,RadioButtons,Rating,Tags,HyperLink,Camera,Range,
 import * as FormElements from './FormElements';
 
-export default class ReactForm extends React.Component {
+export default class ReactFormGenerator extends React.Component {
 
   form;
   inputs = {};
@@ -217,6 +217,9 @@ export default class ReactForm extends React.Component {
                         key={`form_${item.id}`} data={item} defaultValue={this.props.answer_data[item.field_name]}/>
         case 'Download':
           return <Download download_path={this.props.download_path} mutable={true} key={`form_${item.id}`} data={item}/>
+        case 'UploadFile':
+          return <UploadFile url={this.props.upload_path} read_only={this.props.read_only}
+                        mutable={true} key={`form_${item.id}`} data={item}/>
         default:
           return this.getSimpleElement(item);
       }
@@ -258,4 +261,4 @@ export default class ReactForm extends React.Component {
   }
 }
 
-ReactForm.defaultProps = {validateForCorrectness: false};
+ReactFormGenerator.defaultProps = {validateForCorrectness: false};

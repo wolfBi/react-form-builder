@@ -190,7 +190,10 @@ export default class Toolbar extends React.Component {
         icon: 'fa fa-upload',
         label: 'Placeholder Label',
         field_name: 'uploadfile_',
-        addFileText:"Add Attachments"
+        addFileText:"Add Attachments",
+        allowedExtensions:'',
+        multiple: false,
+        dropable: true
       },
       {
         key: 'Download',
