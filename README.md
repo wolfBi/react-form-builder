@@ -113,8 +113,3 @@ $ npm serve:api
 ```
 Then navigate to http://localhost:8080/ in your browser and you should be able to see the form builder in action.
 
-# Tests
-```bash
-$ npm test
-```
-Test is not working at this moment.
