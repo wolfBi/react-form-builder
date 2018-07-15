@@ -886,7 +886,7 @@ class Range extends React.Component {
     props.list = "tickmarks_" + this.props.data.field_name;
     props.min = this.props.data.min_value;
     props.max = this.props.data.max_value;
-    props.step = this.props.data.step;
+    props.step = this.props.step !== undefined ? parseInt(this.props.step, 10) : parseInt(this.props.data.step, 10);;
 
     props.defaultValue = this.props.defaultValue !== undefined ? parseInt(this.props.defaultValue, 10) : parseInt(this.props.data.default_value, 10);
 
@@ -946,7 +946,7 @@ class Range extends React.Component {
             <ReactBootstrapSlider
               name={props.name}
               value={props.defaultValue}
-              step={this.props.data.step}
+              step={props.step}
               max={this.props.data.max_value}
               min={this.props.data.min_value}/>
           </div>
