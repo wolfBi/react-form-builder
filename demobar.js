@@ -82,7 +82,8 @@ export default class Demobar extends React.Component {
           <div className="modal-dialog">
             <div className="modal-content">
               <ReactFormGenerator
-                download_path=""
+                download_path="/download_path"
+                upload_path="/upload_path"
                 back_action="/"
                 back_name="Back"
                 answer_data={{}}

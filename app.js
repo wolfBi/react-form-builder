@@ -9,8 +9,8 @@ require('./public/css/application.css.scss');
 
 ReactDOM.render(
   <FormBuilder.ReactFormBuilder variables={variables}
-                                url='/api/formdata'
-                                saveUrl='/api/formdata'
+    url='/api/formdata'
+    saveUrl='/api/formdata'
   />,
   document.getElementById('form-builder')
 )

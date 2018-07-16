@@ -87,7 +87,8 @@ export default class Toolbar extends React.Component {
         compWidth:'12',
         label: 'Placeholder Label',
         icon: 'fa fa-font',
-        field_name: 'text_input_'
+        field_name: 'text_input_',
+        supportJS:true
       },
       {
         key: 'NumberInput',
@@ -96,7 +97,8 @@ export default class Toolbar extends React.Component {
         compWidth:'12',
         label: 'Placeholder Label',
         icon: 'fa fa-plus',
-        field_name: 'number_input_'
+        field_name: 'number_input_',
+        supportJS:true
       },
       {
         key: 'TextArea',
@@ -105,7 +107,8 @@ export default class Toolbar extends React.Component {
         name: 'TextArea',
         label: 'Placeholder Label',
         icon: 'fa fa-text-height',
-        field_name: 'text_area_'
+        field_name: 'text_area_',
+        supportJS:true
       },
       {
         key: 'Dropdown',
@@ -115,7 +118,8 @@ export default class Toolbar extends React.Component {
         icon: 'fa fa-caret-square-o-down',
         label: 'Placeholder Label',
         field_name: 'dropdown_',
-        options: []
+        options: [],
+        supportJS:true
       },
       {
         key: 'Tags',
@@ -125,7 +129,8 @@ export default class Toolbar extends React.Component {
         icon: 'fa fa-tags',
         label: 'Placeholder Label',
         field_name: 'tags_',
-        options: []
+        options: [],
+        supportJS:true
       },
       {
         key: 'Checkboxes',
@@ -135,7 +140,8 @@ export default class Toolbar extends React.Component {
         icon: 'fa fa-check-square-o',
         label: 'Placeholder Label',
         field_name: 'checkboxes_',
-        options: []
+        options: [],
+        supportJS:true
       },
       {
         key: 'RadioButtons',
@@ -145,7 +151,8 @@ export default class Toolbar extends React.Component {
         icon: 'fa fa-dot-circle-o',
         label: 'Placeholder Label',
         field_name: 'radio_buttons_',
-        options: []
+        options: [],
+        supportJS:true
       },
       {
         key: 'DatePicker',
@@ -175,14 +182,14 @@ export default class Toolbar extends React.Component {
         field_name: 'image_',
         src: ''
       },
-      {
+      /*{
         key: 'Camera',
         name: 'Camera',
         compWidth:'12',
         icon: 'fa fa-camera',
         label: 'Placeholder Label',
         field_name: 'camera_'
-      },
+      },*/
       {
         key: 'UploadFile',
         name: 'File Upload',
@@ -190,9 +197,9 @@ export default class Toolbar extends React.Component {
         icon: 'fa fa-upload',
         label: 'Placeholder Label',
         field_name: 'uploadfile_',
-        addFileText:"Add Attachments",
+        addFileText:"Add File",
         allowedExtensions:'',
-        multiple: false,
+        multiple: true,
         dropable: true
       },
       {
@@ -254,6 +261,12 @@ export default class Toolbar extends React.Component {
       elementOptions['italic'] = false;
     }
 
+    if (item.supportJS) {
+      elementOptions['supportJS'] = item.supportJS;
+      elementOptions['onClickStr'] = "";
+      elementOptions['onChangeStr'] = "";
+      elementOptions['onBlurStr'] = "";
+    }
     if (item.canHaveAnswer)
       elementOptions['canHaveAnswer'] = item.canHaveAnswer;
 
@@ -268,6 +281,31 @@ export default class Toolbar extends React.Component {
 
     if (item.href)
       elementOptions['href'] = item.href;
+
+    if (item.hasOwnProperty("multiple"))
+      elementOptions['multiple'] = item.multiple;
+
+    if (item.hasOwnProperty("dropable"))
+      elementOptions['dropable'] = item.dropable;
+
+    if (item.addFileText)
+      elementOptions['addFileText'] = item.addFileText;
+
+    if (item.compWidth)
+      elementOptions['compWidth'] = item.compWidth;
+
+    if (item.defaultValue)
+      elementOptions['defaultValue'] = item.defaultValue;
+
+    if (item.field_name)
+      elementOptions['field_name'] = item.field_name;// + ID.uuid()
+
+    if (item.label)
+      elementOptions['label'] = item.label;
+
+    if (item.options) {
+      elementOptions['options'] = Toolbar._defaultItemOptions(elementOptions['element']);
+    }
 
     if (item.key === "Image") {
       elementOptions['src'] = item.src;
@@ -285,22 +323,6 @@ export default class Toolbar extends React.Component {
       elementOptions['max_value'] = item.max_value;
       elementOptions['min_label'] = item.min_label;
       elementOptions['max_label'] = item.max_label;
-    }
-
-    if (item.compWidth)
-      elementOptions['compWidth'] = item.compWidth;
-
-    if (item.defaultValue)
-      elementOptions['defaultValue'] = item.defaultValue;
-
-    if (item.field_name)
-      elementOptions['field_name'] = item.field_name;// + ID.uuid()
-
-    if (item.label)
-      elementOptions['label'] = item.label;
-
-    if (item.options) {
-      elementOptions['options'] = Toolbar._defaultItemOptions(elementOptions['element']);
     }
 
     return elementOptions;

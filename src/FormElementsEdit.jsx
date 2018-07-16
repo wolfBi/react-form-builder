@@ -1,10 +1,10 @@
 import React from 'react';
-import DynamicOptionList from './DynamicOptionList';
 import TextAreaAutosize from 'react-textarea-autosize';
-
-import {ContentState, EditorState, convertFromHTML, convertToRaw} from 'draft-js';
+import { Col } from "react-bootstrap";
+import { ContentState, EditorState, convertFromHTML, convertToRaw } from 'draft-js';
+import { Editor } from 'react-draft-wysiwyg'
 import draftToHtml from 'draftjs-to-html';
-import {Editor} from 'react-draft-wysiwyg';
+import DynamicOptionList from './DynamicOptionList';
 
 let toolbar = {
   options: ['inline', 'list', 'textAlign', 'fontSize', 'link', 'history'],
@@ -104,7 +104,7 @@ export default class FormElementsEdit extends React.Component {
     }
 
     return (
-      <form role="form" className="form-horizontal">
+      <div >
         <div className="clearfix">
           <h4 className="pull-left">{this.props.element.text}</h4>
           <i className="pull-right fa fa-times dismiss-edit" onClick={this.props.manualEditModeOff}></i>
@@ -112,11 +112,13 @@ export default class FormElementsEdit extends React.Component {
 
         { this.props.element.hasOwnProperty('field_name') &&
         <div className="form-group">
-          <label htmlFor="srcInput">ID/Name:</label>
-          <input id="nameIdInput" type="text" className="form-control"  style={{width:'220px'}}
-                 defaultValue={this.props.element.field_name}
-                 onBlur={this.updateElement.bind(this)}
-                 onChange={this.editElementProp.bind(this, 'field_name', 'value')}/>
+          <Col xs={3} className="padding0Px"><label htmlFor="srcInput">ID/Name</label></Col>
+          <Col xs={9} >
+            <input id="nameIdInput" type="text" className="form-control"  style={{width:'220px'}}
+               defaultValue={this.props.element.field_name}
+               onBlur={this.updateElement.bind(this)}
+               onChange={this.editElementProp.bind(this, 'field_name', 'value')}/>
+          </Col>
         </div>}
 
         { this.props.element.hasOwnProperty('content') &&
@@ -132,7 +134,7 @@ export default class FormElementsEdit extends React.Component {
         }
         { this.props.element.hasOwnProperty('file_path') &&
         <div className="form-group">
-          <label className="control-label" htmlFor="fileSelect">Choose file:</label>
+          <label className="control-label" htmlFor="fileSelect">Choose file</label>
           <select id="fileSelect" className="form-control" defaultValue={this.props.element.file_path}
                   onBlur={this.updateElement.bind(this)}
                   onChange={this.editElementProp.bind(this, 'file_path', 'value')}>
@@ -228,15 +230,17 @@ export default class FormElementsEdit extends React.Component {
           }
         </div>
         }
-        { this.state.element.element === 'UploadFile' &&
-        <div >
-          <div className="checkbox">
-            <label>
-              <label className="control-label" htmlFor="addFileText">Upload Button Text:</label>
-              <input id="addFileText" type="text" className="form-control" defaultValue={this.props.element.addFileText}
-                     onBlur={this.updateElement.bind(this)} onChange={this.editElementProp.bind(this, 'addFileText', 'value')}/>
-            </label>
+        { this.state.element.hasOwnProperty('addFileText') &&
+          <div className="form-group clearfix">
+            <Col xs={3} className="padding0Px"><label htmlFor="addFileText">Upload Button Text</label></Col>
+            <Col xs={9} >
+              <input id="addFileText" type="text" className="form-control"  style={{width:'240px'}}
+                   defaultValue={this.props.element.addFileText}
+                   onBlur={this.updateElement.bind(this)} onChange={this.editElementProp.bind(this, 'addFileText', 'value')}/>
+            </Col>
           </div>
+        }
+        { this.state.element.hasOwnProperty('multiple') &&
           <div className="checkbox">
             <label>
               <input type="checkbox" checked={this_checked_multiple} value={true}
@@ -244,6 +248,8 @@ export default class FormElementsEdit extends React.Component {
               Multiple
             </label>
           </div>
+        }
+        { this.state.element.hasOwnProperty('dropable') &&
           <div className="checkbox">
             <label>
               <input type="checkbox" checked={this_checked_dropable} value={true}
@@ -251,12 +257,11 @@ export default class FormElementsEdit extends React.Component {
               Dropable
             </label>
           </div>
-        </div>
         }
         {this.state.element.element === 'Signature' && this.props.element.readOnly
           ? (
             <div className="form-group">
-              <label className="control-label" htmlFor="variableKey">Variable Key:</label>
+              <label className="control-label" htmlFor="variableKey">Variable Key</label>
               <input id="variableKey" type="text" className="form-control" defaultValue={this.props.element.variableKey}
                      onBlur={this.updateElement.bind(this)}
                      onChange={this.editElementProp.bind(this, 'variableKey', 'value')}/>
@@ -313,7 +318,7 @@ export default class FormElementsEdit extends React.Component {
         </div>
         }
         { this.props.element.hasOwnProperty('static') && this.props.element.static &&
-        <div className="form-group">
+        <div className="form-group clearfix">
           <label className="control-label">Text Style</label>
           <div className="checkbox">
             <label>
@@ -332,17 +337,19 @@ export default class FormElementsEdit extends React.Component {
         </div>
         }
         { this.props.element.hasOwnProperty('compWidth') &&
-        <div className="form-group ">
-          <label className="control-label" htmlFor="compWidth">Width:</label>
+        <div className="form-group clearfix">
+          <Col xs={3} className="padding0Px"><label className="control-label" htmlFor="compWidth">Width</label></Col>
+          <Col xs={9} >
           <input id="compWidth" type="number" min={0} max={12} style={{width:'240px'}}
                  className="form-control" defaultValue={this.props.element.compWidth}
                  onBlur={this.updateElement.bind(this)}
                  onChange={this.editElementProp.bind(this, 'compWidth', 'value')}/>
+          </Col>
         </div>
         }
 
         { this.props.showCorrectColumn && this.props.element.canHaveAnswer && !this.props.element.hasOwnProperty('options') &&
-        <div className="form-group">
+        <div className="form-group clearfix">
           <label className="control-label" htmlFor="correctAnswer">Correct Answer</label>
           <input id="correctAnswer" type="text" className="form-control" defaultValue={this.props.element.correct}
                  onBlur={this.updateElement.bind(this)} onChange={this.editElementProp.bind(this, 'correct', 'value')}/>
@@ -353,7 +360,41 @@ export default class FormElementsEdit extends React.Component {
                            updateElement={this.props.updateElement} preview={this.props.preview}
                            element={this.props.element} key={this.props.element.options.length}/>
         }
-
+        { this.props.element.hasOwnProperty('supportJS') && this.props.element.supportJS &&
+          <div>
+            <Col xs={12} className="control-label padding0Px"><h4>Function</h4></Col>
+            <Col xs={12} className="control-label padding0Px">
+              <p>  &nbsp;&nbsp;The name and value variables are not allowed to be defined in the <span style={{fontWeight:'700'}}>OnChange</span> function.You can use name and value directly, e.g. alert(name+value)</p>
+            </Col>
+            <div className="form-group clearfix">
+              <Col xs={3} className="padding0Px"><label className="control-label" htmlFor="onClickStr">OnClick </label></Col>
+              <Col xs={9} >
+                <textarea id="onClickStr" rows={3} onBlur={this.updateElement.bind(this)}
+                          onChange={this.editElementProp.bind(this, 'onClickStr', 'value')}>
+                  {this.props.element.onClickStr}
+                </textarea>
+              </Col>
+            </div>
+            <div className="form-group clearfix">
+              <Col xs={3} className="padding0Px"><label className="control-label" htmlFor="onChangeStr">OnChange </label></Col>
+              <Col xs={9} >
+                <textarea id="onChangeStr" rows={3} onBlur={this.updateElement.bind(this)}
+                          onChange={this.editElementProp.bind(this, 'onChangeStr', 'value')}>
+                  {this.props.element.onChangeStr}
+                </textarea>
+              </Col>
+            </div>
+            <div className="form-group clearfix">
+              <Col xs={3} className="padding0Px"><label className="control-label" htmlFor="onBlurStr">OnBlur </label></Col>
+              <Col xs={9} >
+                <textarea id="onBlurStr" rows={3} onBlur={this.updateElement.bind(this)}
+                          onChange={this.editElementProp.bind(this, 'onBlurStr', 'value')}>
+                  {this.props.element.onBlurStr}
+                </textarea>
+              </Col>
+            </div>
+          </div>
+        }
         <div className="form-group">
           <label className="control-label">Print Options</label>
           <div className="checkbox">
@@ -376,7 +417,7 @@ export default class FormElementsEdit extends React.Component {
           </div>
         </div>
 
-      </form>
+      </div>
     );
   }
 }

@@ -182,10 +182,10 @@ export default class FileUploader extends Component{
             }
             console.log(dropFileSection);
             modalDialog =
-                <div className={'right_section'+(this.props.data.dropable?'Drop':'')}>
+                <div className={'right_section'+(this.props.dropable?'Drop':'')}>
                     <div>
                         <div>
-                            <FileInput className="file_input" multiple={this.props.data.multiple} accept={this.props.data.accept} uploader={this.state.uploader}>
+                            <FileInput className="file_input" multiple={this.props.multiple} accept={this.props.accept} uploader={this.state.uploader}>
                                 <span className="button blue qq-upload-choose">Browse</span>
                             </FileInput>
                         </div>
@@ -193,10 +193,10 @@ export default class FileUploader extends Component{
                       </a>
                         <div style={{color:'red'}}>{this.state.errorMsg}</div>
                     </div>
-                    {this.props.data.dropable===false?
+                    {this.props.dropable===false?
                         null:
                         <div>
-                            <Dropzone multiple={this.props.data.multiple} accept={this.props.data.accept}
+                            <Dropzone multiple={this.props.multiple} accept={this.props.accept}
                                className="qq-uploader" uploader={this.state.uploader}>
                               {dropFileSection}
                             </Dropzone>
@@ -204,17 +204,17 @@ export default class FileUploader extends Component{
                     }
                 </div>
         }
-        let form = this.props.data.needForm && this.props.data.formData && !CommonUtils.isEmptyObject(this.props.data.formData)? <div disabled>
+        let form = this.props.needForm && this.props.formData && !CommonUtils.isEmptyObject(this.props.formData)? <div disabled>
             <form action='' id="qq-form" >
-                { Object.keys(this.props.data.formData).map((key)=>{
-                    return <input type="hidden" name={key} value={ this.props.data.formData[key] }/>
+                { Object.keys(this.props.formData).map((key)=>{
+                    return <input type="hidden" name={key} value={ this.props.formData[key] }/>
                 })}
             </form>
         </div>:false;
-        let filesListDiv = !this.props.data.hiddenFilesListDiv ?
+        let filesListDiv = !this.props.hiddenFilesListDiv ?
             <div className="clearfix">
                 <Col xs={4} >
-                    <span className={"file-attachment btn btn-info"} onClick={this.addFileClick}>{this.props.data.addFileText }{form}</span>
+                    <span className={"file-attachment btn btn-info"} onClick={this.addFileClick}>{this.props.addFileText }{form}</span>
                     { modalDialog }
                 </Col>
                 <Col id='dropzoneOut' xs={8} className="padding0Px " style={{marginTop:'5px'}}>
@@ -240,89 +240,72 @@ export default class FileUploader extends Component{
             </div>
             :
             <span >
-                <span className="file-attachment btn btn-info	" onClick={this.addFileClick}>{this.props.data.addFileText}{form}</span>
+                <span className="file-attachment btn btn-info	" onClick={this.addFileClick}>{this.props.addFileText}{form}</span>
                 { modalDialog }
             </span>
         let renderReturn =
-            this.props.data.directlyUpload ?<span className="file-attachment btn btn-info	" onClick={()=>{
-                let directlyUploadFileInput = document.getElementById(this.props.data.directlyUploadFileInputID);
+            this.props.directlyUpload ?<span className="file-attachment btn btn-info	" onClick={()=>{
+                let directlyUploadFileInput = document.getElementById(this.props.directlyUploadFileInputID);
                 directlyUploadFileInput.click();
             }}>
-                {this.props.data.addFileText}
+                {this.props.addFileText}
                 <div display style={{display:'none'}}>
                     {form}
-                    <FileInput className="file_input" style={{display:'none'}} id={this.props.data.directlyUploadFileInputID} multiple={this.props.data.multiple?true:false} accept={this.props.accept} uploader={this.state.uploader}>
+                    <FileInput className="file_input" style={{display:'none'}} id={this.props.directlyUploadFileInputID} multiple={this.props.multiple?true:false} accept={this.props.accept} uploader={this.state.uploader}>
                     </FileInput>
                 </div>
             </span>
             : <span >{filesListDiv}</span>
-      let baseClasses = CommonUtils.getElementsClass(this.props.data);
         return (
-          <div className={baseClasses}>
-            { !this.props.data.mutable &&
-            <div>
-              { this.props.data.pageBreakBefore &&
-              <div className="preview-page-break">Page Break</div>
-              }
-              <HeaderBar parent={this.props.parent} editModeOn={this.props.editModeOn} data={this.props.data}
-                         onDestroy={this.props._onDestroy} onEdit={this.props.onEdit} static={this.props.data.static}
-                         required={this.props.data.required}/>
-            </div>
-            }
             <div className="form-group">
               <label>
-                {this.props.data.label}
-                { (this.props.data.hasOwnProperty('required') && this.props.data.required === true && !this.props.read_only) &&
+                {this.props.label}
+                { (this.props.hasOwnProperty('required') && this.props.required === true && !this.props.read_only) &&
                 <span className="label-required label label-danger">Required</span>
                 }
-                <input type="hidden" name={this.props.data.field_name } value={JSON.stringify(this.state.completeFilesInfo)}/>
+                <input type="hidden" name={this.props.field_name } value={JSON.stringify(this.state.completeFilesInfo)}/>
               </label>
 
               <div className="image-upload-container">
                 {renderReturn}
               </div>
             </div>
-          </div>
        );
     }
     static defaultProps = {
       method:"POST",
-      data:{
-        directlyUploadFileInputID:"directlyUploadFileInput",
-        allowedExtensions:[],
-        addFileText : 'Add File',
-        itemLimit:20,
-        sizeLimit:20*1024*1024*1024,
-        hiddenFilesListDiv: false,
-        clearAttachs: false,
-        multiple: false,
-        dropable: true,
-        autoUpload: true,
-        directlyUpload: false,
-        needForm: false,
-      }
+      directlyUploadFileInputID:"directlyUploadFileInput",
+      allowedExtensions:[],
+      addFileText : 'Add File',
+      itemLimit:20,
+      sizeLimit:20*1024*1024*1024,
+      hiddenFilesListDiv: false,
+      clearAttachs: false,
+      multiple: false,
+      dropable: true,
+      autoUpload: true,
+      directlyUpload: false,
+      needForm: false,
     }
     static propTypes = {
         deleteUrl: PropTypes.string,
         url: PropTypes.string,
         method: PropTypes.string,
-        data:{
-          directlyUploadFileInputID: PropTypes.string,
-          allowedExtensions: PropTypes.array,
-          itemLimit: PropTypes.number,
-          sizeLimit: PropTypes.number,
-          hiddenFilesListDiv: PropTypes.bool,
-          clearAttachs: PropTypes.bool,
-          multiple: PropTypes.bool,
-          dropable: PropTypes.bool,
-          autoUpload: PropTypes.bool,
-          directlyUpload: PropTypes.bool,
-          needForm: PropTypes.bool,
-          formData: PropTypes.object,
-          accept: PropTypes.object,
-          addFileText: PropTypes.any,
-          onCloseCallback: PropTypes.func,
-          onAllCompleteCallback: PropTypes.func,
-        }
+        directlyUploadFileInputID: PropTypes.string,
+        allowedExtensions: PropTypes.array,
+        itemLimit: PropTypes.number,
+        sizeLimit: PropTypes.number,
+        hiddenFilesListDiv: PropTypes.bool,
+        clearAttachs: PropTypes.bool,
+        multiple: PropTypes.bool,
+        dropable: PropTypes.bool,
+        autoUpload: PropTypes.bool,
+        directlyUpload: PropTypes.bool,
+        needForm: PropTypes.bool,
+        formData: PropTypes.object,
+        accept: PropTypes.object,
+        addFileText: PropTypes.any,
+        onCloseCallback: PropTypes.func,
+        onAllCompleteCallback: PropTypes.func,
     }
 }

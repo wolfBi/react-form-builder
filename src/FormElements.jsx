@@ -192,7 +192,23 @@ class TextInput extends React.Component {
             <span className="label-required label label-danger">Required</span>
             }
           </label>
-          <input {...props} />
+          <input {...props} onClick={()=>{ if(this.props.data.supportJS && this.props.data.hasOwnProperty('onClickStr')
+            && !CommonUtils.isEmpty(this.props.data.onClickStr)){
+            eval(this.props.data.onClickStr)
+          }}} onChange={(e)=>{
+            if(this.props.data.supportJS && this.props.data.hasOwnProperty('onChangeStr')
+            && !CommonUtils.isEmpty(this.props.data.onChangeStr)){
+              let target = e && e.target ? e.target : e;
+              let name = target.name;
+              let value = target.value;
+              let onChangeStr = this.props.data.onChangeStr;
+              onChangeStr = onChangeStr.replace(/'name'/g,name);
+              onChangeStr = onChangeStr.replace(/'value'/g,value);
+              eval(onChangeStr)
+          }}} onBlur={()=>{ if(this.props.data.supportJS && this.props.data.hasOwnProperty('onBlurStr')
+            && !CommonUtils.isEmpty(this.props.data.onBlurStr)){
+            eval(this.props.data.onBlurStr)
+          }}} />
         </div>
       </div>
     );
@@ -247,7 +263,23 @@ class NumberInput extends React.Component {
             <span className="label-required label label-danger">Required</span>
             }
           </label>
-          <input {...props} />
+          <input {...props} onClick={()=>{ if(this.props.data.supportJS && this.props.data.hasOwnProperty('onClickStr')
+            && !CommonUtils.isEmpty(this.props.data.onClickStr)){
+            eval(this.props.data.onClickStr)
+          }}} onChange={(e)=>{
+            if(this.props.data.supportJS && this.props.data.hasOwnProperty('onChangeStr')
+            && !CommonUtils.isEmpty(this.props.data.onChangeStr)){
+              let target = e && e.target ? e.target : e;
+              let name = target.name;
+              let value = target.value;
+              let onChangeStr = this.props.data.onChangeStr;
+              onChangeStr = onChangeStr.replace(/'name'/g,name);
+              onChangeStr = onChangeStr.replace(/'value'/g,value);
+              eval(onChangeStr)
+          }}} onBlur={()=>{ if(this.props.data.supportJS && this.props.data.hasOwnProperty('onBlurStr')
+            && !CommonUtils.isEmpty(this.props.data.onBlurStr)){
+            eval(this.props.data.onBlurStr)
+          }}}  />
         </div>
       </div>
     );
@@ -295,7 +327,23 @@ class TextArea extends React.Component {
             <span className="label-required label label-danger">Required</span>
             }
           </label>
-          <textarea {...props} />
+          <textarea {...props}  onClick={()=>{ if(this.props.data.supportJS && this.props.data.hasOwnProperty('onClickStr')
+            && !CommonUtils.isEmpty(this.props.data.onClickStr)){
+            eval(this.props.data.onClickStr)
+          }}} onChange={(e)=>{
+            if(this.props.data.supportJS && this.props.data.hasOwnProperty('onChangeStr')
+            && !CommonUtils.isEmpty(this.props.data.onChangeStr)){
+              let target = e && e.target ? e.target : e;
+              let name = target.name;
+              let value = target.value;
+              let onChangeStr = this.props.data.onChangeStr;
+              onChangeStr = onChangeStr.replace(/'name'/g,name);
+              onChangeStr = onChangeStr.replace(/'value'/g,value);
+              eval(onChangeStr)
+          }}} onBlur={()=>{ if(this.props.data.supportJS && this.props.data.hasOwnProperty('onBlurStr')
+            && !CommonUtils.isEmpty(this.props.data.onBlurStr)){
+            eval(this.props.data.onBlurStr)
+          }}} />
         </div>
       </div>
     );
@@ -480,7 +528,23 @@ class Dropdown extends React.Component {
             <span className="label-required label label-danger">Required</span>
             }
           </label>
-          <select {...props}>
+          <select {...props}  onClick={()=>{ if(this.props.data.supportJS && this.props.data.hasOwnProperty('onClickStr')
+            && !CommonUtils.isEmpty(this.props.data.onClickStr)){
+            eval(this.props.data.onClickStr)
+          }}} onChange={(e)=>{
+            if(this.props.data.supportJS && this.props.data.hasOwnProperty('onChangeStr')
+            && !CommonUtils.isEmpty(this.props.data.onChangeStr)){
+              let target = e && e.target ? e.target : e;
+              let name = target.name;
+              let value = target.value;
+              let onChangeStr = this.props.data.onChangeStr;
+              onChangeStr = onChangeStr.replace(/'name'/g,name);
+              onChangeStr = onChangeStr.replace(/'value'/g,value);
+              eval(onChangeStr)
+          }}} onBlur={()=>{ if(this.props.data.supportJS && this.props.data.hasOwnProperty('onBlurStr')
+            && !CommonUtils.isEmpty(this.props.data.onBlurStr)){
+            eval(this.props.data.onBlurStr)
+          }}} >
             {this.props.data.options.map(function (option) {
               let this_key = 'preview_' + option.key;
               return <option value={option.value} key={this_key}>{option.text}</option>;
@@ -543,7 +607,23 @@ class Tags extends React.Component {
             <span className="label-required label label-danger">Required</span>
             }
           </label>
-          <Select {...props} />
+          <Select {...props}  onClick={()=>{ if(this.props.data.supportJS && this.props.data.hasOwnProperty('onClickStr')
+            && !CommonUtils.isEmpty(this.props.data.onClickStr)){
+            eval(this.props.data.onClickStr)
+          }}} onChange={(e)=>{
+            if(this.props.data.supportJS && this.props.data.hasOwnProperty('onChangeStr')
+            && !CommonUtils.isEmpty(this.props.data.onChangeStr)){
+              let target = e && e.target ? e.target : e;
+              let name = target.name;
+              let value = target.value;
+              let onChangeStr = this.props.data.onChangeStr;
+              onChangeStr = onChangeStr.replace(/'name'/g,name);
+              onChangeStr = onChangeStr.replace(/'value'/g,value);
+              eval(onChangeStr)
+          }}} onBlur={()=>{ if(this.props.data.supportJS && this.props.data.hasOwnProperty('onBlurStr')
+            && !CommonUtils.isEmpty(this.props.data.onBlurStr)){
+            eval(this.props.data.onBlurStr)
+          }}} />
         </div>
       </div>
     );
@@ -600,7 +680,23 @@ class Checkboxes extends React.Component {
                   if (c && self.props.mutable) {
                     self.options[`child_ref_${option.key}`] = c;
                   }
-                } } {...props} /> {option.text}
+                } } {...props}  onClick={()=>{ if(this.props.data.supportJS && this.props.data.hasOwnProperty('onClickStr')
+                  && !CommonUtils.isEmpty(this.props.data.onClickStr)){
+                  eval(this.props.data.onClickStr)
+                }}} onChange={(e)=>{
+                  if(this.props.data.supportJS && this.props.data.hasOwnProperty('onChangeStr')
+                  && !CommonUtils.isEmpty(this.props.data.onChangeStr)){
+                    let target = e && e.target ? e.target : e;
+                    let name = target.name;
+                    let value = target.value;
+                    let onChangeStr = this.props.data.onChangeStr;
+                    onChangeStr = onChangeStr.replace(/'name'/g,name);
+                    onChangeStr = onChangeStr.replace(/'value'/g,value);
+                    eval(onChangeStr)
+                }}} onBlur={()=>{ if(this.props.data.supportJS && this.props.data.hasOwnProperty('onBlurStr')
+                  && !CommonUtils.isEmpty(this.props.data.onBlurStr)){
+                  eval(this.props.data.onBlurStr)
+                }}} /> {option.text}
               </label>
             )
           })}
@@ -660,7 +756,23 @@ class RadioButtons extends React.Component {
                   if (c && self.props.mutable) {
                     self.options[`child_ref_${option.key}`] = c;
                   }
-                } } {...props} /> {option.text}
+                } } {...props}  onClick={()=>{ if(this.props.data.supportJS && this.props.data.hasOwnProperty('onClickStr')
+                  && !CommonUtils.isEmpty(this.props.data.onClickStr)){
+                  eval(this.props.data.onClickStr)
+                }}} onChange={(e)=>{
+                  if(this.props.data.supportJS && this.props.data.hasOwnProperty('onChangeStr')
+                  && !CommonUtils.isEmpty(this.props.data.onChangeStr)){
+                    let target = e && e.target ? e.target : e;
+                    let name = target.name;
+                    let value = target.value;
+                    let onChangeStr = this.props.data.onChangeStr;
+                    onChangeStr = onChangeStr.replace(/'name'/g,name);
+                    onChangeStr = onChangeStr.replace(/'value'/g,value);
+                    eval(onChangeStr)
+                }}} onBlur={()=>{ if(this.props.data.supportJS && this.props.data.hasOwnProperty('onBlurStr')
+                  && !CommonUtils.isEmpty(this.props.data.onBlurStr)){
+                  eval(this.props.data.onBlurStr)
+                }}} /> {option.text}
               </label>
             )
           })}
@@ -793,6 +905,32 @@ class Download extends React.Component {
   }
 }
 
+
+class UploadFile extends React.Component {
+
+  render() {
+    let baseClasses = CommonUtils.getElementsClass(this.props.data);
+
+    return (
+      <div className={baseClasses}>
+        { !this.props.mutable &&
+        <div>
+          { this.props.data.pageBreakBefore &&
+          <div className="preview-page-break">Page Break</div>
+          }
+          <HeaderBar parent={this.props.parent} editModeOn={this.props.editModeOn} data={this.props.data}
+                     onDestroy={this.props._onDestroy} onEdit={this.props.onEdit} static={this.props.data.static}
+                     required={this.props.data.required}/>
+        </div>
+        }
+        <div className="form-group">
+          <FineUploader {...this.props } {...this.props.data } />
+        </div>
+      </div>
+    );
+  }
+}
+
 class Camera extends React.Component {
   // mixins: [SortableItemMixin],
 
@@ -845,7 +983,6 @@ class Camera extends React.Component {
             }
           </label>
           <div className="image-upload-container">
-
             { !this.state.img &&
             <div>
               <input type="file" accept="image/*" capture="camera" className="image-upload"
@@ -856,7 +993,6 @@ class Camera extends React.Component {
               </div>
             </div>
             }
-
             { this.state.img &&
             <div>
               <img src={ this.state.img } height="100" className="image-upload-preview"/><br />
@@ -865,7 +1001,6 @@ class Camera extends React.Component {
               </div>
             </div>
             }
-
           </div>
         </div>
       </div>
@@ -978,7 +1113,7 @@ FormElements.Rating = Rating;
 FormElements.Tags = Tags;
 FormElements.HyperLink = HyperLink;
 FormElements.Download = Download;
-FormElements.UploadFile = FineUploader;
+FormElements.UploadFile = UploadFile;
 FormElements.Camera = Camera;
 FormElements.Range = Range;
 
