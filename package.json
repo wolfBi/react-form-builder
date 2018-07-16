@@ -37,6 +37,7 @@
     "fine-uploader": "^5.16.2",
     "moment": "^2.22.1",
     "prop-types": "^15.6.2",
+    "rc-time-picker": "^3.3.1",
     "react": "^16.3.2",
     "react-bootstrap": "^0.32.1",
     "react-bootstrap-slider": "^2.1.5",
