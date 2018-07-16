@@ -8,6 +8,7 @@ import ReactDatePicker from 'react-datepicker';
 import ReactBootstrapSlider from  'react-bootstrap-slider';
 import HeaderBar from './HeaderBar';
 import StarRating from './component/StarRating';
+import SelectWidget from './component/SelectWidget';
 import FineUploader from './component/FineUploader';
 import CommonUtils from './CommonUtils';
 
@@ -514,6 +515,9 @@ class Dropdown extends React.Component {
       props.defaultValue = this.props.defaultValue;
       props.ref = this.inputField;
     }
+    props.value = this.props.data.value;
+    props.creatable = this.props.data.creatable;
+    props.clearable = this.props.data.clearable;
 
     if (this.props.read_only) {
       props.disabled = "disabled";
@@ -540,10 +544,11 @@ class Dropdown extends React.Component {
             <span className="label-required label label-danger">Required</span>
             }
           </label>
-          <select {...props}  onClick={()=>{ if(this.props.data.supportJS && this.props.data.hasOwnProperty('onClickStr')
-            && !CommonUtils.isEmpty(this.props.data.onClickStr)){
-            eval(this.props.data.onClickStr)
-          }}} onChange={(e)=>{
+          <SelectWidget {...props} options={this.props.data.options}
+            onClick={()=>{ if(this.props.data.supportJS && this.props.data.hasOwnProperty('onClickStr')
+              && !CommonUtils.isEmpty(this.props.data.onClickStr)){
+              eval(this.props.data.onClickStr)
+            }}} onChange={(e)=>{
             if(this.props.data.supportJS && this.props.data.hasOwnProperty('onChangeStr')
             && !CommonUtils.isEmpty(this.props.data.onChangeStr)){
               let target = e && e.target ? e.target : e;
@@ -557,11 +562,11 @@ class Dropdown extends React.Component {
             && !CommonUtils.isEmpty(this.props.data.onBlurStr)){
             eval(this.props.data.onBlurStr)
           }}} >
-            {this.props.data.options.map(function (option) {
+            {/*{this.props.data.options.map(function (option) {
               let this_key = 'preview_' + option.key;
               return <option value={option.value} key={this_key}>{option.text}</option>;
-            })}
-          </select>
+            })}*/}
+          </SelectWidget>
         </div>
       </div>
     );

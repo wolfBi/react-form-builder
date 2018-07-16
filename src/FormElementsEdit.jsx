@@ -90,6 +90,8 @@ export default class FormElementsEdit extends React.Component {
     let this_checked_alternate_form = this.props.element.hasOwnProperty('alternateForm') ? this.props.element.alternateForm : false;
     let this_checked_multiple = this.props.element.hasOwnProperty('multiple') ? this.props.element.multiple : false;
     let this_checked_dropable = this.props.element.hasOwnProperty('dropable') ? this.props.element.dropable : false;
+    let this_checked_creatable = this.props.element.hasOwnProperty('creatable') ? this.props.element.creatable : false;
+    let this_checked_clearable = this.props.element.hasOwnProperty('clearable') ? this.props.element.clearable : false;
 
     let this_files = this.props.files.length ? this.props.files : [];
     if (this_files.length < 1 || this_files.length > 0 && this_files[0].id !== "")
@@ -250,14 +252,33 @@ export default class FormElementsEdit extends React.Component {
           </div>
         }
         { this.state.element.hasOwnProperty('dropable') &&
-          <div className="checkbox">
-            <label>
-              <input type="checkbox" checked={this_checked_dropable} value={true}
-                     onChange={this.editElementProp.bind(this, 'dropable', 'checked')}/>
-              Dropable
-            </label>
-          </div>
+        <div className="checkbox">
+          <label>
+            <input type="checkbox" checked={this_checked_dropable} value={true}
+                   onChange={this.editElementProp.bind(this, 'dropable', 'checked')}/>
+            Dropable
+          </label>
+        </div>
         }
+        { this.state.element.hasOwnProperty('creatable') &&
+        <div className="checkbox">
+          <label>
+            <input type="checkbox" checked={this_checked_creatable} value={true}
+                   onChange={this.editElementProp.bind(this, 'creatable', 'checked')}/>
+            Dropable
+          </label>
+        </div>
+        }
+        { this.state.element.hasOwnProperty('clearable') &&
+        <div className="checkbox">
+          <label>
+            <input type="checkbox" checked={this_checked_clearable} value={true}
+                   onChange={this.editElementProp.bind(this, 'clearable', 'checked')}/>
+            Dropable
+          </label>
+        </div>
+        }
+
         {this.state.element.element === 'Signature' && this.props.element.readOnly
           ? (
             <div className="form-group">

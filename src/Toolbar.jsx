@@ -119,6 +119,8 @@ export default class Toolbar extends React.Component {
         label: 'Placeholder Label',
         field_name: 'dropdown_',
         options: [],
+        creatable:true,
+        clearable:true,
         supportJS:true
       },
       {
@@ -287,6 +289,10 @@ export default class Toolbar extends React.Component {
 
     if (item.hasOwnProperty("dropable"))
       elementOptions['dropable'] = item.dropable;
+    if (item.hasOwnProperty("creatable"))
+      elementOptions['creatable'] = item.creatable;
+    if (item.hasOwnProperty("clearable"))
+      elementOptions['clearable'] = item.clearable;
 
     if (item.addFileText)
       elementOptions['addFileText'] = item.addFileText;
