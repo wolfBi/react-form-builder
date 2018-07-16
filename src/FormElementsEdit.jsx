@@ -4,7 +4,7 @@ import { Col } from "react-bootstrap";
 import { ContentState, EditorState, convertFromHTML, convertToRaw } from 'draft-js';
 import { Editor } from 'react-draft-wysiwyg'
 import draftToHtml from 'draftjs-to-html';
-import DynamicOptionList from './DynamicOptionList';
+import DynamicOptionList from './component/DynamicOptionList';
 
 let toolbar = {
   options: ['inline', 'list', 'textAlign', 'fontSize', 'link', 'history'],

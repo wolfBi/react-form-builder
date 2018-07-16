@@ -3,7 +3,7 @@
  */
 
 import React from 'react';
-import ID from './UUID';
+import ID from '../UUID';
 
 export default class DynamicOptionList extends React.Component {
   constructor(props) {
