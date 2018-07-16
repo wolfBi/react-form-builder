@@ -11,6 +11,8 @@ import StarRating from './component/StarRating';
 import FineUploader from './component/FineUploader';
 import CommonUtils from './CommonUtils';
 
+import 'react-datepicker/dist/react-datepicker.css'
+
 let FormElements = {};
 let myxss = new xss.FilterXSS({
   whiteList: {
@@ -428,6 +430,15 @@ class DatePicker extends React.Component {
 
     let baseClasses = CommonUtils.getElementsClass(this.props.data);
 
+    const dataDiv = <div >
+      <i className="fa fa-calendar" style={{marginRight: '3px', marginLeft: '3px', marginTop: '3px', marginBottom: '3px'}} />
+      <input className='widget-date-input' style={{width: '131px',background:'white'}} id={this.props.id} ref='input'
+             name={this.props.name} disabled={true}
+             value={this.state.value}
+             onChange={this.props.onChange}
+             disabledPastDate ={true}
+      />
+    </div>;
     return (
       <div className={baseClasses}>
         { !this.props.mutable &&
@@ -469,16 +480,17 @@ class DatePicker extends React.Component {
                    className="form-control"/>
             }
             { !iOS && !this.props.data.readOnly &&
-            <ReactDatePicker
-              name={props.name}
-              ref={props.ref}
-              onChange={this.handleChange}
-              selected={this.state.internalValue}
-              todayButton={'Today'}
-              className="form-control"
-              isClearable={true}
-              dateFormat="MM/DD/YYYY"
-              placeholderText={this.state.placeholder}/>
+            <ReactDatePicker customInput={dataDiv}
+               name={props.name}
+               ref={props.ref}
+               onChange={this.handleChange}
+               selected={this.state.internalValue}
+               minDate={this.props.hasOwnProperty("disabledPastDate")&&this.props.disabledPastDate === false ? null : moment()}
+               todayButton={'Today'}
+               /*className="form-control"*/
+               isClearable={true}
+               dateFormat="MM/DD/YYYY"
+               placeholderText={this.state.placeholder}/>
             }
           </div>
         </div>
