@@ -76,6 +76,8 @@ form_action | string | Required | URL path to submit the form
 form_method | string | Required | Verb used in the form submission.
 action_name | string | Optional | Defines form submit button text.  Defaults to "Submit"
 data | array | Required | Question data retrieved from the database
+download_path | string | Optional | used in File Download 
+upload_path | string | Optional | used in File Upload
 back_action | string | Optional | URL path to go back if needed.
 back_name | string | Optional | Button text for back action.  Defaults to "Cancel".
 task_id | integer | Optional | User to submit a hidden variable with id to the form on the backend database.

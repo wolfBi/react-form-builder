@@ -896,7 +896,7 @@ class Download extends React.Component {
         </div>
         }
         <div className="form-group">
-          <a href={this.props.download_path + '?id=' + this.props.data.file_path}>
+          <a href={this.props.download_path + this.props.data.file_path}>
             <span dangerouslySetInnerHTML={{__html: myxss.process(this.props.data.content)}}/>
           </a>
         </div>
