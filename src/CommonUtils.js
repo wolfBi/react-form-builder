@@ -31,7 +31,7 @@ export default class CommonUtil {
     if (elementData.pageBreakBefore) {
       baseClasses += ' alwaysbreak';
     }
-    if (elementData.compWidth) {
+    if (elementData.compWidth && elementData.compWidth > 0 && elementData.compWidth <= 12 ) {
       baseClasses += ' col-xs-'+elementData.compWidth;
     }else{
       baseClasses += ' col-xs-12 ';

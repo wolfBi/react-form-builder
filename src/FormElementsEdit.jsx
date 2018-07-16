@@ -340,7 +340,7 @@ export default class FormElementsEdit extends React.Component {
         <div className="form-group clearfix">
           <Col xs={3} className="padding0Px"><label className="control-label" htmlFor="compWidth">Width</label></Col>
           <Col xs={9} >
-          <input id="compWidth" type="number" min={0} max={12} style={{width:'240px'}}
+          <input id="compWidth" type="number" min={1} max={12} style={{width:'240px'}}
                  className="form-control" defaultValue={this.props.element.compWidth}
                  onBlur={this.updateElement.bind(this)}
                  onChange={this.editElementProp.bind(this, 'compWidth', 'value')}/>
