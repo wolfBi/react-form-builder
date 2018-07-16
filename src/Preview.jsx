@@ -96,11 +96,13 @@ export default class Preview extends React.Component {
   }
 
   getElement(item, index) {
-    const SortableFormElement = SortableFormElements[item.element]
-    return <SortableFormElement id={item.id} index={index} moveCard={this.moveCard} insertCard={this.insertCard}
-                                mutable={false} parent={this.props.parent} editModeOn={this.props.editModeOn}
-                                isDraggable={true} key={item.id} sortData={item.id} data={item}
-                                _onDestroy={this._onDestroy}/>
+    if(item){
+      const SortableFormElement = SortableFormElements[item.element]
+      return <SortableFormElement id={item.id} index={index} moveCard={this.moveCard} insertCard={this.insertCard}
+                                  mutable={false} parent={this.props.parent} editModeOn={this.props.editModeOn}
+                                  isDraggable={true} key={item.id} sortData={item.id} data={item}
+                                  _onDestroy={this._onDestroy}/>
+    }
   }
 
   render() {
