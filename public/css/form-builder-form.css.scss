@@ -25,7 +25,8 @@ input[type="date"] {
 
 .react-form-builder-form {
   position: relative;
-
+  max-height:700px;
+  overflow: auto;
   .rfb-item.alwaysbreak {
     page-break-before: always;
   }

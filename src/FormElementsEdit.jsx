@@ -338,12 +338,12 @@ export default class FormElementsEdit extends React.Component {
         }
         { this.props.element.hasOwnProperty('compWidth') &&
         <div className="form-group clearfix">
-          <Col xs={3} className="padding0Px"><label className="control-label" htmlFor="compWidth">Width</label></Col>
+          <Col xs={3} className="padding0Px"><label className="control-label" htmlFor="compWidth">Width </label></Col>
           <Col xs={9} >
-          <input id="compWidth" type="number" min={1} max={12} style={{width:'240px'}}
-                 className="form-control" defaultValue={this.props.element.compWidth}
-                 onBlur={this.updateElement.bind(this)}
-                 onChange={this.editElementProp.bind(this, 'compWidth', 'value')}/>
+          <input id="compWidth" type="number" min={1} max={12} style={{width:'40px'}}
+            defaultValue={this.props.element.compWidth} onBlur={this.updateElement.bind(this)}
+            onChange={this.editElementProp.bind(this, 'compWidth', 'value')}/>
+            ( 1~12 ) Change lines every 12 units. Bootstrap col-xs-?
           </Col>
         </div>
         }
@@ -364,7 +364,7 @@ export default class FormElementsEdit extends React.Component {
           <div>
             <Col xs={12} className="control-label padding0Px"><h4>Function</h4></Col>
             <Col xs={12} className="control-label padding0Px">
-              <p>  &nbsp;&nbsp;The name and value variables are not allowed to be defined in the <span style={{fontWeight:'700'}}>OnChange</span> function.You can use name and value directly, e.g. alert(name+value)</p>
+              <p>The name and value variables are not allowed to be defined in the <span style={{fontWeight:'700'}}>OnChange</span> function.You can use name and value directly, e.g. alert(name+value)</p>
             </Col>
             <div className="form-group clearfix">
               <Col xs={3} className="padding0Px"><label className="control-label" htmlFor="onClickStr">OnClick </label></Col>

@@ -102,6 +102,8 @@ export default class Preview extends React.Component {
                                   mutable={false} parent={this.props.parent} editModeOn={this.props.editModeOn}
                                   isDraggable={true} key={item.id} sortData={item.id} data={item}
                                   _onDestroy={this._onDestroy}/>
+    }else{
+      console.log("getElement item is undefined");
     }
   }
 
