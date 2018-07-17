@@ -9,7 +9,8 @@ class SelectAsync extends Component {
 	}
 
 	render(){
-	    let {name, styles, value, onChange, creatable, clearable, placeholder, disabled, loadOptions, autofocus, closeOnSelect, backspaceRemoves} = this.props;
+	    let {name, styles, value, onChange, creatable, clearable, placeholder, disabled,
+        loadOptions, autofocus, closeOnSelect, backspaceRemoves } = this.props;
         if (creatable) {
             return (<Select.AsyncCreatable name={name} style={styles} disabled={disabled} closeOnSelect={closeOnSelect} clearable={clearable}
                                            loadOptions={loadOptions}  value={value} onChange={onChange} backspaceRemoves={backspaceRemoves}

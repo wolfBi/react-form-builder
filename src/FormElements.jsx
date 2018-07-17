@@ -1,7 +1,6 @@
 import React from 'react';
 import xss from 'xss';
 import moment from 'moment';
-import update from 'immutability-helper';
 import Select from 'react-select';
 import ReactDatePicker from 'react-datepicker';
 // import SortableItemMixin from 'react-anything-sortable/SortableItemMixin';
@@ -11,8 +10,6 @@ import StarRating from './component/StarRating';
 import SelectWidget from './component/SelectWidget';
 import FineUploader from './component/FineUploader';
 import CommonUtils from './CommonUtils';
-
-import 'react-datepicker/dist/react-datepicker.css'
 
 let FormElements = {};
 let myxss = new xss.FilterXSS({
@@ -188,14 +185,14 @@ class TextInput extends React.Component {
         </div>
         }
         <div className="form-group">
-          <label>
+          <label className={!this.props.data.inline?"form-label":""}>
             <span dangerouslySetInnerHTML={{__html: myxss.process(this.props.data.label)}}/>
-
             { (this.props.data.hasOwnProperty('required') && this.props.data.required === true && !this.props.read_only) &&
             <span className="label-required label label-danger">Required</span>
             }
           </label>
-          <input {...props} onClick={()=>{ if(this.props.data.supportJS && this.props.data.hasOwnProperty('onClickStr')
+          <input {...props} style={this.props.data.inline?{display:'inline-flex'}:{}}
+          onClick={()=>{ if(this.props.data.supportJS && this.props.data.hasOwnProperty('onClickStr')
             && !CommonUtils.isEmpty(this.props.data.onClickStr)){
             eval(this.props.data.onClickStr)
           }}} onChange={(e)=>{
@@ -259,14 +256,15 @@ class NumberInput extends React.Component {
         </div>
         }
         <div className="form-group">
-          <label>
+          <label className={!this.props.data.inline?"form-label":""}>
             <span dangerouslySetInnerHTML={{__html: myxss.process(this.props.data.label)}}/>
 
             { (this.props.data.hasOwnProperty('required') && this.props.data.required === true && !this.props.read_only) &&
             <span className="label-required label label-danger">Required</span>
             }
           </label>
-          <input {...props} onClick={()=>{ if(this.props.data.supportJS && this.props.data.hasOwnProperty('onClickStr')
+          <input {...props} style={this.props.data.inline?{display:'inline-flex'}:{}}
+                 onClick={()=>{ if(this.props.data.supportJS && this.props.data.hasOwnProperty('onClickStr')
             && !CommonUtils.isEmpty(this.props.data.onClickStr)){
             eval(this.props.data.onClickStr)
           }}} onChange={(e)=>{
@@ -297,7 +295,7 @@ class TextArea extends React.Component {
 
   render() {
     let props = {};
-    props.className = "form-control";
+    props.className = "";
     props.name = this.props.data.field_name;
 
     if (this.props.read_only) {
@@ -324,7 +322,7 @@ class TextArea extends React.Component {
         </div>
         }
         <div className="form-group">
-          <label>
+          <label style={this.props.data.inline?{verticalAlign:'top'}:{}} className={!this.props.data.inline?"form-label":""}>
             <span dangerouslySetInnerHTML={{__html: myxss.process(this.props.data.label)}}/>
             { (this.props.data.hasOwnProperty('required') && this.props.data.required === true && !this.props.read_only) &&
             <span className="label-required label label-danger">Required</span>
@@ -415,7 +413,7 @@ class DatePicker extends React.Component {
   render() {
     let props = {};
     props.type = "date";
-    props.className = "form-control";
+    props.className = "";
     props.name = this.props.data.field_name;
 
     var iOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
@@ -433,11 +431,8 @@ class DatePicker extends React.Component {
 
     const dataDiv = <div >
       <i className="fa fa-calendar" style={{marginRight: '3px', marginLeft: '3px', marginTop: '3px', marginBottom: '3px'}} />
-      <input className='widget-date-input' style={{width: '131px',background:'white'}} id={this.props.id} ref='input'
-             name={this.props.name} disabled={true}
-             value={this.state.value}
-             onChange={this.props.onChange}
-             disabledPastDate ={true}
+      <input className='widget-date-input' style={{width: '132px',background:'white'}} id={props.name}
+            name={props.name} disabled={true} value={this.state.value}
       />
     </div>;
     return (
@@ -453,13 +448,13 @@ class DatePicker extends React.Component {
         </div>
         }
         <div className="form-group">
-          <label>
+          <label className={!this.props.data.inline?"form-label":""} >
             <span dangerouslySetInnerHTML={{__html: myxss.process(this.props.data.label)}}/>
             { (this.props.data.hasOwnProperty('required') && this.props.data.required === true && !this.props.read_only) &&
             <span className="label-required label label-danger">Required</span>
             }
           </label>
-          <div>
+          <div style={this.props.data.inline?{display:'inline-flex'}:{}}>
             { this.props.data.readOnly &&
             <input type="text"
                    name={props.name}
@@ -482,13 +477,11 @@ class DatePicker extends React.Component {
             }
             { !iOS && !this.props.data.readOnly &&
             <ReactDatePicker customInput={dataDiv}
-               name={props.name}
-               ref={props.ref}
+               name={props.name} ref={props.ref}
                onChange={this.handleChange}
                selected={this.state.internalValue}
                minDate={this.props.hasOwnProperty("disabledPastDate")&&this.props.disabledPastDate === false ? null : moment()}
                todayButton={'Today'}
-               /*className="form-control"*/
                isClearable={true}
                dateFormat="MM/DD/YYYY"
                placeholderText={this.state.placeholder}/>
@@ -515,7 +508,6 @@ class Dropdown extends React.Component {
       props.defaultValue = this.props.defaultValue;
       props.ref = this.inputField;
     }
-    props.value = this.props.data.value;
     props.creatable = this.props.data.creatable;
     props.clearable = this.props.data.clearable;
 
@@ -544,7 +536,9 @@ class Dropdown extends React.Component {
             <span className="label-required label label-danger">Required</span>
             }
           </label>
-          <SelectWidget {...props} options={this.props.data.options}
+          <div  style={this.props.data.inline?{display:'inline-flex'}:{}}>
+          <SelectWidget {...props}
+            options={this.props.data.options}
             onClick={()=>{ if(this.props.data.supportJS && this.props.data.hasOwnProperty('onClickStr')
               && !CommonUtils.isEmpty(this.props.data.onClickStr)){
               eval(this.props.data.onClickStr)
@@ -562,11 +556,7 @@ class Dropdown extends React.Component {
             && !CommonUtils.isEmpty(this.props.data.onBlurStr)){
             eval(this.props.data.onBlurStr)
           }}} >
-            {/*{this.props.data.options.map(function (option) {
-              let this_key = 'preview_' + option.key;
-              return <option value={option.value} key={this_key}>{option.text}</option>;
-            })}*/}
-          </SelectWidget>
+          </SelectWidget></div>
         </div>
       </div>
     );
@@ -586,10 +576,7 @@ class Tags extends React.Component {
   };
 
   render() {
-    let options = this.props.data.options.map(option => {
-      option.label = option.text;
-      return option;
-    })
+    let options = this.props.data.options
     let props = {};
     props.multi = true;
     props.name = this.props.data.field_name;
@@ -624,7 +611,8 @@ class Tags extends React.Component {
             <span className="label-required label label-danger">Required</span>
             }
           </label>
-          <Select {...props}  onClick={()=>{ if(this.props.data.supportJS && this.props.data.hasOwnProperty('onClickStr')
+          <Select {...props} style={this.props.data.inline?{display:'inline-flex'}:{}}
+          onClick={()=>{ if(this.props.data.supportJS && this.props.data.hasOwnProperty('onClickStr')
             && !CommonUtils.isEmpty(this.props.data.onClickStr)){
             eval(this.props.data.onClickStr)
           }}} onChange={(e)=>{
@@ -656,7 +644,7 @@ class Checkboxes extends React.Component {
   render() {
     let self = this;
     let classNames = 'checkbox-label';
-    if (this.props.data.inline) {
+    if (this.props.data.optionInline) {
       classNames += ' option-inline';
     }
 
@@ -675,7 +663,7 @@ class Checkboxes extends React.Component {
         </div>
         }
         <div className="form-group">
-          <label className="form-label">
+          <label className={!this.props.data.inline?"form-label":""}>
             <span dangerouslySetInnerHTML={{__html: myxss.process(this.props.data.label)}}/>
             { (this.props.data.hasOwnProperty('required') && this.props.data.required === true && !this.props.read_only) &&
             <span className="label-required label label-danger">Required</span>
@@ -713,7 +701,7 @@ class Checkboxes extends React.Component {
                 }}} onBlur={()=>{ if(this.props.data.supportJS && this.props.data.hasOwnProperty('onBlurStr')
                   && !CommonUtils.isEmpty(this.props.data.onBlurStr)){
                   eval(this.props.data.onBlurStr)
-                }}} /> {option.text}
+                }}} /> {option.label}
               </label>
             )
           })}
@@ -732,7 +720,7 @@ class RadioButtons extends React.Component {
   render() {
     let self = this;
     let classNames = 'radio-label';
-    if (this.props.data.inline) {
+    if (this.props.data.optionInline) {
       classNames += ' option-inline';
     }
 
@@ -751,7 +739,7 @@ class RadioButtons extends React.Component {
         </div>
         }
         <div className="form-group">
-          <label className="form-label">
+          <label className={!this.props.data.inline?"form-label":""} >
             <span dangerouslySetInnerHTML={{__html: myxss.process(this.props.data.label)}}/>
             { (this.props.data.hasOwnProperty('required') && this.props.data.required === true && !this.props.read_only) &&
             <span className="label-required label label-danger">Required</span>
@@ -789,7 +777,7 @@ class RadioButtons extends React.Component {
                 }}} onBlur={()=>{ if(this.props.data.supportJS && this.props.data.hasOwnProperty('onBlurStr')
                   && !CommonUtils.isEmpty(this.props.data.onBlurStr)){
                   eval(this.props.data.onBlurStr)
-                }}} /> {option.text}
+                }}} /> {option.label}
               </label>
             )
           })}
@@ -1122,16 +1110,16 @@ FormElements.TextInput = TextInput;
 FormElements.NumberInput = NumberInput;
 FormElements.TextArea = TextArea;
 FormElements.Dropdown = Dropdown;
-FormElements.Checkboxes = Checkboxes;
-FormElements.DatePicker = DatePicker;
-FormElements.RadioButtons = RadioButtons;
-FormElements.Image = Image;
-FormElements.Rating = Rating;
 FormElements.Tags = Tags;
+FormElements.Checkboxes = Checkboxes;
+FormElements.RadioButtons = RadioButtons;
+FormElements.DatePicker = DatePicker;
 FormElements.HyperLink = HyperLink;
 FormElements.Download = Download;
 FormElements.UploadFile = UploadFile;
 FormElements.Camera = Camera;
+FormElements.Image = Image;
+FormElements.Rating = Rating;
 FormElements.Range = Range;
 
 module.exports = FormElements;

@@ -83,6 +83,7 @@ export default class FormElementsEdit extends React.Component {
 
     let this_checked_required = this.props.element.hasOwnProperty('required') ? this.props.element.required : false;
     let this_checked_inline = this.props.element.hasOwnProperty('inline') ? this.props.element.inline : false;
+    let this_checked_optioninline = this.props.element.hasOwnProperty('optionInline') ? this.props.element.optionInline : false;
     let this_checked_bold = this.props.element.hasOwnProperty('bold') ? this.props.element.bold : false;
     let this_checked_italic = this.props.element.hasOwnProperty('italic') ? this.props.element.italic : false;
     let this_checked_center = this.props.element.hasOwnProperty('center') ? this.props.element.center : false;
@@ -113,7 +114,7 @@ export default class FormElementsEdit extends React.Component {
         </div>
 
         { this.props.element.hasOwnProperty('field_name') &&
-        <div className="form-group">
+        <div className="form-group clearfix">
           <Col xs={3} className="padding0Px"><label htmlFor="srcInput">ID/Name</label></Col>
           <Col xs={9} >
             <input id="nameIdInput" type="text" className="form-control"  style={{width:'220px'}}
@@ -124,7 +125,7 @@ export default class FormElementsEdit extends React.Component {
         </div>}
 
         { this.props.element.hasOwnProperty('content') &&
-        <div className="form-group">
+        <div className="form-group clearfix">
           <label className="control-label">Text to display:</label>
 
           <Editor
@@ -135,8 +136,9 @@ export default class FormElementsEdit extends React.Component {
         </div>
         }
         { this.props.element.hasOwnProperty('file_path') &&
-        <div className="form-group">
-          <label className="control-label" htmlFor="fileSelect">Choose file</label>
+        <div className="form-group clearfix">
+          <Col xs={3} className="padding0Px"><label className="control-label" htmlFor="fileSelect">Choose file</label></Col>
+          <Col xs={9} >
           <select id="fileSelect" className="form-control" defaultValue={this.props.element.file_path}
                   onBlur={this.updateElement.bind(this)}
                   onChange={this.editElementProp.bind(this, 'file_path', 'value')}>
@@ -145,23 +147,26 @@ export default class FormElementsEdit extends React.Component {
               return <option value={file.id} key={this_key}>{file.file_name}</option>;
             })}
           </select>
+          </Col>
         </div>
         }
         { this.props.element.hasOwnProperty('href') &&
-        <div className="form-group">
+        <div className="form-group clearfix">
           <TextAreaAutosize type="text" className="form-control" defaultValue={this.props.element.href}
                             onBlur={this.updateElement.bind(this)}
                             onChange={this.editElementProp.bind(this, 'href', 'value')}/>
         </div>
         }
         { this.props.element.hasOwnProperty('src') &&
-        <div>
-          <div className="form-group">
-            <label className="control-label" htmlFor="srcInput">Link to:</label>
+        <div style={{marginBottom:'10px'}}>
+          <div className="form-group clearfix">
+            <Col xs={3} className="padding0Px"><label className="control-label" htmlFor="srcInput">Link to:</label></Col>
+            <Col xs={9} >
             <input id="srcInput" type="text" className="form-control" defaultValue={this.props.element.src}
                    onBlur={this.updateElement.bind(this)} onChange={this.editElementProp.bind(this, 'src', 'value')}/>
+            </Col>
           </div>
-          <div className="form-group">
+          <div className="form-group clearfix">
             <div className="checkbox">
               <label>
                 <input type="checkbox" checked={this_checked_center} value={true}
@@ -171,24 +176,22 @@ export default class FormElementsEdit extends React.Component {
             </div>
           </div>
           <div className="row">
-            <div className="col-sm-3">
-              <label className="control-label" htmlFor="elementWidth">Image Width:</label>
-              <input id="elementWidth" type="text" className="form-control" defaultValue={this.props.element.width}
-                     onBlur={this.updateElement.bind(this)}
-                     onChange={this.editElementProp.bind(this, 'width', 'value')}/>
+            <div className="col-sm-6">
+              <Col xs={4} className="padding0Px"><label className="control-label" htmlFor="elementWidth">Image Width:</label></Col>
+              <Col xs={8} ><input id="elementWidth" type="text" className="form-control" defaultValue={this.props.element.width}
+                     onBlur={this.updateElement.bind(this)} onChange={this.editElementProp.bind(this, 'width', 'value')}/></Col>
             </div>
-            <div className="col-sm-3">
-              <label className="control-label" htmlFor="elementHeight">Image Height:</label>
-              <input id="elementHeight" type="text" className="form-control" defaultValue={this.props.element.height}
-                     onBlur={this.updateElement.bind(this)}
-                     onChange={this.editElementProp.bind(this, 'height', 'value')}/>
+            <div className="col-sm-6">
+              <Col xs={4} className="padding0Px"><label className="control-label" htmlFor="elementHeight">Image Height:</label></Col>
+              <Col xs={8} ><input id="elementHeight" type="text" className="form-control" defaultValue={this.props.element.height}
+                     onBlur={this.updateElement.bind(this)} onChange={this.editElementProp.bind(this, 'height', 'value')}/></Col>
             </div>
           </div>
         </div>
         }
         { this.props.element.hasOwnProperty('label') &&
-        <div className="form-group">
-          <label>Display Label</label>
+        <div className="form-group clearfix">
+          <label style={{display:"table-row"}}>Display Label</label>
           <Editor
             toolbar={toolbar}
             defaultEditorState={editorState}
@@ -201,6 +204,13 @@ export default class FormElementsEdit extends React.Component {
               <input type="checkbox" checked={this_checked_required} value={true}
                      onChange={this.editElementProp.bind(this, 'required', 'checked')}/>
               Required
+            </label>
+          </div>
+          <div className="checkbox">
+            <label>
+              <input type="checkbox" checked={this_checked_inline} value={true}
+                     onChange={this.editElementProp.bind(this, 'inline', 'checked')}/>
+              Display horizonal
             </label>
           </div>
           { this.props.element.hasOwnProperty('readOnly') &&
@@ -221,12 +231,12 @@ export default class FormElementsEdit extends React.Component {
             </label>
           </div>
           }
-          { (this.state.element.element === 'RadioButtons' || this.state.element.element === 'Checkboxes') &&
+          { this.props.element.hasOwnProperty('optionInline') &&
           <div className="checkbox">
             <label>
-              <input type="checkbox" checked={this_checked_inline} value={true}
-                     onChange={this.editElementProp.bind(this, 'inline', 'checked')}/>
-              Display horizonal
+              <input type="checkbox" checked={this_checked_optioninline} value={true}
+                     onChange={this.editElementProp.bind(this, 'optionInline', 'checked')}/>
+              Option display horizonal
             </label>
           </div>
           }
@@ -265,7 +275,7 @@ export default class FormElementsEdit extends React.Component {
           <label>
             <input type="checkbox" checked={this_checked_creatable} value={true}
                    onChange={this.editElementProp.bind(this, 'creatable', 'checked')}/>
-            Dropable
+            Creatable
           </label>
         </div>
         }
@@ -274,11 +284,10 @@ export default class FormElementsEdit extends React.Component {
           <label>
             <input type="checkbox" checked={this_checked_clearable} value={true}
                    onChange={this.editElementProp.bind(this, 'clearable', 'checked')}/>
-            Dropable
+            Clearable
           </label>
         </div>
         }
-
         {this.state.element.element === 'Signature' && this.props.element.readOnly
           ? (
             <div className="form-group">

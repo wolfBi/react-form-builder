@@ -3,25 +3,61 @@ import Select, {Creatable} from 'react-select';
 import PropTypes from "prop-types";
 
 class SelectWidget extends Component {
-	arrowRenderer(){
+  constructor(props){
+    super(props);
+
+    this.state = {
+      value: props.value,
+      options: props.options,
+    };
+  }
+  componentWillReceiveProps(nextprops){
+    this.setState({
+      value: nextprops.value,
+      options: nextprops.options,
+    });
+  }
+
+	arrowRenderer = ()=>{
 		return(<div style={{height:'30px',width:'29px','paddingRight':'0'}}>
 			</div>);
 	}
-
+  onChangeHandle = (e)=>{
+	  let {onChange} = this.props;
+	  if(onChange){
+      onChange(e);
+    }
+    let target = e && e.target ? e.target : e;
+    let name = target.name;
+    let value = target.value;
+    let optionValue={value,label:value}
+    this.state.options.map((option)=>{
+      if(option.value === value ){
+        optionValue = option;
+      }
+      return option
+    })
+    this.setState({
+      value,
+      optionValue
+    })
+  }
 	render(){
-	    let {name, styles, options, creatable, clearable, value, onChange, placeholder, disabled} = this.props;
-	    if (creatable) {
-	        return (<Creatable name={name} style={styles} options={options} disabled={disabled}
-                              clearable={clearable} value={value} onChange={onChange}
-                              placeholder={placeholder} arrowRenderer={this.arrowRenderer}/>
-            );
-        } else {
-            return (
-                <Select name={name} style={styles} options={options} disabled={disabled}
-                        clearable={clearable} value={value} onChange={onChange}
-                        placeholder={placeholder} arrowRenderer={this.arrowRenderer}/>
-            );
-        }
+    let {name, styles, creatable, clearable, placeholder, disabled} = this.props;
+    let { value, options } = this.state;
+
+    if (creatable) {
+        return (<Creatable name={name} style={styles} options={options} disabled={disabled}
+                            clearable={clearable} value={value} onChange={this.onChangeHandle}
+                            placeholder={placeholder} arrowRenderer={this.arrowRenderer}/>
+          );
+      } else {
+          return (
+              <Select name={name} style={styles} options={options} disabled={disabled}
+                      clearable={clearable} value={value} onChange={this.onChangeHandle}
+                      placeholder={placeholder} arrowRenderer={this.arrowRenderer}/>
+          );
+      }
 	}
 
 	static propTypes = {

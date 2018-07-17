@@ -21,9 +21,9 @@ export default class DynamicOptionList extends React.Component {
 
   editOption(option_index, e) {
     let this_element = this.state.element;
-    let val = (this_element.options[option_index].value !== this._setValue(this_element.options[option_index].text)) ? this_element.options[option_index].value : this._setValue(e.target.value)
+    let val = (this_element.options[option_index].value !== this._setValue(this_element.options[option_index].label)) ? this_element.options[option_index].value : this._setValue(e.target.value)
 
-    this_element.options[option_index].text = e.target.value;
+    this_element.options[option_index].label = e.target.value;
     this_element.options[option_index].value = val;
     this.setState({
       element: this_element,
@@ -33,7 +33,7 @@ export default class DynamicOptionList extends React.Component {
 
   editValue(option_index, e) {
     let this_element = this.state.element;
-    let val = (e.target.value === '') ? this._setValue(this_element.options[option_index].text) : e.target.value;
+    let val = (e.target.value === '') ? this._setValue(this_element.options[option_index].label) : e.target.value;
     this_element.options[option_index].value = val;
     this.setState({
       element: this_element,
@@ -63,7 +63,7 @@ export default class DynamicOptionList extends React.Component {
 
   addOption(index) {
     let this_element = this.state.element;
-    this_element.options.splice(index + 1, 0, {value: '', text: '', key: ID.uuid()});
+    this_element.options.splice(index + 1, 0, {value: '', label: '', key: ID.uuid()});
     this.props.updateElement.call(this.props.preview, this_element);
   }
 
@@ -87,13 +87,13 @@ export default class DynamicOptionList extends React.Component {
           {
             this.props.element.options.map((option, index) => {
               let this_key = 'edit_' + option.key;
-              let val = (option.value !== this._setValue(option.text)) ? option.value : ''
+              let val = (option.value !== this._setValue(option.label)) ? option.value : ''
               return (
                 <li className="clearfix" key={this_key}>
                   <div className="row">
                     <div className="col-sm-6">
                       <input tabIndex={index + 1} className="form-control" style={{width: '100%'}} type="text"
-                             name={'text_' + index} placeholder="Option text" value={option.text}
+                             name={'label_' + index} placeholder="Option text" value={option.label}
                              onBlur={this.updateOption.bind(this)} onChange={this.editOption.bind(this, index)}/>
                     </div>
                     <div className="col-sm-2">

@@ -26,6 +26,7 @@ input[type="date"] {
 .react-form-builder-form {
   position: relative;
   max-height:700px;
+  min-height:300px;
   overflow: auto;
   .rfb-item.alwaysbreak {
     page-break-before: always;
@@ -58,7 +59,13 @@ input[type="date"] {
         display: inline-block !important;
         margin-right: 10px;
       }
-
+      .inline {
+        display: inline-block !important;
+        margin-right: 10px;
+      }
+      label {
+        font-weight: normal;
+      }
       a {
         cursor: pointer;
       }
