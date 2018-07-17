@@ -1,15 +1,16 @@
 import React from 'react';
 import xss from 'xss';
 import moment from 'moment';
-import Select from 'react-select';
 import ReactDatePicker from 'react-datepicker';
 // import SortableItemMixin from 'react-anything-sortable/SortableItemMixin';
 import ReactBootstrapSlider from  'react-bootstrap-slider';
 import HeaderBar from './HeaderBar';
 import StarRating from './component/StarRating';
 import SelectWidget from './component/SelectWidget';
+import SelectAsync from './component/SelectAsync';
 import FineUploader from './component/FineUploader';
-import CommonUtils from './CommonUtils';
+import CommonUtils from './utils/CommonUtils';
+import HttpUtil from './utils/HttpUtil';
 
 let FormElements = {};
 let myxss = new xss.FilterXSS({
@@ -510,6 +511,8 @@ class Dropdown extends React.Component {
     }
     props.creatable = this.props.data.creatable;
     props.clearable = this.props.data.clearable;
+    props.multi = this.props.data.multiple;
+    props.options= this.props.data.options;
 
     if (this.props.read_only) {
       props.disabled = "disabled";
@@ -536,9 +539,8 @@ class Dropdown extends React.Component {
             <span className="label-required label label-danger">Required</span>
             }
           </label>
-          <div  style={this.props.data.inline?{display:'inline-flex'}:{}}>
+          <div style={this.props.data.inline?{display:'inline-flex'}:{}}>
           <SelectWidget {...props}
-            options={this.props.data.options}
             onClick={()=>{ if(this.props.data.supportJS && this.props.data.hasOwnProperty('onClickStr')
               && !CommonUtils.isEmpty(this.props.data.onClickStr)){
               eval(this.props.data.onClickStr)
@@ -563,7 +565,7 @@ class Dropdown extends React.Component {
   }
 }
 
-class Tags extends React.Component {
+class AsyncDropdown extends React.Component {
   constructor(props) {
     super(props);
     this.inputField = React.createRef();
@@ -573,18 +575,42 @@ class Tags extends React.Component {
 
   handleChange = (e) => {
     this.setState({value: e});
+    if(this.props.data.supportJS && this.props.data.hasOwnProperty('onChangeStr')
+      && !CommonUtils.isEmpty(this.props.data.onChangeStr)) {
+      let target = e && e.target ? e.target : e;
+      let name = target.name;
+      let value = target.value;
+      let onChangeStr = this.props.data.onChangeStr;
+      onChangeStr = onChangeStr.replace(/'name'/g, name);
+      onChangeStr = onChangeStr.replace(/'value'/g, value);
+      eval(onChangeStr)
+    }
   };
-
+  loadOptionsHandle =(input)=>{
+    let { loadOptionUrl,responseFeild, labelFeild, valueFeild } = this.props.data;
+    var api_url = loadOptionUrl+input
+    // global['MCKINSEY_API_URL'] +
+    //   '/v3/persons?fields=core.gocOfficeCode,core.gocOfficeDesc,core.fmno,core.firstName,core.lastName,contact.emails&q='+input;
+    //, {Authorization: `${token.tokenType} ${token.accessToken}`}
+    return HttpUtil.get(api_url, {}, undefined, false, false).then(json => {
+      var items = json.response[responseFeild]&&json.response[responseFeild].map((item) => {
+        return {
+          "value": item[valueFeild],
+          "label": item[labelFeild]
+        };
+      });
+      return {options: items};
+    })
+  }
   render() {
-    let options = this.props.data.options
     let props = {};
     props.multi = true;
     props.name = this.props.data.field_name;
     props.onChange = this.handleChange;
+    props.loadOptionUrl = this.loadOptionUrl;
 
-    props.options = options;
     if (!this.props.mutable) {
-      props.value = options[0].text
+      // props.value = options[0].text
     } // to show a sample of what tags looks like
     if (this.props.mutable) {
       props.value = this.state.value;
@@ -611,24 +637,16 @@ class Tags extends React.Component {
             <span className="label-required label label-danger">Required</span>
             }
           </label>
-          <Select {...props} style={this.props.data.inline?{display:'inline-flex'}:{}}
-          onClick={()=>{ if(this.props.data.supportJS && this.props.data.hasOwnProperty('onClickStr')
-            && !CommonUtils.isEmpty(this.props.data.onClickStr)){
-            eval(this.props.data.onClickStr)
-          }}} onChange={(e)=>{
-            if(this.props.data.supportJS && this.props.data.hasOwnProperty('onChangeStr')
-            && !CommonUtils.isEmpty(this.props.data.onChangeStr)){
-              let target = e && e.target ? e.target : e;
-              let name = target.name;
-              let value = target.value;
-              let onChangeStr = this.props.data.onChangeStr;
-              onChangeStr = onChangeStr.replace(/'name'/g,name);
-              onChangeStr = onChangeStr.replace(/'value'/g,value);
-              eval(onChangeStr)
-          }}} onBlur={()=>{ if(this.props.data.supportJS && this.props.data.hasOwnProperty('onBlurStr')
-            && !CommonUtils.isEmpty(this.props.data.onBlurStr)){
-            eval(this.props.data.onBlurStr)
-          }}} />
+          <div style={this.props.data.inline?{display:'inline-flex'}:{}}>
+            <SelectAsync {...props} loadOptions={this.loadOptionsHandle}
+               onClick={()=>{ if(this.props.data.supportJS && this.props.data.hasOwnProperty('onClickStr')
+              && !CommonUtils.isEmpty(this.props.data.onClickStr)){
+              eval(this.props.data.onClickStr)
+            }}} onBlur={()=>{ if(this.props.data.supportJS && this.props.data.hasOwnProperty('onBlurStr')
+              && !CommonUtils.isEmpty(this.props.data.onBlurStr)){
+              eval(this.props.data.onBlurStr)
+            }}} />
+          </div>
         </div>
       </div>
     );
@@ -1110,7 +1128,7 @@ FormElements.TextInput = TextInput;
 FormElements.NumberInput = NumberInput;
 FormElements.TextArea = TextArea;
 FormElements.Dropdown = Dropdown;
-FormElements.Tags = Tags;
+FormElements.AsyncDropdown = AsyncDropdown;
 FormElements.Checkboxes = Checkboxes;
 FormElements.RadioButtons = RadioButtons;
 FormElements.DatePicker = DatePicker;

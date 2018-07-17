@@ -48,7 +48,7 @@ export default class ReactFormGenerator extends React.Component {
             incorrect = true;
           }
         } else {
-          if (item.element === 'Tags') {
+          if (item.element === 'AsyncDropdown') {
             $item = {};
             $item.value = ref.inputField.current.state.value
           } else if (item.element === 'DatePicker') {
@@ -93,7 +93,7 @@ export default class ReactFormGenerator extends React.Component {
             invalid = true;
           }
         } else {
-          if (item.element === 'Tags') {
+          if (item.element === 'AsyncDropdown') {
             $item = {};
             $item.value = ref.inputField.current.state.value
           } else if (item.element === 'DatePicker') {

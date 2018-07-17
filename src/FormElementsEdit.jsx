@@ -189,6 +189,7 @@ export default class FormElementsEdit extends React.Component {
           </div>
         </div>
         }
+
         { this.props.element.hasOwnProperty('label') &&
         <div className="form-group clearfix">
           <label style={{display:"table-row"}}>Display Label</label>
@@ -240,6 +241,36 @@ export default class FormElementsEdit extends React.Component {
             </label>
           </div>
           }
+        </div>
+        }
+        { this.props.element.hasOwnProperty('loadOptionUrl') &&
+        <div style={{marginBottom:'10px'}}>
+          <div className="form-group clearfix">
+            <Col xs={3} className="padding0Px"><label className="control-label" htmlFor="loadOptionUrlInput">Load Option URL</label></Col>
+            <Col xs={9} >
+              <textarea id="loadOptionUrlInput" rows={3} onBlur={this.updateElement.bind(this)}
+                      onChange={this.editElementProp.bind(this, 'loadOptionUrl', 'value')}>
+                {this.props.element.loadOptionUrl}
+              </textarea>
+            </Col>
+          </div>
+          <div className="row">
+            <div className="col-sm-12">
+              <Col xs={3} className="padding0Px"><label className="control-label" htmlFor="responseFeild">Response Feild</label></Col>
+              <Col xs={9} ><input id="responseFeild" type="text" className="form-control" defaultValue={this.props.element.responseFeild}
+                                  onBlur={this.updateElement.bind(this)} onChange={this.editElementProp.bind(this, 'responseFeild', 'value')}/></Col>
+            </div>
+            <div className="col-sm-12">
+              <Col xs={3} className="padding0Px"><label className="control-label" htmlFor="elementWidth">Label Feild</label></Col>
+              <Col xs={9} ><input id="labelFeild" type="text" className="form-control" defaultValue={this.props.element.labelFeild}
+                                  onBlur={this.updateElement.bind(this)} onChange={this.editElementProp.bind(this, 'labelFeild', 'value')}/></Col>
+            </div>
+            <div className="col-sm-12">
+              <Col xs={3} className="padding0Px"><label className="control-label" htmlFor="elementHeight">Value Feild</label></Col>
+              <Col xs={9} ><input id="valueFeild" type="text" className="form-control" defaultValue={this.props.element.valueFeild}
+                                  onBlur={this.updateElement.bind(this)} onChange={this.editElementProp.bind(this, 'valueFeild', 'value')}/></Col>
+            </div>
+          </div>
         </div>
         }
         { this.state.element.hasOwnProperty('addFileText') &&

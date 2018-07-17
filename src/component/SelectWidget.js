@@ -23,31 +23,33 @@ class SelectWidget extends Component {
 			</div>);
 	}
   onChangeHandle = (e)=>{
-    let target = e && e.target ? e.target : e;
+    let target = e ;
     let { onChange, name } = this.props;
     if(target === null){
-      target={name,value:""}
+      if(onChange){
+        onChange({name,value:"",label:""});
+      }
+    }else{
+      if(onChange){
+        onChange(target);
+      }
     }
-	  if(onChange){
-      onChange(target);
-    }
-    let value = target.value;
     this.setState({
-      value
+      value:target
     })
   }
 	render(){
-    let {name, styles, creatable, clearable, placeholder, disabled} = this.props;
+    let {name, styles,multi, creatable, clearable, placeholder, disabled} = this.props;
     let { value, options } = this.state;
 
     if (creatable) {
-        return (<Creatable name={name} style={styles} options={options} disabled={disabled}
-                            clearable={clearable} value={value} onChange={this.onChangeHandle}
-                            placeholder={placeholder} arrowRenderer={this.arrowRenderer}/>
+        return (<Creatable name={name} style={styles} options={options} disabled={disabled} multi={multi}
+                      clearable={clearable} value={value} onChange={this.onChangeHandle}
+                      placeholder={placeholder} arrowRenderer={this.arrowRenderer}/>
           );
       } else {
           return (
-              <Select name={name} style={styles} options={options} disabled={disabled}
+              <Select name={name} style={styles} options={options} disabled={disabled} multi={multi}
                       clearable={clearable} value={value} onChange={this.onChangeHandle}
                       placeholder={placeholder} arrowRenderer={this.arrowRenderer}/>
           );

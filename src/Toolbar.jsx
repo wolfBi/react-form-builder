@@ -27,7 +27,7 @@ export default class Toolbar extends React.Component {
           {value: '', label: '', key: 'dropdown_option_' + ID.uuid()},
           {value: '', label: '', key: 'dropdown_option_' + ID.uuid()}
         ];
-      case "Tags":
+      case "AsyncDropdown":
         return [
           {value: 'place_holder_tag_1', label: 'Place holder tag 1', key: 'tags_option_' + ID.uuid()},
           {value: 'place_holder_tag_2', label: 'Place holder tag 2', key: 'tags_option_' + ID.uuid()},
@@ -124,18 +124,22 @@ export default class Toolbar extends React.Component {
         options: [],
         creatable:false,
         clearable:true,
+        multiple:false,
         supportJS:true,
         inline:true,
       },
       {
-        key: 'Tags',
+        key: 'AsyncDropdown',
         canHaveAnswer: true,
-        name: 'ListBox',
+        name: 'Async Dropdown',
         compWidth:'12',
         icon: 'fa fa-tags',
         label: 'Placeholder Label',
         field_name: 'tags_',
-        options: [],
+        loadOptionUrl: "",
+        responseFeild: "data",
+        labelFeild: "",
+        valueFeild: "",
         creatable:true,
         clearable:true,
         supportJS:true,
@@ -302,6 +306,14 @@ export default class Toolbar extends React.Component {
 
     if (item.hasOwnProperty("multiple"))
       elementOptions['multiple'] = item.multiple;
+    if (item.hasOwnProperty("loadOptionUrl"))
+      elementOptions['loadOptionUrl'] = item.loadOptionUrl;
+    if (item.hasOwnProperty("responseFeild"))
+      elementOptions['responseFeild'] = item.responseFeild;
+    if (item.hasOwnProperty("labelFeild"))
+      elementOptions['labelFeild'] = item.labelFeild;
+    if (item.hasOwnProperty("valueFeild"))
+      elementOptions['valueFeild'] = item.valueFeild;
 
     if (item.hasOwnProperty("dropable"))
       elementOptions['dropable'] = item.dropable;

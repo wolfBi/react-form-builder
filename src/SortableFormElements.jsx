@@ -13,7 +13,7 @@ import {
   RadioButtons,
   Image,
   Rating,
-  Tags,
+  AsyncDropdown,
   UploadFile,
   HyperLink,
   Download,
@@ -36,7 +36,7 @@ FormElements.DatePicker = SortableElement(DatePicker);
 FormElements.RadioButtons = SortableElement(RadioButtons);
 FormElements.Image = SortableElement(Image);
 FormElements.Rating = SortableElement(Rating);
-FormElements.Tags = SortableElement(Tags);
+FormElements.AsyncDropdown = SortableElement(AsyncDropdown);
 FormElements.HyperLink = SortableElement(HyperLink);
 FormElements.Download = SortableElement(Download);
 FormElements.Camera = SortableElement(Camera);

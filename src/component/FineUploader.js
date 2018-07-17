@@ -10,7 +10,7 @@ import FileDelete from 'react-fine-uploader/delete-button';
 import FileRetry from 'react-fine-uploader/retry-button';
 import FileCancel from 'react-fine-uploader/cancel-button';
 import FineUploaderTraditional from 'fine-uploader-wrappers';
-import CommonUtils from "../CommonUtils";
+import CommonUtils from "../utils/CommonUtils";
 import HeaderBar from '../HeaderBar';
 
 const isFileGone = status => {
