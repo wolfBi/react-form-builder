@@ -23,23 +23,17 @@ class SelectWidget extends Component {
 			</div>);
 	}
   onChangeHandle = (e)=>{
-	  let {onChange} = this.props;
-	  if(onChange){
-      onChange(e);
-    }
     let target = e && e.target ? e.target : e;
-    let name = target.name;
+    let { onChange, name } = this.props;
+    if(target === null){
+      target={name,value:""}
+    }
+	  if(onChange){
+      onChange(target);
+    }
     let value = target.value;
-    let optionValue={value,label:value}
-    this.state.options.map((option)=>{
-      if(option.value === value ){
-        optionValue = option;
-      }
-      return option
-    })
     this.setState({
-      value,
-      optionValue
+      value
     })
   }
 	render(){
