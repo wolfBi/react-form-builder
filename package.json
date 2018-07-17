@@ -35,6 +35,7 @@
     "classnames": "^2.2.5",
     "fbemitter": "^2.1.1",
     "fine-uploader": "^5.16.2",
+    "isomorphic-fetch": "^2.2.1",
     "moment": "^2.22.1",
     "prop-types": "^15.6.2",
     "rc-time-picker": "^3.3.1",
