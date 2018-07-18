@@ -58,7 +58,7 @@ export default class Preview extends React.Component {
     let answer_data = {};
 
     data.forEach((item) => {
-      if (item.readOnly && this.props.variables[item.variableKey]) {
+      if (item && item.hasOwnProperty("readOnly") && item.readOnly && this.props.variables[item.variableKey]) {
         answer_data[item.field_name] = this.props.variables[item.variableKey];
       }
     });

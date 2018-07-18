@@ -4,6 +4,7 @@
 
 import React from 'react'
 import {DragSource, ConnectDragSource} from 'react-dnd'
+import FA from 'react-fontawesome'
 import ItemTypes from './ItemTypes'
 
 const cardSource = {
@@ -23,7 +24,7 @@ class ToolbarItem extends React.Component {
     if (!connectDragSource) return;
     return (
       connectDragSource(
-        <li onClick={onClick}><i className={data.icon}></i>{data.name}</li>
+        <li onClick={onClick}><FA name={data.icon}/>{data.name}</li>
       )
     )
   }

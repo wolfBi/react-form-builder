@@ -1,5 +1,6 @@
-var Reflux = require('reflux');
-var ElementActions = require('../actions/ElementActions');
+import Reflux from 'reflux';
+import ElementActions from '../actions/ElementActions';
+import HttpUtil from '../utils/HttpUtil';
 
 var _data = [];
 var _saveUrl;
@@ -18,12 +19,9 @@ var ElementStore = Reflux.createStore({
     _saveUrl = saveUrl;
 
     if (typeof urlOrData == 'string' || urlOrData instanceof String) {
-      $.ajax({
-        url: urlOrData,
-        success: function (data) {
-          _data = JSON.parse(data);
-          self.trigger(_data);
-        }
+      HttpUtil.get(urlOrData).then((data)=>{
+        _data = JSON.parse(data);
+        self.trigger(_data);
       })
     } else {
       _data = urlOrData;
@@ -52,16 +50,10 @@ var ElementStore = Reflux.createStore({
 
   save: function () {
     if (_saveUrl) {
-      $.ajax({
-        type: 'POST',
-        url: _saveUrl,
-        data: {
-          task_data: JSON.stringify(_data)
-        },
-        dataType: 'json',
-        success: function (data) {
-          console.log('Saved... ', arguments);
-        }
+      HttpUtil.post(_saveUrl,{
+        task_data: JSON.stringify(_data)
+      }).then((data)=>{
+        console.log('Saved... ', arguments);
       })
     }
   }

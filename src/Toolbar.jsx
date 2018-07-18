@@ -54,8 +54,8 @@ export default class Toolbar extends React.Component {
     return [
       {
         key: 'Header',
-        name: 'Header Text',
-        icon: 'fa fa-header',
+        name: 'Header',
+        icon: 'heading',
         static: true,
         content: 'Placeholder Text...'
       },
@@ -64,29 +64,29 @@ export default class Toolbar extends React.Component {
         name: 'Label',
         static: true,
         compWidth:'12',
-        icon: 'fa fa-font',
+        icon: 'font',
         content: 'Placeholder Text...'
       },
       {
         key: 'Paragraph',
         name: 'Paragraph',
         static: true,
-        icon: 'fa fa-paragraph',
+        icon: 'paragraph',
         content: 'Placeholder Text...'
       },
       {
         key: 'LineBreak',
-        name: 'Line Break',
+        name: 'Line',
         static: true,
-        icon: 'fa fa-arrows-h'
+        icon: 'arrows-alt-h'
       },
       {
         key: 'TextInput',
         canHaveAnswer: true,
-        name: 'Text Input',
+        name: 'Text',
         compWidth:'12',
         label: 'Placeholder Label',
-        icon: 'fa fa-font',
+        icon: 'font',
         field_name: 'text_input_',
         supportJS:true,
         inline:true,
@@ -94,10 +94,10 @@ export default class Toolbar extends React.Component {
       {
         key: 'NumberInput',
         canHaveAnswer: true,
-        name: 'Number Input',
+        name: 'Number',
         compWidth:'12',
         label: 'Placeholder Label',
-        icon: 'fa fa-plus',
+        icon: 'sort-numeric-up',
         field_name: 'number_input_',
         supportJS:true,
         inline:true,
@@ -108,7 +108,7 @@ export default class Toolbar extends React.Component {
         compWidth:'12',
         name: 'TextArea',
         label: 'Placeholder Label',
-        icon: 'fa fa-text-height',
+        icon: 'text-height',
         field_name: 'text_area_',
         supportJS:true,
         inline:true,
@@ -118,7 +118,7 @@ export default class Toolbar extends React.Component {
         canHaveAnswer: true,
         name: 'Dropdown',
         compWidth:'12',
-        icon: 'fa fa-caret-square-o-down',
+        icon: 'caret-square-down',
         label: 'Placeholder Label',
         field_name: 'dropdown_',
         options: [],
@@ -131,9 +131,9 @@ export default class Toolbar extends React.Component {
       {
         key: 'AsyncDropdown',
         canHaveAnswer: true,
-        name: 'Async Dropdown',
+        name: 'Async',
         compWidth:'12',
-        icon: 'fa fa-tags',
+        icon: 'tags',
         label: 'Placeholder Label',
         field_name: 'tags_',
         loadOptionUrl: "",
@@ -151,7 +151,7 @@ export default class Toolbar extends React.Component {
         canHaveAnswer: true,
         name: 'Checkboxes',
         compWidth:'12',
-        icon: 'fa fa-check-square-o',
+        icon: 'check-square',
         label: 'Placeholder Label',
         field_name: 'checkboxes_',
         options: [],
@@ -162,9 +162,9 @@ export default class Toolbar extends React.Component {
       {
         key: 'RadioButtons',
         canHaveAnswer: true,
-        name: 'Radio Buttons',
+        name: 'Radio',
         compWidth:'12',
-        icon: 'fa fa-dot-circle-o',
+        icon: 'dot-circle',
         label: 'Placeholder Label',
         field_name: 'radio_buttons_',
         options: [],
@@ -178,16 +178,26 @@ export default class Toolbar extends React.Component {
         compWidth:'12',
         canReadOnly: true,
         name: 'Date',
-        icon: 'fa fa-calendar',
+        icon: 'calendar',
         label: 'Placeholder Label',
         field_name: 'date_picker_',
         inline:true,
       },
       {
-        key: 'HyperLink',
-        name: 'Web site',
+        key: 'TimePicker',
         compWidth:'12',
-        icon: 'fa fa-link',
+        canReadOnly: true,
+        name: 'Time',
+        icon: 'clock',
+        label: 'Placeholder Label',
+        field_name: 'time_picker_',
+        inline:true,
+      },
+      {
+        key: 'HyperLink',
+        name: 'HyperLink',
+        compWidth:'12',
+        icon: 'link',
         static: true,
         content: 'Placeholder Web site link ...',
         href: 'http://www.example.com'
@@ -197,7 +207,7 @@ export default class Toolbar extends React.Component {
         name: 'Image',
         compWidth:'12',
         label: '',
-        icon: 'fa fa-photo',
+        icon: 'image',
         field_name: 'image_',
         src: '',
         inline:true,
@@ -206,13 +216,13 @@ export default class Toolbar extends React.Component {
         key: 'Camera',
         name: 'Camera',
         compWidth:'12',
-        icon: 'fa fa-camera',
+        icon: 'camera',
         label: 'Placeholder Label',
         field_name: 'camera_'
       },*/
       {
         key: 'UploadFile',
-        name: 'File Upload',
+        name: 'Upload',
         compWidth:'12',
         icon: 'fa fa-upload',
         label: 'Placeholder Label',
@@ -225,9 +235,9 @@ export default class Toolbar extends React.Component {
       },
       {
         key: 'Download',
-        name: 'File Download',
+        name: 'Download',
         compWidth:'12',
-        icon: 'fa fa-download',
+        icon: 'download',
         static: true,
         content: 'Placeholder file name ...',
         file_path: '',
@@ -237,7 +247,7 @@ export default class Toolbar extends React.Component {
         key: 'Range',
         name: 'Range',
         compWidth:'12',
-        icon: 'fa fa-sliders',
+        icon: 'sliders-h',
         label: 'Placeholder Label',
         field_name: 'range_',
         step: 1,
@@ -253,7 +263,7 @@ export default class Toolbar extends React.Component {
         compWidth:'12',
         name: 'Rating',
         label: 'Placeholder Label',
-        icon: 'fa fa-star',
+        icon: 'star',
         field_name: 'rating_',
         inline:true,
       }
@@ -370,7 +380,7 @@ export default class Toolbar extends React.Component {
     return (
       <div className="react-form-builder-toolbar pull-right">
         <h4>Toolbox</h4>
-        <ul>
+        <ul className="builder-toolbar_ul">
           {
             this.state.items.map(item => {
               return <ToolbarItem data={item} key={item.key} onClick={this._onClick.bind(this, item)}

@@ -1,14 +1,16 @@
 import React from 'react';
 import xss from 'xss';
 import moment from 'moment';
+import FA from 'react-fontawesome'
 import ReactDatePicker from 'react-datepicker';
-// import SortableItemMixin from 'react-anything-sortable/SortableItemMixin';
 import ReactBootstrapSlider from  'react-bootstrap-slider';
+// import SortableItemMixin from 'react-anything-sortable/SortableItemMixin';
 import HeaderBar from './HeaderBar';
 import StarRating from './component/StarRating';
 import SelectWidget from './component/SelectWidget';
 import SelectAsync from './component/SelectAsync';
 import FineUploader from './component/FineUploader';
+import HourMinSelect from './component/HourMinSelect';
 import CommonUtils from './utils/CommonUtils';
 import HttpUtil from './utils/HttpUtil';
 
@@ -352,6 +354,78 @@ class TextArea extends React.Component {
   }
 }
 
+class TimePicker extends React.Component {
+  constructor(props) {
+    super(props);
+    this.inputField = React.createRef();
+
+    this.state = {
+      value: "",
+      placeholder: 'HH:mm',
+    };
+  }
+
+  handleChange = (value) => {
+    this.setState({
+      value
+    })
+  };
+
+  render() {
+    let props = {};
+    props.type = "time";
+    props.className = "";
+    props.name = this.props.data.field_name;
+    props.value = this.state.value;
+    if (this.props.mutable) {
+      props.defaultValue = this.props.defaultValue;
+      props.ref = this.inputField;
+    }
+
+    if (this.props.read_only) {
+      props.disabled = "disabled";
+    }
+
+    let baseClasses = CommonUtils.getElementsClass(this.props.data);
+    return (
+      <div className={baseClasses}>
+        { !this.props.mutable &&
+        <div>
+          { this.props.data.pageBreakBefore &&
+          <div className="preview-page-break">Page Break</div>
+          }
+          <HeaderBar parent={this.props.parent} editModeOn={this.props.editModeOn} data={this.props.data}
+                     onDestroy={this.props._onDestroy} onEdit={this.props.onEdit} static={this.props.data.static}
+                     required={this.props.data.required}/>
+        </div>
+        }
+        <div className="form-group">
+          <label className={!this.props.data.inline?"form-label":""} >
+            <span dangerouslySetInnerHTML={{__html: myxss.process(this.props.data.label)}}/>
+            { (this.props.data.hasOwnProperty('required') && this.props.data.required === true && !this.props.read_only) &&
+            <span className="label-required label label-danger">Required</span>
+            }
+          </label>
+          <div style={this.props.data.inline?{display:'inline-flex'}:{}}>
+            { this.props.data.readOnly &&
+            <input type="text"
+                   name={props.name}
+                   ref={props.ref}
+                   readOnly="true"
+                   dateFormat="HH:mm"
+                   placeholder={this.state.placeholder}
+                   value={this.state.value}
+                   className="form-control"/>
+            }
+
+            <HourMinSelect {...props} onChangeHandler={this.handleChange} />
+          </div>
+        </div>
+      </div>
+    );
+  }
+}
+
 class DatePicker extends React.Component {
   constructor(props) {
     super(props);
@@ -431,7 +505,7 @@ class DatePicker extends React.Component {
     let baseClasses = CommonUtils.getElementsClass(this.props.data);
 
     const dataDiv = <div >
-      <i className="fa fa-calendar" style={{marginRight: '3px', marginLeft: '3px', marginTop: '3px', marginBottom: '3px'}} />
+      <FA name="calendar" style={{marginRight: '3px', marginLeft: '3px', marginTop: '3px', marginBottom: '3px'}} />
       <input className='widget-date-input' style={{width: '132px',background:'white'}} id={props.name}
             name={props.name} disabled={true} value={this.state.value}
       />
@@ -1020,7 +1094,7 @@ class Camera extends React.Component {
               <input type="file" accept="image/*" capture="camera" className="image-upload"
                      onChange={this.displayImage}/>
               <div className="image-upload-control">
-                <div className="btn btn-default btn-school"><i className="fa fa-camera"></i> Upload Photo</div>
+                <div className="btn btn-default btn-school"><FA name="camera" /> Upload Photo</div>
                 <p>Select an image from your computer or device.</p>
               </div>
             </div>
@@ -1029,7 +1103,7 @@ class Camera extends React.Component {
             <div>
               <img src={ this.state.img } height="100" className="image-upload-preview"/><br />
               <div className="btn btn-school btn-image-clear" onClick={this.clearImage}>
-                <i className="fa fa-times"></i> Clear Photo
+                <FA name="times" /> Clear Photo
               </div>
             </div>
             }
@@ -1143,6 +1217,7 @@ FormElements.AsyncDropdown = AsyncDropdown;
 FormElements.Checkboxes = Checkboxes;
 FormElements.RadioButtons = RadioButtons;
 FormElements.DatePicker = DatePicker;
+FormElements.TimePicker = TimePicker;
 FormElements.HyperLink = HyperLink;
 FormElements.Download = Download;
 FormElements.UploadFile = UploadFile;

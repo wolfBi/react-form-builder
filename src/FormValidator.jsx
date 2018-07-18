@@ -3,6 +3,7 @@
  */
 
 import React from 'react';
+import FA from 'react-fontawesome'
 import xss from 'xss';
 
 let myxss = new xss.FilterXSS({
@@ -58,7 +59,7 @@ export default class FormValidator extends React.Component {
         { this.state.errors.length > 0 &&
         <div className="alert alert-danger validation-error">
           <div className="clearfix">
-            <i className="fa fa-exclamation-triangle pull-left"></i>
+            <FA name="exclamation-triangle" className="pull-left"/>
             <ul className="pull-left">
               {errors}
             </ul>

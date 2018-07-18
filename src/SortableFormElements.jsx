@@ -10,6 +10,7 @@ import {
   Dropdown,
   Checkboxes,
   DatePicker,
+  TimePicker,
   RadioButtons,
   Image,
   Rating,
@@ -33,6 +34,7 @@ FormElements.TextArea = SortableElement(TextArea);
 FormElements.Dropdown = SortableElement(Dropdown);
 FormElements.Checkboxes = SortableElement(Checkboxes);
 FormElements.DatePicker = SortableElement(DatePicker);
+FormElements.TimePicker = SortableElement(TimePicker);
 FormElements.RadioButtons = SortableElement(RadioButtons);
 FormElements.Image = SortableElement(Image);
 FormElements.Rating = SortableElement(Rating);

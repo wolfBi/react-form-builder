@@ -3,7 +3,13 @@
  */
 
 import React from 'react';
+import FA from 'react-fontawesome'
 
+const cssModule = {
+  fa: 'fas',
+  'fa-pencil': 'fa-pencil-alt',
+  'fa-trash': 'fa-trash',
+}
 export default class HeaderBar extends React.Component {
   render() {
     return (
@@ -12,11 +18,13 @@ export default class HeaderBar extends React.Component {
         <div className="toolbar-header-buttons">
           { this.props.data.element !== "LineBreak" &&
           <div className="btn is-isolated btn-school"
-               onClick={this.props.editModeOn.bind(this.props.parent, this.props.data)}><i
-            className="is-isolated fa fa-pencil-square-o"></i></div>
+               onClick={this.props.editModeOn.bind(this.props.parent, this.props.data)}>
+            <FA name="pencil" cssModule={cssModule} />
+          </div>
           }
-          <div className="btn is-isolated btn-school" onClick={this.props.onDestroy.bind(this, this.props.data)}><i
-            className="is-isolated fa fa-trash-o"></i></div>
+          <div className="btn is-isolated btn-school" onClick={this.props.onDestroy.bind(this, this.props.data)}>
+            <FA name="trash" cssModule={cssModule} />
+          </div>
         </div>
       </div>
     );

@@ -203,6 +203,7 @@ export default class ReactFormGenerator extends React.Component {
         case 'TextArea':
         case 'Dropdown':
         case 'DatePicker':
+        case 'TimePicker':
         case 'RadioButtons':
         case 'Rating':
         case 'Tags':

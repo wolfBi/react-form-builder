@@ -1,9 +1,10 @@
 import React from 'react';
+import FA from 'react-fontawesome'
+import draftToHtml from 'draftjs-to-html';
 import TextAreaAutosize from 'react-textarea-autosize';
 import { Col } from "react-bootstrap";
 import { ContentState, EditorState, convertFromHTML, convertToRaw } from 'draft-js';
 import { Editor } from 'react-draft-wysiwyg'
-import draftToHtml from 'draftjs-to-html';
 import DynamicOptionList from './component/DynamicOptionList';
 
 let toolbar = {
@@ -110,7 +111,8 @@ export default class FormElementsEdit extends React.Component {
       <div >
         <div className="clearfix">
           <h4 className="pull-left">{this.props.element.text}</h4>
-          <i className="pull-right fa fa-times dismiss-edit" onClick={this.props.manualEditModeOff}></i>
+          {/*<i className="pull-right fa fa-times dismiss-edit" onClick={this.props.manualEditModeOff}></i>*/}
+          <FA name="times"  className="pull-right dismiss-edit" onClick={this.props.manualEditModeOff}/>
         </div>
 
         { this.props.element.hasOwnProperty('field_name') &&
