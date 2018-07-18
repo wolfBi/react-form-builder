@@ -142,6 +142,7 @@ export default class Toolbar extends React.Component {
         valueFeild: "",
         creatable:true,
         clearable:true,
+        multiple:true,
         supportJS:true,
         inline:true,
       },
@@ -245,7 +246,6 @@ export default class Toolbar extends React.Component {
         max_value: 5,
         min_label: 'Easy',
         max_label: 'Difficult',
-        inline:true,
       },
       {
         key: 'Rating',

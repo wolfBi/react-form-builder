@@ -608,6 +608,9 @@ class AsyncDropdown extends React.Component {
     props.name = this.props.data.field_name;
     props.onChange = this.handleChange;
     props.loadOptionUrl = this.loadOptionUrl;
+    props.creatable = this.props.data.creatable;
+    props.clearable = this.props.data.clearable;
+    props.multi = this.props.data.multiple;
 
     if (!this.props.mutable) {
       // props.value = options[0].text
@@ -681,48 +684,49 @@ class Checkboxes extends React.Component {
         </div>
         }
         <div className="form-group">
-          <label className={!this.props.data.inline?"form-label":""}>
+          <label className={!this.props.data.inline?"form-label":""} style={this.props.data.inline?{verticalAlign:'top'}:{}}>
             <span dangerouslySetInnerHTML={{__html: myxss.process(this.props.data.label)}}/>
             { (this.props.data.hasOwnProperty('required') && this.props.data.required === true && !this.props.read_only) &&
             <span className="label-required label label-danger">Required</span>
             }
           </label>
-          {this.props.data.options.map((option) => {
-            let this_key = 'preview_' + option.key;
-            let props = {};
-            props.name = 'option_' + option.key;
-
-            props.type = "checkbox"
-            props.value = option.value;
-            if (self.props.mutable) {
-              props.defaultChecked = self.props.defaultValue.indexOf(option.value) > -1 ? true : false;
-            }
-            return (
-              <label className={classNames} key={this_key}>
-                <input ref={c => {
-                  if (c && self.props.mutable) {
-                    self.options[`child_ref_${option.key}`] = c;
-                  }
-                } } {...props}  onClick={()=>{ if(this.props.data.supportJS && this.props.data.hasOwnProperty('onClickStr')
-                  && !CommonUtils.isEmpty(this.props.data.onClickStr)){
-                  eval(this.props.data.onClickStr)
-                }}} onChange={(e)=>{
-                  if(this.props.data.supportJS && this.props.data.hasOwnProperty('onChangeStr')
-                  && !CommonUtils.isEmpty(this.props.data.onChangeStr)){
-                    let target = e && e.target ? e.target : e;
-                    let name = target.name;
-                    let value = target.value;
-                    let onChangeStr = this.props.data.onChangeStr;
-                    onChangeStr = onChangeStr.replace(/'name'/g,name);
-                    onChangeStr = onChangeStr.replace(/'value'/g,value);
-                    eval(onChangeStr)
-                }}} onBlur={()=>{ if(this.props.data.supportJS && this.props.data.hasOwnProperty('onBlurStr')
-                  && !CommonUtils.isEmpty(this.props.data.onBlurStr)){
-                  eval(this.props.data.onBlurStr)
-                }}} /> {option.label}
-              </label>
-            )
-          })}
+          <div style={this.props.data.inline?{display:'inline-block'}:{}}>
+            {this.props.data.options.map((option) => {
+              let this_key = 'preview_' + option.key;
+              let props = {};
+              props.name = self.props.data.field_name;// 'option_' + option.key;
+              props.type = "checkbox"
+              props.value = option.value;
+              if (self.props.mutable) {
+                props.defaultChecked = self.props.defaultValue.indexOf(option.value) > -1 ? true : false;
+              }
+              return (
+                <label className={classNames} key={this_key}>
+                  <input ref={c => {
+                    if (c && self.props.mutable) {
+                      self.options[`child_ref_${option.key}`] = c;
+                    }
+                  } } {...props}  onClick={()=>{ if(this.props.data.supportJS && this.props.data.hasOwnProperty('onClickStr')
+                    && !CommonUtils.isEmpty(this.props.data.onClickStr)){
+                    eval(this.props.data.onClickStr)
+                  }}} onChange={(e)=>{
+                    if(this.props.data.supportJS && this.props.data.hasOwnProperty('onChangeStr')
+                    && !CommonUtils.isEmpty(this.props.data.onChangeStr)){
+                      let target = e && e.target ? e.target : e;
+                      let name = target.name;
+                      let value = target.value;
+                      let onChangeStr = this.props.data.onChangeStr;
+                      onChangeStr = onChangeStr.replace(/'name'/g,name);
+                      onChangeStr = onChangeStr.replace(/'value'/g,value);
+                      eval(onChangeStr)
+                  }}} onBlur={()=>{ if(this.props.data.supportJS && this.props.data.hasOwnProperty('onBlurStr')
+                    && !CommonUtils.isEmpty(this.props.data.onBlurStr)){
+                    eval(this.props.data.onBlurStr)
+                  }}} /> {option.label}
+                </label>
+              )
+            })}
+          </div>
         </div>
       </div>
     );
@@ -757,48 +761,51 @@ class RadioButtons extends React.Component {
         </div>
         }
         <div className="form-group">
-          <label className={!this.props.data.inline?"form-label":""} >
+          <label className={!this.props.data.inline?"form-label":""} style={this.props.data.inline?{verticalAlign:'top'}:{}}>
             <span dangerouslySetInnerHTML={{__html: myxss.process(this.props.data.label)}}/>
             { (this.props.data.hasOwnProperty('required') && this.props.data.required === true && !this.props.read_only) &&
             <span className="label-required label label-danger">Required</span>
             }
           </label>
-          {this.props.data.options.map((option) => {
-            let this_key = 'preview_' + option.key;
-            let props = {};
-            props.name = self.props.data.field_name;
 
-            props.type = "radio"
-            props.value = option.value;
-            if (self.props.mutable) {
-              props.defaultChecked = (self.props.defaultValue !== undefined && self.props.defaultValue.indexOf(option.value) > -1) ? true : false;
-            }
-            return (
-              <label className={classNames} key={this_key}>
-                <input ref={c => {
-                  if (c && self.props.mutable) {
-                    self.options[`child_ref_${option.key}`] = c;
-                  }
-                } } {...props}  onClick={()=>{ if(this.props.data.supportJS && this.props.data.hasOwnProperty('onClickStr')
-                  && !CommonUtils.isEmpty(this.props.data.onClickStr)){
-                  eval(this.props.data.onClickStr)
-                }}} onChange={(e)=>{
-                  if(this.props.data.supportJS && this.props.data.hasOwnProperty('onChangeStr')
-                  && !CommonUtils.isEmpty(this.props.data.onChangeStr)){
-                    let target = e && e.target ? e.target : e;
-                    let name = target.name;
-                    let value = target.value;
-                    let onChangeStr = this.props.data.onChangeStr;
-                    onChangeStr = onChangeStr.replace(/'name'/g,name);
-                    onChangeStr = onChangeStr.replace(/'value'/g,value);
-                    eval(onChangeStr)
-                }}} onBlur={()=>{ if(this.props.data.supportJS && this.props.data.hasOwnProperty('onBlurStr')
-                  && !CommonUtils.isEmpty(this.props.data.onBlurStr)){
-                  eval(this.props.data.onBlurStr)
-                }}} /> {option.label}
-              </label>
-            )
-          })}
+          <div style={this.props.data.inline?{display:'inline-block'}:{}}>
+            {this.props.data.options.map((option) => {
+              let this_key = 'preview_' + option.key;
+              let props = {};
+              props.name = self.props.data.field_name;
+
+              props.type = "radio"
+              props.value = option.value;
+              if (self.props.mutable) {
+                props.defaultChecked = (self.props.defaultValue !== undefined && self.props.defaultValue.indexOf(option.value) > -1) ? true : false;
+              }
+              return (
+                <label className={classNames} key={this_key}>
+                  <input ref={c => {
+                    if (c && self.props.mutable) {
+                      self.options[`child_ref_${option.key}`] = c;
+                    }
+                  } } {...props}  onClick={()=>{ if(this.props.data.supportJS && this.props.data.hasOwnProperty('onClickStr')
+                    && !CommonUtils.isEmpty(this.props.data.onClickStr)){
+                    eval(this.props.data.onClickStr)
+                  }}} onChange={(e)=>{
+                    if(this.props.data.supportJS && this.props.data.hasOwnProperty('onChangeStr')
+                    && !CommonUtils.isEmpty(this.props.data.onChangeStr)){
+                      let target = e && e.target ? e.target : e;
+                      let name = target.name;
+                      let value = target.value;
+                      let onChangeStr = this.props.data.onChangeStr;
+                      onChangeStr = onChangeStr.replace(/'name'/g,name);
+                      onChangeStr = onChangeStr.replace(/'value'/g,value);
+                      eval(onChangeStr)
+                  }}} onBlur={()=>{ if(this.props.data.supportJS && this.props.data.hasOwnProperty('onBlurStr')
+                    && !CommonUtils.isEmpty(this.props.data.onBlurStr)){
+                    eval(this.props.data.onBlurStr)
+                  }}} /> {option.label}
+                </label>
+              )
+            })}
+          </div>
         </div>
       </div>
     );
@@ -861,13 +868,15 @@ class Rating extends React.Component {
         </div>
         }
         <div className="form-group">
-          <label>
+          <label className={!this.props.data.inline?"form-label":""} style={this.props.data.inline?{verticalAlign:'top'}:{}}>
             <span dangerouslySetInnerHTML={{__html: myxss.process(this.props.data.label)}}/>
             { (this.props.data.hasOwnProperty('required') && this.props.data.required === true && !this.props.read_only) &&
             <span className="label-required label label-danger">Required</span>
             }
           </label>
-          <StarRating {...props} />
+          <div style={this.props.data.inline?{display:'inline-block'}:{}}>
+            <StarRating {...props} />
+          </div>
         </div>
       </div>
     );
@@ -1090,30 +1099,32 @@ class Range extends React.Component {
         </div>
         }
         <div className="form-group">
-          <label>
+          <label className={!this.props.data.inline?"form-label":""} style={this.props.data.inline?{verticalAlign:'top'}:{}}>
             {this.props.data.label}
             { (this.props.data.hasOwnProperty('required') && this.props.data.required === true && !this.props.read_only) &&
             <span className="label-required label label-danger">Required</span>
             }
           </label>
-          <div className="range">
-            <div className="clearfix">
-              <span className="pull-left">{this.props.data.min_label}</span>
-              <span className="pull-right">{this.props.data.max_label}</span>
+          <div style={this.props.data.inline?{display:'inline-block',width:"60%"}:{}}>
+            <div className="range">
+              <div className="clearfix">
+                <span className="pull-left">{this.props.data.min_label}</span>
+                <span className="pull-right">{this.props.data.max_label}</span>
+              </div>
+              <ReactBootstrapSlider
+                name={props.name}
+                value={props.defaultValue}
+                step={props.step}
+                max={this.props.data.max_value}
+                min={this.props.data.min_value}/>
             </div>
-            <ReactBootstrapSlider
-              name={props.name}
-              value={props.defaultValue}
-              step={props.step}
-              max={this.props.data.max_value}
-              min={this.props.data.min_value}/>
+            <div className="visible_marks">
+              {visible_marks}
+            </div>
+            <datalist id={props.list}>
+              {_datalist}
+            </datalist>
           </div>
-          <div className="visible_marks">
-            {visible_marks}
-          </div>
-          <datalist id={props.list}>
-            {_datalist}
-          </datalist>
         </div>
       </div>
     );

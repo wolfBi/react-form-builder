@@ -258,15 +258,14 @@ export default class FileUploader extends Component{
             : <span >{filesListDiv}</span>
         return (
             <div className="form-group">
-              <label>
+              <label  className={!this.props.data.inline?"form-label":""} style={this.props.data.inline?{verticalAlign:'top'}:{}}>
                 {this.props.label}
                 { (this.props.hasOwnProperty('required') && this.props.required === true && !this.props.read_only) &&
                 <span className="label-required label label-danger">Required</span>
                 }
                 <input type="hidden" name={this.props.field_name } value={JSON.stringify(this.state.completeFilesInfo)}/>
               </label>
-
-              <div className="image-upload-container">
+              <div className="image-upload-container" style={this.props.data.inline?{display:'inline-block'}:{}}>
                 {renderReturn}
               </div>
             </div>
