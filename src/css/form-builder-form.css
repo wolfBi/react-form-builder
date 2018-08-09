@@ -1,0 +1,102 @@
+input[type="date"]:before {
+    content: attr(placeholder);
+    color: #aaa;
+    margin-right: 0.5em;
+}
+
+.validation-error {
+    position: fixed;
+    width: 100%;
+    top: 0;
+    left: 0;
+    margin: 0;
+    z-index: 99999999;
+}
+
+.validation-error ul {
+    width: auto;
+}
+
+.validation-error .dismiss-modal-button {
+    margin-top: 10px;
+}
+
+.react-form-builder-form {
+    position: relative;
+    max-height: 700px;
+    min-height: 300px;
+    overflow: auto;
+}
+
+.react-form-builder-form .rfb-item.alwaysbreak {
+    page-break-before: always;
+}
+
+.react-form-builder-form .rfb-item.nobreak:before {
+    clear: both;
+}
+
+.react-form-builder-form .rfb-item.nobreak {
+    page-break-inside: avoid;
+}
+
+.react-form-builder-form .rfb-item label {
+    font-weight: normal;
+}
+
+.react-form-builder-form .rfb-item .bold {
+    font-weight: bold;
+}
+
+.react-form-builder-form .rfb-item .italic {
+    font-style: italic;
+}
+
+.react-form-builder-form .rfb-item .form-label {
+    display: block !important;
+}
+
+.react-form-builder-form .rfb-item .form-group .option-inline {
+    display: inline-block !important;
+    margin-right: 10px;
+}
+
+.react-form-builder-form .rfb-item .form-group .inline {
+    display: inline-block !important;
+    margin-right: 10px;
+}
+
+.react-form-builder-form .rfb-item .form-group label {
+    font-weight: normal;
+}
+
+.react-form-builder-form .rfb-item .form-group a {
+    cursor: pointer;
+}
+
+.react-form-builder-form .rfb-item .form-group input[type='date'] {
+    height: 42px;
+}
+.react-form-builder-form .rfb-item .form-group input[type='date'] {
+    width: 100%;
+}
+
+.react-form-builder-form .rfb-item .form-group .m-signature-pad {
+    position: relative;
+    width: auto;
+}
+
+.react-form-builder-form .rfb-item .form-group .react-star-rating {
+    display: block;
+}
+
+.react-form-builder-form .rfb-item .form-group .checkbox-label, .react-form-builder-form .rfb-item .form-group .radio-label {
+    font-weight: normal;
+    display: block;
+}
+
+.react-form-builder-form .rfb-item .form-group .label-required {
+    margin-left: 5px;
+}
+
+/*# sourceMappingURL=form-builder-form.css.css.map */

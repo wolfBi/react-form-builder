@@ -1,0 +1,412 @@
+.button {
+
+    margin-left: 0;
+    margin-right: 4px;
+}
+
+.file-uploader a, a:hover, a:focus {
+    color: #337AB7
+}
+
+.file-uploader a:link {
+    text-decoration: none;
+    color: #337AB7
+}
+
+.file-uploader a:visited {
+    text-decoration: none;
+    color: #337AB7
+}
+
+.button.blue, .button.blue, button.button.blue, .facet-source-this-dropdown.blue {
+    color: #fff;
+    background-image: none;
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#337AB7), to(#337AB7));
+    background: -moz-linear-gradient(top, #337AB7, #337AB7);
+    background-color: #337AB7;
+    background-color: #337AB7;
+    border-color: #337AB7
+}
+
+a.button.blue:focus, .button.blue:focus, button.button.blue:focus, .facet-source-this-dropdown.blue:focus, a.button.blue:hover, .button.blue:hover, button.button.blue:hover, .facet-source-this-dropdown.blue:hover {
+    background-image: none;
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#46b8e9), to(#3498db));
+    background: -moz-linear-gradient(top, #46b8e9, #3498db);
+    background-color: #3da8e2;
+    background-color: #46b8e9;
+    border-color: #3498db
+}
+
+a.button.blue[disabled], .button.blue[disabled], button.button.blue[disabled], .facet-source-this-dropdown.blue[disabled], a.button.blue.disabled, .button.blue.disabled, button.button.blue.disabled, .facet-source-this-dropdown.blue.disabled {
+    color: #bbb;
+    background-color: #dde8eb;
+    background-image: none;
+    border-color: #f5fcff
+}
+
+a.button.blue[disabled]:focus, .button.blue[disabled]:focus, button.button.blue[disabled]:focus, .facet-source-this-dropdown.blue[disabled]:focus, a.button.blue.disabled:focus, .button.blue.disabled:focus, button.button.blue.disabled:focus, .facet-source-this-dropdown.blue.disabled:focus, a.button.blue[disabled]:hover, .button.blue[disabled]:hover, button.button.blue[disabled]:hover, .facet-source-this-dropdown.blue[disabled]:hover, a.button.blue.disabled:hover, .button.blue.disabled:hover, button.button.blue.disabled:hover, .facet-source-this-dropdown.blue.disabled:hover {
+    background-color: #dde8eb;
+    border-color: #f5fcff
+}
+
+.qq-uploader {
+    min-height: 90px;
+    max-height: 490px;
+    width: inherit;
+    border-radius: 4px;
+    background-color: #fff;
+    border: 1px dashed #ccc;
+    padding: 1px 0 10px 5px;
+    top: 5px;
+}
+
+.dropIcon {
+    position: absolute;
+    font-size: 200%;
+    left: 0;
+    width: 100%;
+    text-align: center;
+    top: 60%;
+    opacity: .25
+}
+
+.dropIcon:after {
+    content: attr(qq-drop-area-text) " "
+}
+
+/*media all*/
+.close_button {
+    position: absolute;
+    top: 8px;
+    right: 7px;
+    z-index: 898;
+    width: 18px;
+    height: 18px;
+    background: url(/optimize/facilitiesrequests/images/gray_x_single.png) no-repeat;
+    cursor: pointer;
+}
+
+.right {
+    float: right !important;
+}
+
+.right_section {
+    position: absolute;
+    overflow: none;
+    outline: none;
+    border-radius: 3px;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    box-shadow: 2px 3px 5px #e3e3e3;
+    min-width: 340px;
+    font-size: 11px;
+    font-weight: normal;
+    line-height: 18px;
+    padding: 8px;
+    z-index: 1024;
+    width: 340px;
+    min-height: 136px;
+    height: auto;
+
+}
+
+.container {
+    width: 340px;
+    height: 136px;
+}
+
+.icon_size {
+    font-size: 18px;
+}
+
+.file_input {
+    font-family: Arial;
+    cursor: pointer;
+    margin-bottom: 5px;
+}
+
+.left {
+    float: left !important
+}
+
+.center {
+    text-align: center
+}
+
+.qq-upload-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    max-height: 450px;
+    clear: both;
+    width: auto;
+    height: auto;
+}
+
+.qq-upload-list li {
+    margin: 0;
+    line-height: 18px;
+    font-size: 12px;
+    color: #505050;
+    background-color: #f7f7f7;
+    border-top: 1px solid #fff;
+    border-bottom: 1px solid #ddd
+}
+
+.qq-upload-list li a.button {
+    margin-left: 0;
+    margin-right: 4px
+}
+
+.qq-upload-list li:first-child {
+    border-top: 0
+}
+
+.qq-upload-list li:last-child {
+    border-bottom: 0
+}
+
+.qq-upload-row-border-top {
+    border-top: none !important;
+}
+
+.qq-upload-cancel, .qq-upload-delete, .qq-upload-pause, .qq-upload-continue {
+    font-size: 12px;
+    font-weight: normal;
+    cursor: pointer;
+    vertical-align: middle
+}
+
+.qq-upload-file, .qq-upload-size, .qq-upload-failed-text, .qq-upload-delete, .qq-upload-pause, .qq-upload-continue {
+    margin-right: 12px;
+    display: inline
+}
+
+.qq-upload-file {
+    vertical-align: middle;
+    display: inline-block;
+    width: auto;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow-x: hidden;
+    height: 18px
+}
+
+.qq-upload-spinner {
+    display: inline-block;
+    background: url(/optimize/facilitiesrequests/images/spinner.gif);
+    width: 15px;
+    height: 15px;
+    vertical-align: text-bottom;
+    margin-right: 5px
+}
+
+.qq-upload-vertical-align {
+    vertical-align: top !important
+}
+
+.extra-small {
+    height: 20px;
+    line-height: 20px
+}
+
+.qq-upload-float-none {
+    float: none !important
+}
+
+.button {
+    margin-left: 0px;
+    margin-right: 4px;
+}
+
+.button.green, button.button.green {
+    color: #fff;
+    background-image: none;
+    background: -moz-linear-gradient(top, #75b564, #6aaf57);
+    background-color: #70b25e;
+    background-color: #6aaf57;
+    border-color: #66ad52;
+}
+
+.qq-upload-retry {
+    margin-right: 0;
+    margin-left: 5px !important;
+    vertical-align: top;
+    padding-top: 0px;
+    line-height: 19px !important;
+    height: 19px !important;
+}
+
+.qq-upload-choose {
+    margin-right: 0;
+    padding: 5px 8px;
+    line-height: 23px !important;
+    height: 23px !important;
+}
+
+.qq-upload-buttons {
+    /*margin-right: 12px;*/
+    display: inline;
+    text-align: right;
+}
+
+.qq-upload-container {
+    background-color: #f7f7f7;
+   /* margin-right: 12px;*/
+    display: inline
+}
+
+.attachments-list {
+    float: none
+}
+
+.attachments-list .attachment:first-child {
+    margin-top: 5px
+}
+
+.attachments-list .pending-delete-warning {
+    background-color: #fffee5;
+    padding: 5px;
+    font-size: 11px;
+    color: #767674;
+    margin-bottom: 3px;
+    border-radius: 5px
+}
+
+.attachments-list.has_thumbnail {
+    float: left;
+    margin-left: 5px;
+    width: 175px;
+    overflow: hidden;
+    text-overflow: ellipsis
+}
+
+.attachments-list .attachment-list-item {
+    background-color: #edf9fd;
+    border: 1px solid #d9eaf0;
+    color: #009be0;
+    /*border-radius: 5px;*/
+    display: block;
+    margin-bottom: 2px;
+    padding: 3px 3px 3px 30px;
+    position: relative;
+    font-size: 12px;
+    line-height: 20px;
+    width: 400px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.attachments-list .attachment-list-item .wrap-text-attachment {
+    white-space: normal
+}
+
+.attachments-list .attachment-list-item:hover {
+    background-color: #e7f2f7;
+    text-decoration: none
+}
+
+.attachments-list .attachment-list-item:hover .underline {
+    text-decoration: underline
+}
+
+.attachments-list .attachment-list-item.attachment-text:hover {
+    background-color: #edf9fd
+}
+
+.attachments-list .attachment-list-item.attachment-text:hover .underline {
+    text-decoration: none
+}
+
+.attachments-list .attachment-text.attachment-list-item {
+    color: #666
+}
+
+.attachment-file, .attachments-list .attachment-imagefile, .attachments-list .attachment-text {
+    padding: 3px 17px 3px 30px;
+    background-repeat: no-repeat;
+    background-position: 7px 5px
+}
+
+.attachment-list-item {
+    width: 265px
+}
+
+.underline {
+    margin-left: 5px;
+    width: 260px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis
+}
+
+.inline_cancel {
+    padding-bottom: 3px;
+    background: url(/optimize/facilitiesrequests/images/trash.png) no-repeat 0 0;
+    width: 16px;
+    height: 16px;
+    margin-top: 1px;
+    right: 1px;
+    top: 0
+}
+
+.inline_cancel:hover {
+    background-position: center bottom
+}
+
+.spinner {
+    display: block;
+    margin: 0 auto
+}
+
+.hide {
+    display: none
+}
+
+.attachment {
+    display: inline;
+}
+
+.attachment-file, .attachment-imagefile {
+    cursor: pointer;
+    background-image: url(/optimize/facilitiesrequests/images/page.png)
+}
+
+.attachment-file[href$='.zip'], .attachment-imagefile[href$='.zip'], .attachment-file[href$='.rar'], .attachment-imagefile[href$='.rar'], .attachment-file[href$='.gzip'], .attachment-imagefile[href$='.gzip'], .attachment-file[href$='.bzip'], .attachment-imagefile[href$='.bzip'], .attachment-file[href$='.ace'], .attachment-imagefile[href$='.ace'] {
+    background-image: url(/optimize/facilitiesrequests/images/zip.png)
+}
+
+.transparent-button {
+    border: none;
+    outline: none;
+    background: none;
+    line-height: 19px !important;
+    height: 19px !important;
+}
+
+.transparent-button:active {
+    border: none;
+    outline: none;
+    background: none;
+}
+
+/*drop area*/
+.qq-upload-drop-area-active {
+    background: #fff;
+    border-radius: 4px;
+    border: 1px dashed #f27921
+}
+
+.file-attachment {
+    vertical-align: top;
+}
+
+.qq-upload-cancel {
+    margin-right: 2px;
+    margin-left: 0;
+    vertical-align: top;
+    padding-top: 0px;
+    line-height: 19px !important;
+    height: 19px !important;
+}

@@ -3,6 +3,7 @@
  */
 import fetch from 'isomorphic-fetch';
 import Promise from 'promise';
+import {startAjax, endAjax} from '../actions';
 import LogUtil from './LogUtil';
 
 export default class HttpUtil {

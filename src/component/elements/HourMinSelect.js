@@ -1,15 +1,17 @@
 import React, {Component} from 'react';
 import TimePicker from 'rc-time-picker';
-import CommonUtils from '../utils/CommonUtils';
+import * as CommonUtil from '../../utils/CommonUtil';
 import moment from 'moment';
+import '../../css/timePicker.css';
+
 const format = 'hh:mm a';
 
 class HourMinSelect extends Component {
     constructor(props) {
         super(props);
-        this.state={
-            hideDisabledOptions:true,
-            disabledMinutesInterval:15
+        this.state = {
+            hideDisabledOptions: true,
+            disabledMinutesInterval: 15
         }
     }
 
@@ -35,8 +37,9 @@ class HourMinSelect extends Component {
         }
         return this.generateOptions(60, arr);
     }
+
     render() {
-        let time = !CommonUtils.isEmpty(this.props.value) ? (moment.isMoment(this.props.value) ? this.props.value : moment(this.props.value, "HH:mm")) : null;
+        let time = !CommonUtil.isEmpty(this.props.value) ? (moment.isMoment(this.props.value) ? this.props.value : moment(this.props.value, "HH:mm")) : null;
         return (
             <TimePicker name={this.props.name}
                         showSecond={false}
