@@ -3,7 +3,7 @@
  */
 
 import React from 'react';
-import {guid} from '../../utils/CommonUtil';
+import {guid} from '../../../../utils/CommonUtil';
 
 export default class DynamicOptionList extends React.Component {
     constructor(props) {
@@ -41,17 +41,6 @@ export default class DynamicOptionList extends React.Component {
         });
     }
 
-    editOptionCorrect(option_index, e) {
-        let this_element = this.state.element;
-        if (this_element.options[option_index].hasOwnProperty("correct")) {
-            delete(this_element.options[option_index]["correct"]);
-        } else {
-            this_element.options[option_index].correct = true;
-        }
-        this.setState({element: this_element});
-        this.props.updateElement.call(this.props.preview, this_element);
-    }
-
     updateOption() {
         let this_element = this.state.element;
         // to prevent ajax calls with no change
@@ -79,9 +68,9 @@ export default class DynamicOptionList extends React.Component {
                 <ul>
                     <li>
                         <div className="row">
-                            <div className="col-sm-4"><b>Options</b></div>
+                            <div className="col-sm-4"><b>Fixed Options</b></div>
                             <div className="col-sm-4"><b>Value</b></div>
-                            <div className="col-sm-4">{/*<b>Correct</b>*/}</div>
+                            <div className="col-sm-4"></div>
                         </div>
                     </li>
                     {
@@ -101,14 +90,9 @@ export default class DynamicOptionList extends React.Component {
                                         </div>
                                         <div className="col-sm-4">
                                             <input className="form-control" type="text" name={'value_' + index}
-                                                   value={val}
+                                                   value={val} onBlur={this.updateOption.bind(this)}
                                                    onChange={this.editValue.bind(this, index)}/>
                                         </div>
-                                        {/*<div className="col-sm-1">
-                                            <input className="form-control" type="checkbox" value="1"
-                                                   onChange={this.editOptionCorrect.bind(this, index)}
-                                                   checked={option.hasOwnProperty("correct")}/>
-                                        </div>*/}
                                         <div className="col-sm-4">
                                             <div className="dynamic-options-actions-buttons">
                                                 <button onClick={this.addOption.bind(this, index)}

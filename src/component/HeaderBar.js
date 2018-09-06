@@ -9,6 +9,7 @@ const cssModule = {
     fa: 'fas',
     'fa-pencil': 'fa-pencil-alt',
     'fa-trash': 'fa-trash',
+    'fa-copy':'fa-copy'
 }
 export default class HeaderBar extends React.Component {
     render() {
@@ -18,10 +19,14 @@ export default class HeaderBar extends React.Component {
                 <div className="toolbar-header-buttons">
                     { this.props.data.element !== "LineBreak" &&
                     <div className="btn is-isolated btn-school"
-                         onClick={this.props.editModeOn.bind(this.props.parent, this.props.data)}>
+                         onClick={this.props.editModeOn && this.props.editModeOn.bind(this.props.parent, this.props.data)}>
                         <FA name="pencil" cssModule={cssModule}/>
                     </div>
                     }
+                    <div className="btn is-isolated btn-school"
+                        onClick={this.props.copyElement}>
+                        <FA name="copy" cssModule={cssModule}/>
+                    </div>
                     <div className="btn is-isolated btn-school"
                          onClick={this.props.onDestroy}>
                         <FA name="trash" cssModule={cssModule}/>

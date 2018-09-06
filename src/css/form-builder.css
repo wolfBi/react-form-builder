@@ -5,7 +5,7 @@
     background: #fafafa;
     padding: 10px;
     box-shadow: 0 0 2px 1px rgba(0, 0, 0, 0.1);
-    min-height: 750px;
+    min-height: 100px;
 }
 
 .react-form-builder .react-form-builder-preview .preview-page-break {
@@ -63,7 +63,6 @@
     transition: .5s;
     overflow-y: auto;
 }
-
 .react-form-builder .react-form-builder-preview .edit-form h4, .react-form-builder .react-form-builder-preview .edit-form .dismiss-edit {
     margin-bottom: 30px;
 }
@@ -135,7 +134,9 @@
 .react-form-builder .react-form-builder-preview .edit-form .dynamic-option-list ul li .dynamic-options-actions-buttons {
     margin-left: 20px;
 }
-
+.react-form-builder .react-form-builder-preview .form-item-hidden {
+    border: 1px dotted darkgrey !important;
+}
 .react-form-builder .react-form-builder-preview .Sortable {
     transition: opacity .25s ease-in;
     position: relative;
@@ -155,7 +156,9 @@
 .react-form-builder .react-form-builder-preview .Sortable .rfb-item.SortableItem {
     position: relative;
 }
-
+.react-form-builder .react-form-builder-preview .Sortable  .rfb-item.SortableItem .form-group .react-datepicker-wrapper {
+    display: flex !important;
+}
 .react-form-builder .react-form-builder-preview .Sortable .rfb-item.SortableItem .form-group {
     pointer-events: none;
 }
@@ -167,7 +170,23 @@
 .react-form-builder .react-form-builder-preview .Sortable .rfb-item.SortableItem .form-group input[type='date'] {
     height: 42px;
 }
-
+.react-form-builder .react-form-builder-preview .Sortable .rfb-item.SortableItem .form-group div input {
+    width: 100% !important;
+    border-radius:0px !important;
+}
+.react-form-builder .react-form-builder-preview .Sortable .rfb-item.SortableItem .form-group div input[type='checkbox'] {
+    width: auto !important;
+}
+.react-form-builder .react-form-builder-preview .Sortable .rfb-item.SortableItem .form-group div input[type='radio'] {
+    width: auto !important;
+}
+.react-form-builder .react-form-builder-preview .Sortable .rfb-item.SortableItem .form-group div .Select {
+    width: 100% !important;
+}
+.react-form-builder .react-form-builder-preview .Sortable .rfb-item.SortableItem .form-group .m-signature-pad {
+    position: relative;
+    width: auto;
+}
 .react-form-builder .react-form-builder-preview .Sortable .rfb-item.SortableItem .form-group .react-star-rating {
     display: block;
 }

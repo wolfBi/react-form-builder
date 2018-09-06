@@ -6,6 +6,7 @@ import React from 'react';
 import update from 'immutability-helper';
 import FormElementsEdit from './FormElementsEdit';
 import SortableFormElements from './SortableFormElements';
+import { deepClone } from '../../../utils/CommonUtil';
 import "../css/application.css";
 import "../css/form-builder-form.css";
 import "../css/form-builder.css";
@@ -46,7 +47,7 @@ export default class Preview extends React.Component {
     }
 
     updateElement = (element) => {
-        let data = this.state.data;
+        let data = this.props.data;
         let found = false;
 
         for (var i = 0, len = data.length; i < len; i++) {
@@ -67,33 +68,35 @@ export default class Preview extends React.Component {
     }
 
     insertCard = (item, hoverIndex) => {
-        const {data} = this.state
+        const {data} = this.props
         data.splice(hoverIndex, 0, item)
         this.saveData(item, hoverIndex, hoverIndex)
     }
 
     moveCard = (dragIndex, hoverIndex) => {
-        const {data} = this.state
+        const {data} = this.props
         const dragCard = data[dragIndex]
         this.saveData(dragCard, dragIndex, hoverIndex)
     }
 
     saveData = (dragCard, dragIndex, hoverIndex) => {
-        const newData = update(this.state, {
-            data: {
-                $splice: [[dragIndex, 1], [hoverIndex, 0, dragCard]],
-            },
-        });
-        this.setState(newData)
-        this.props.saveData(newData.data);
+        let {data} = this.props
+        const newData = update(data, { $splice: [[dragIndex, 1], [hoverIndex, 0, dragCard]], });
+        this.setState({data:newData})
+        this.props.saveData(newData);
     }
 
     getElement = (item, index) => {
-        if (item) {
+        if (item && item.element) {
             const SortableFormElement = SortableFormElements[item.element]
             return <SortableFormElement id={item.id} index={index} moveCard={this.moveCard} insertCard={this.insertCard}
                                         mutable={false} parent={this.props.parent} editModeOn={this.props.editModeOn}
                                         isDraggable={true} key={item.id} sortData={item.id} data={item} token={this.props.token}
+                                        copyElement={()=>{
+                                            let newItem = deepClone(item);
+                                            newItem.id +=new Date().getTime();
+                                            this.props.createElement(newItem)
+                                        }}
                                         _onDestroy={()=>{this._onDestroy(index)}} />
         } else {
             console.log("getElement item is undefined");

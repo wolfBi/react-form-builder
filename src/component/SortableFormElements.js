@@ -1,25 +1,8 @@
 import SortableElement from './SortableElement';
 import {
-    Header,
-    Paragraph,
-    Label,
-    LineBreak,
-    TextInput,
-    NumberInput,
-    TextArea,
-    Dropdown,
-    Checkboxes,
-    DatePicker,
-    TimePicker,
-    RadioButtons,
-    Image,
-    Rating,
-    AsyncDropdown,
-    UploadFile,
-    HyperLink,
-    Download,
-    Camera,
-    Range
+    Header,    Paragraph,    Label,    LineBreak,    TextInput,    NumberInput,    TextArea,    Dropdown,    Checkboxes,    DatePicker,
+    TimePicker,    RadioButtons,    Image,    Rating,    AsyncDropdown,    UploadFile,    HyperLink,    Download,    Camera,
+    Range,   DayMonYearPicker
 } from './FormElements';
 
 const SortableFormElements = {};
@@ -45,5 +28,6 @@ SortableFormElements.Camera = SortableElement(Camera);
 SortableFormElements.UploadFile = SortableElement(UploadFile);
 SortableFormElements.Range = Range;
 
+SortableFormElements.DayMonYearPicker = SortableElement(DayMonYearPicker);
 
 export default SortableFormElements;

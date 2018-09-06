@@ -9,8 +9,8 @@ import FileDelete from 'react-fine-uploader/delete-button';
 import FileRetry from 'react-fine-uploader/retry-button';
 import FileCancel from 'react-fine-uploader/cancel-button';
 import FineUploaderTraditional from 'fine-uploader-wrappers';
-import * as CommonUtil from "../../utils/CommonUtil";
-import '../../css/FileUploader.css';
+import * as CommonUtil from "../../../../utils/CommonUtil";
+import '../../../../components/FileUploader.css';
 
 const isFileGone = status => {
     return [
@@ -29,12 +29,13 @@ export default class FileUploader extends Component {
             submittedFiles: [],
             completeFilesInfo: [],
             errorMsg: '',
-            uploader: this.initUploader(props)
+
         };
+        this.uploader=this.initUploader(props);
     }
 
     componentDidMount() {
-        this.state.uploader.on('statusChange', (id, oldStatus, newStatus) => {
+        this.uploader.on('statusChange', (id, oldStatus, newStatus) => {
             if (newStatus === 'submitted') {
                 const _submittedFiles = this.state.submittedFiles;
                 _submittedFiles.push(id);
@@ -57,7 +58,16 @@ export default class FileUploader extends Component {
                 if (indexToRemoveCom !== undefined) {
                     completeFiles.splice(indexToRemoveCom, 1);
                 }
-                this.setState({submittedFiles, emptyFiles, completeFiles});
+
+                const completeFilesInfo = this.state.completeFilesInfo;
+                const indexToRemoveComInfo = completeFilesInfo.indexOf(id);
+                if (indexToRemoveComInfo !== undefined) {
+                    completeFilesInfo.splice(indexToRemoveComInfo, 1);
+                }
+                this.setState({submittedFiles, emptyFiles, completeFiles,completeFilesInfo});
+                if (this.props.onCloseCallback !== undefined) {
+                    this.props.onCloseCallback(completeFiles);
+                }
             }
         });
     }
@@ -86,11 +96,6 @@ export default class FileUploader extends Component {
                 request: {
                     endpoint: props.url,
                 },
-                cors: {
-                    allowXdr: true,
-                    expected: true,
-                    sendCredentials: true
-                },
                 deleteFile: {
                     enabled: !CommonUtil.isEmpty(props.deleteUrl),
                     endpoint: props.deleteUrl,
@@ -116,10 +121,14 @@ export default class FileUploader extends Component {
                             const completeFiles = this.state.completeFiles;
                             completeFiles.push(id);
                             const completeFilesInfo = this.state.completeFilesInfo;
-                            completeFilesInfo.push(response);
+                            let data = response.data
+                            if(response.success)
+                            {
+                                completeFilesInfo.push(...data);
+                            }
                             this.setState({completeFiles, completeFilesInfo});
                             if (this.props.onCloseCallback !== undefined) {
-                                this.props.onCloseCallback(response);
+                                this.props.onCloseCallback(completeFiles);
                             }
                         }
                     },
@@ -165,18 +174,18 @@ export default class FileUploader extends Component {
                                     <div className="qq-upload-container">
                                         <div className="qq-upload-spinner left"></div>
                                         <div className="qq-upload-file left show-ellipsis">
-                                            <Filename id={id} uploader={this.state.uploader}/>
+                                            <Filename id={id} uploader={this.uploader}/>
                                         </div>
                                         <div className="qq-upload-size left">
-                                            <Filestatus id={id} uploader={this.state.uploader}/>
-                                            <Filesize id={id} uploader={this.state.uploader}/>
+                                            <Filestatus id={id} uploader={this.uploader}/>
+                                            <Filesize id={id} uploader={this.uploader}/>
                                         </div>
                                         <div className="qq-upload-buttons right">
                                             <FileRetry id={id}
                                                        className="qq-upload-retry button green extra-small right"
-                                                       uploader={this.state.uploader}/>
+                                                       uploader={this.uploader}/>
                                             <FileCancel id={id} className="qq-upload-retry button extra-small right"
-                                                        uploader={this.state.uploader}/>
+                                                        uploader={this.uploader}/>
                                         </div>
                                     </div>
                                 </li>
@@ -189,7 +198,7 @@ export default class FileUploader extends Component {
                 <div className="right_section">
                     <div>
                         <div style={{textAlign: "left"}}>
-                            <FileInput className="file_input" multiple={this.props.multiple?true:false} accept={this.props.accept} uploader={this.state.uploader}>
+                            <FileInput className="file_input" multiple={this.props.multiple?true:false} accept={this.props.accept} uploader={this.uploader}>
                                 <span className="button blue qq-upload-choose">Browse</span>
                             </FileInput>
                         </div>
@@ -199,79 +208,17 @@ export default class FileUploader extends Component {
                     {this.props.dropable===false?
                         null:
                         <div>
-                            <Dropzone multiple={this.props.multiple?true:false} accept={this.props.accept} className="qq-uploader" uploader={this.state.uploader}
+                            <Dropzone multiple={this.props.multiple?true:false} accept={this.props.accept} className="qq-uploader" uploader={this.uploader}
                                       children={[dropFileSection]}>
                             </Dropzone>
                         </div>
                     }
                 </div>
         }
-        /*let form = this.props.needForm && this.props.formData && !CommonUtil.isEmptyObject(this.props.formData) ?
-            <div disabled>
-                <form action='' id="qq-form">
-                    { Object.keys(this.props.formData).map((key) => {
-                        return <input type="hidden" name={key} value={ this.props.formData[key] }/>
-                    })}
-                </form>
-            </div> : false;
-        let filesListDiv = !this.props.hiddenFilesListDiv ?
-            <div className="clearfix">
-                <Col xs={4}>
-                    <span className={"file-attachment btn btn-info"}
-                          onClick={this.addFileClick}>{this.props.addFileText }{form}</span>
-                    { modalDialog }
-                </Col>
-                <Col id='dropzoneOut' xs={8} className="padding0Px " style={{marginTop: '5px'}}>
-                    {this.state.submittedFiles.map(id => (
-                        <div className="attachments-list" key={id}>
-                            <div className="attachment editable">
-                                <span className="attachment-file attachment-list-item clearfix" target="_blank">
-                                    <div className="clearfix">
-                                        <Col md={5} className="underline padding0Px">
-                                            <Filename id={id} uploader={this.state.uploader}/>
-                                        </Col>
-                                        <Col md={6} className="padding0Px ">
-                                            <FileRetry id={id}
-                                                       className="qq-upload-retry button green extra-small right"
-                                                       uploader={this.state.uploader}/>
-                                            <FileCancel id={id} className="qq-upload-cancel button extra-small right"
-                                                        uploader={this.state.uploader}/>
-                                            <FileDelete id={id} className="transparent-button right"
-                                                        children={<span className="inline_cancel right"></span>}
-                                                        uploader={this.state.uploader}/>
-                                        </Col>
-                                    </div>
-                                </span>
-                            </div>
-                        </div>
-                    ))}
-                </Col>
-            </div>
-            :
-            <span >
-                <span className="file-attachment btn btn-info	"
-                      onClick={this.addFileClick}>{this.props.addFileText}{form}</span>
-                { modalDialog }
-            </span>
-        let renderReturn =
-            this.props.directlyUpload ? <span className="file-attachment btn btn-info " onClick={() => {
-                let directlyUploadFileInput = document.getElementById(this.props.directlyUploadFileInputID);
-                directlyUploadFileInput.click();
-            }}>
-                {this.props.addFileText}
-                <div display style={{display: 'none'}}>
-                    {form}
-                    <FileInput className="file_input" style={{display: 'none'}}
-                               id={this.props.directlyUploadFileInputID} multiple={this.props.multiple ? true : false}
-                               accept={this.props.accept} uploader={this.state.uploader}>
-                    </FileInput>
-                </div>
-            </span>
-                : <span >{filesListDiv}</span>*/
         return (
             <div className="file-uploader">
                 <div style={{padding: '7px 7px 7px 0px', textAlign: "left"}}>
-                    <a className="file-attachment" href="javascript:void(0);" onClick={this.addFileClick}>Add File</a>
+                    <a className="file-attachment" href="javascript:void(0);" onClick={this.addFileClick}>{this.props.addFileText}</a>
                     {modalDialog}
                 </div>
                 <div id='dropzoneOut' >
@@ -280,11 +227,11 @@ export default class FileUploader extends Component {
                             <div className="attachment editable">
                                 <span className="attachment-file attachment-list-item"  target="_blank">
                                 <div className="underline left" style={{textAlign: "left"}}>
-                                    <Filename id={id} uploader={this.state.uploader} />
+                                    <Filename id={id} uploader={this.uploader} />
                                 </div>
-                                <FileRetry id={id} className="qq-upload-retry button extra-small right" uploader={this.state.uploader} />
-                                <FileCancel id={id} className="qq-upload-cancel button extra-small right" uploader={this.state.uploader}/>
-                                <FileDelete id={id} className="transparent-button right" children={<span className="inline_cancel right"></span>} uploader={this.state.uploader} />
+                                <FileRetry id={id} className="qq-upload-retry button extra-small right" uploader={this.uploader} />
+                                <FileCancel id={id} className="qq-upload-cancel button extra-small right" uploader={this.uploader}/>
+                                <FileDelete id={id} className="transparent-button right" children={<span className="inline_cancel right"></span>} uploader={this.uploader} />
                                 </span>
                             </div>
                         </div>
@@ -326,7 +273,7 @@ export default class FileUploader extends Component {
         needForm: PropTypes.bool,
         formData: PropTypes.object,
         accept: PropTypes.object,
-        addFileText: PropTypes.any,
+        addFileText: PropTypes.string,
         onCloseCallback: PropTypes.func,
         onAllCompleteCallback: PropTypes.func,
     }

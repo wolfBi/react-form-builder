@@ -1,6 +1,7 @@
 import React from "react";
 import ReactFormGenerator from './ReactFormGenerator';
 import { CustomerModal } from '../../Facilities';
+import { deepClone } from "../../../utils/CommonUtil";
 
 export default class Previewbar extends React.Component {
     constructor(props) {
@@ -33,7 +34,7 @@ export default class Previewbar extends React.Component {
     }
 
     render() {
-        var modalClass = 'modal';
+        var modalClass = 'preview-Modal';
         if (this.state.previewVisible) {
             modalClass += ' show';
         }
@@ -42,7 +43,8 @@ export default class Previewbar extends React.Component {
         if (this.state.roPreviewVisible) {
             roModalClass += ' show';
         }
-
+        let previewFormData = deepClone(this.props.formData);
+        let previewData=deepClone(this.props.data);
         return (
             <div className="clearfix" style={{margin: '10px', width: '70%'}}>
                 <h4 className="pull-left">Preview</h4>
@@ -52,7 +54,7 @@ export default class Previewbar extends React.Component {
                 <button className="btn btn-default pull-right" style={{marginRight: '10px'}}
                         onClick={this.showRoPreview}>Read Only Form
                 </button>
-                <CustomerModal show={this.state.previewVisible} closeOpenModal={this.closePreview }
+                <CustomerModal bodyClass='' show={this.state.previewVisible} closeOpenModal={this.closePreview }
                    menuTitle={this.props.menuTitle} hideHeader={this.true} className={modalClass}
                    body={
                        <ReactFormGenerator
@@ -63,12 +65,12 @@ export default class Previewbar extends React.Component {
                            action_name="Submit"
                            form_action=""
                            form_method="POST"
-                           formData={ this.props.formData }
+                           formData={ previewFormData }
                            variables={this.props.variables}
                            hide_actions={true}
-                           data={this.props.data}/>
+                           data={previewData}/>
                    } />
-                <CustomerModal show={this.state.roPreviewVisible} closeOpenModal={this.closePreview }
+                <CustomerModal bodyClass='' show={this.state.roPreviewVisible} closeOpenModal={this.closePreview }
                     menuTitle={this.props.menuTitle} hideHeader={this.true} className={roModalClass}
                     body={
                         <ReactFormGenerator
@@ -79,10 +81,10 @@ export default class Previewbar extends React.Component {
                             action_name="Submit"
                             form_action=""
                             form_method="POST"
-                            formData={ this.props.formData }
+                            formData={ previewFormData }
                             read_only={true}
                             variables={this.props.variables}
-                            hide_actions={true} data={this.props.data}/>
+                            hide_actions={true} data={previewData}/>
                 } />
             </div>
         );

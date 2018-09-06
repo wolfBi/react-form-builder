@@ -1,19 +1,20 @@
 import React from 'react';
 import xss from 'xss';
 import moment from 'moment';
-import update from 'immutability-helper';
-import { Col } from 'react-bootstrap'
 import FA from 'react-fontawesome'
+import update from 'immutability-helper';
 import ReactDatePicker from 'react-datepicker';
 import ReactBootstrapSlider from  'react-bootstrap-slider';
+import { Col } from 'react-bootstrap'
 import HeaderBar from './HeaderBar';
+import MessagePopup from '../../../MessagePopup.js';
 import StarRating from './elements/StarRating';
 import SelectWidget from './elements/SelectWidget';
 import SelectAsync from './elements/SelectAsync';
 import FineUploader from './elements/FineUploader';
 import HourMinSelect from './elements/HourMinSelect';
-import * as CommonUtil from '../utils/CommonUtil';
-import HttpUtil from '../utils/HttpUtil';
+import * as CommonUtil from '../../../utils/CommonUtil';
+import HttpUtil from '../../../utils/HttpUtil';
 import datePickerIcon from '../../../images/Calendar.png';
 // import SortableItemMixin from 'react-anything-sortable/SortableItemMixin';
 import 'react-datepicker/dist/react-datepicker.css'
@@ -41,12 +42,7 @@ let myxss = new xss.FilterXSS({
 });
 
 const isRequired = (props)=>{
-    if(props.data && props.data.hasOwnProperty('required') && props.data.required === true && (!props.hasOwnProperty('read_only') || !props.read_only) ){
-        // return <span className="label-required label label-danger">Required</span>
-        return "reuired-true dispalyInline";
-    }else {
-        return " dispalyInline ";
-    }
+    return " dispalyInline ";
 }
 const getElementsClass = (elementData) => {
     let baseClasses = 'SortableItem rfb-item';
@@ -58,23 +54,43 @@ const getElementsClass = (elementData) => {
     }else{
         baseClasses += ' col-xs-12 ';
     }
+    if(elementData.hidden){
+        baseClasses += ' form-item-hidden ';
+    }
     return baseClasses;
 }
 
 class InlineLayout extends React.Component {
     render(){
-        let colxs = this.props.compWidth && this.props.compWidth <= 6 ? 4 : 2
+        let labelCol=parseInt(this.props.labelWidth?this.props.labelWidth:4,10);
+        let inputCol=parseInt(this.props.inputWidth?this.props.inputWidth:8,10);
         if(this.props.inline){
             return <div className="form-group" style={{marginBottom:'15px'}}>
-                <Col xs={colxs} style={{padding:'0',textAlign:'right'}}>{this.props.label}</Col>
-                <Col xs={12-colxs}>{this.props.children}</Col>
+                { labelCol===0?false: <Col xs={labelCol} style={{padding:'0',textAlign:'right'}}>{this.props.label}</Col>}
+                <Col xs={inputCol}>{this.props.children}</Col>
             </div>
         }else{
             return <div className="form-group" style={{marginBottom:'15px'}}>
-                {this.props.label}
+                { labelCol===0?false:this.props.label}
                 {this.props.children}
             </div>
         }
+    }
+}
+
+class HeaderBarPanel extends React.Component {
+    render(){
+        let rtn = !this.props.mutable ?
+            <div>
+                { this.props.data.pageBreakBefore &&
+                <div className="preview-page-break">Page Break</div>
+                }
+                <HeaderBar parent={this.props.parent} editModeOn={this.props.editModeOn} data={this.props.data}
+                           onDestroy={this.props._onDestroy} copyElement={this.props.copyElement}  onEdit={this.props.onEdit}
+                           static={this.props.data.static}
+                           required={this.props.data.required}/>
+            </div>:false
+        return rtn
     }
 }
 
@@ -94,17 +110,7 @@ export class Header extends React.Component {
 
         return (
             <div className={baseClasses}>
-                { !this.props.mutable &&
-                <div>
-                    { this.props.data.pageBreakBefore &&
-                    <div className="preview-page-break">Page Break</div>
-                    }
-                    <HeaderBar parent={this.props.parent} editModeOn={this.props.editModeOn} data={this.props.data}
-                               onDestroy={this.props._onDestroy} onEdit={this.props.onEdit}
-                               static={this.props.data.static}
-                               required={this.props.data.required}/>
-                </div>
-                }
+                <HeaderBarPanel {...this.props} />
                 <h3 className={classNames} dangerouslySetInnerHTML={{__html: this.props.data.content}}/>
             </div>
         );
@@ -126,17 +132,7 @@ export class Paragraph extends React.Component {
 
         return (
             <div className={baseClasses}>
-                { !this.props.mutable &&
-                <div>
-                    { this.props.data.pageBreakBefore &&
-                    <div className="preview-page-break">Page Break</div>
-                    }
-                    <HeaderBar parent={this.props.parent} editModeOn={this.props.editModeOn} data={this.props.data}
-                               onDestroy={this.props._onDestroy} onEdit={this.props.onEdit}
-                               static={this.props.data.static}
-                               required={this.props.data.required}/>
-                </div>
-                }
+                <HeaderBarPanel {...this.props} />
                 <p className={classNames} dangerouslySetInnerHTML={{__html: this.props.data.content}}/>
             </div>
         );
@@ -157,18 +153,8 @@ export class Label extends React.Component {
         let baseClasses = getElementsClass(this.props.data);
         return (
             <div className={baseClasses}>
-                { !this.props.mutable &&
-                <div>
-                    { this.props.data.pageBreakBefore &&
-                    <div className="preview-page-break">Page Break</div>
-                    }
-                    <HeaderBar parent={this.props.parent} editModeOn={this.props.editModeOn} data={this.props.data}
-                               onDestroy={this.props._onDestroy} onEdit={this.props.onEdit}
-                               static={this.props.data.static}
-                               required={this.props.data.required}/>
-                </div>
-                }
-                <label className={classNames}
+                <HeaderBarPanel {...this.props} />
+                <label style={{width:"100%"}} className={classNames}
                        dangerouslySetInnerHTML={{__html: this.props.data.content}}/>
             </div>
         );
@@ -181,17 +167,7 @@ export class LineBreak extends React.Component {
         let baseClasses = getElementsClass(this.props.data);
         return (
             <div className={baseClasses}>
-                { !this.props.mutable &&
-                <div>
-                    { this.props.data.pageBreakBefore &&
-                    <div className="preview-page-break">Page Break</div>
-                    }
-                    <HeaderBar parent={this.props.parent} editModeOn={this.props.editModeOn} data={this.props.data}
-                               onDestroy={this.props._onDestroy} onEdit={this.props.onEdit}
-                               static={this.props.data.static}
-                               required={this.props.data.required}/>
-                </div>
-                }
+                <HeaderBarPanel {...this.props} />
                 <hr />
             </div>
         );
@@ -199,62 +175,36 @@ export class LineBreak extends React.Component {
 }
 
 export class TextInput extends React.Component {
-    constructor(props) {
-        super(props);
-        this.inputField = "child_ref_" + this.props.data.field_name;//React.createRef();
-    }
-
     render() {
         let props = {};
         props.type = "text";
-        props.className = "form-control";
         props.name = this.props.data.field_name;
-        if (this.props.mutable) {
-            props.defaultValue = this.props.defaultValue;
-            props.ref = this.inputField;
+        props.placeholder= this.props.data.placeholder;
+        props.value = this.props.value;
+        if(this.props.value===undefined || this.props.value==="")
+        {
+            props.value=(this.props.data.defaultValue===undefined || this.props.data.defaultValue===""?"":this.props.data.defaultValue)
         }
-
-        let baseClasses = getElementsClass(this.props.data);
-
         if (this.props.read_only) {
             props.disabled = "disabled";
         }
+        let baseClasses = getElementsClass(this.props.data);
 
         return (
-            <div className={baseClasses}>
-                { !this.props.mutable &&
-                <div>
-                    { this.props.data.pageBreakBefore &&
-                    <div className="preview-page-break">Page Break</div>
-                    }
-                    <HeaderBar parent={this.props.parent} editModeOn={this.props.editModeOn} data={this.props.data}
-                               onDestroy={this.props._onDestroy} onEdit={this.props.onEdit}
-                               static={this.props.data.static}
-                               required={this.props.data.required}/>
-                </div>
-                }
+            <div className={baseClasses} id={"div_form_item_"+this.props.data.field_name}>
+                <HeaderBarPanel {...this.props} />
                 <InlineLayout inline={this.props.data.inline} compWidth={this.props.data.compWidth}
+                              labelWidth={this.props.data.labelWidth} inputWidth={this.props.data.inputWidth}
                     label={ <label className={(!this.props.data.inline ? "form-label" : "")+isRequired(this.props)}>
                         <span dangerouslySetInnerHTML={{__html: myxss.process(this.props.data.label)}}/>
                     </label>} >
-                    <input {...props} style={this.props.data.inline ? {display: 'inline-flex'} : {}}
+                    <input {...props} value={props.value} style={this.props.data.inline ? {display: 'inline-flex'} : {}}
                            onClick={() => {
                                if (this.props.data.supportJS && this.props.data.hasOwnProperty('onClickStr')
                                    && !CommonUtil.isEmpty(this.props.data.onClickStr)) {
                                    eval(this.props.data.onClickStr)
                                }
-                           }} onChange={(e) => {
-                        if (this.props.data.supportJS && this.props.data.hasOwnProperty('onChangeStr')
-                            && !CommonUtil.isEmpty(this.props.data.onChangeStr)) {
-                            let target = e && e.target ? e.target : e;
-                            let name = target.name;
-                            let value = target.value;
-                            let onChangeStr = this.props.data.onChangeStr;
-                            onChangeStr = onChangeStr.replace(/'name'/g, name);
-                            onChangeStr = onChangeStr.replace(/'value'/g, value);
-                            eval(onChangeStr)
-                        }
-                    }} onBlur={() => {
+                           }} onChange={(e)=>{this.props.handleChange(e,this.props.data)}} onBlur={() => {
                         if (this.props.data.supportJS && this.props.data.hasOwnProperty('onBlurStr')
                             && !CommonUtil.isEmpty(this.props.data.onBlurStr)) {
                             eval(this.props.data.onBlurStr)
@@ -267,22 +217,16 @@ export class TextInput extends React.Component {
 }
 
 export class NumberInput extends React.Component {
-    constructor(props) {
-        super(props);
-        this.inputField = "child_ref_" + this.props.data.field_name;//React.createRef();
-    }
-
     render() {
         let props = {};
         props.type = "number";
-        props.className = "form-control";
         props.name = this.props.data.field_name;
-
-        if (this.props.mutable) {
-            props.defaultValue = this.props.defaultValue;
-            props.ref = "child_ref_" + this.props.data.field_name;
+        props.placeholder= this.props.data.placeholder;
+        props.value = this.props.value;
+        if(this.props.value===undefined || this.props.value==="")
+        {
+            props.value=(this.props.data.defaultValue===undefined || this.props.data.defaultValue===""?"":this.props.data.defaultValue)
         }
-
         if (this.props.read_only) {
             props.disabled = "disabled";
         }
@@ -290,40 +234,21 @@ export class NumberInput extends React.Component {
         let baseClasses = getElementsClass(this.props.data);
 
         return (
-            <div className={baseClasses}>
-                { !this.props.mutable &&
-                <div>
-                    { this.props.data.pageBreakBefore &&
-                    <div className="preview-page-break">Page Break</div>
-                    }
-                    <HeaderBar parent={this.props.parent} editModeOn={this.props.editModeOn} data={this.props.data}
-                               onDestroy={this.props._onDestroy} onEdit={this.props.onEdit}
-                               static={this.props.data.static}
-                               required={this.props.data.required}/>
-                </div>
-                }
+            <div className={baseClasses} id={"div_form_item_"+this.props.data.field_name}>
+                <HeaderBarPanel {...this.props} />
                 <InlineLayout inline={this.props.data.inline}  compWidth={this.props.data.compWidth}
+                              labelWidth={this.props.data.labelWidth} inputWidth={this.props.data.inputWidth}
                               label={ <label className={(!this.props.data.inline ? "form-label" : "")+isRequired(this.props)}>
                     <span dangerouslySetInnerHTML={{__html: myxss.process(this.props.data.label)}}/>
                 </label>} >
-                    <input {...props} style={this.props.data.inline ? {display: 'inline-flex'} : {}}
-                           onClick={() => {
+                    <input {...props} value={props.value} style={this.props.data.inline ? {display: 'inline-flex'} : {}}
+                        onClick={() => {
                                if (this.props.data.supportJS && this.props.data.hasOwnProperty('onClickStr')
                                    && !CommonUtil.isEmpty(this.props.data.onClickStr)) {
                                    eval(this.props.data.onClickStr)
                                }
-                           }} onChange={(e) => {
-                        if (this.props.data.supportJS && this.props.data.hasOwnProperty('onChangeStr')
-                            && !CommonUtil.isEmpty(this.props.data.onChangeStr)) {
-                            let target = e && e.target ? e.target : e;
-                            let name = target.name;
-                            let value = target.value;
-                            let onChangeStr = this.props.data.onChangeStr;
-                            onChangeStr = onChangeStr.replace(/'name'/g, name);
-                            onChangeStr = onChangeStr.replace(/'value'/g, value);
-                            eval(onChangeStr)
-                        }
-                    }} onBlur={() => {
+                           }} onChange={(e)=>{this.props.handleChange(e,this.props.data)}}
+                        onBlur={() => {
                         if (this.props.data.supportJS && this.props.data.hasOwnProperty('onBlurStr')
                             && !CommonUtil.isEmpty(this.props.data.onBlurStr)) {
                             eval(this.props.data.onBlurStr)
@@ -336,62 +261,37 @@ export class NumberInput extends React.Component {
 }
 
 export class TextArea extends React.Component {
-    constructor(props) {
-        super(props);
-        this.inputField = "child_ref_" + this.props.data.field_name;//React.createRef();
-    }
-
     render() {
         let props = {};
         props.className = "";
         props.name = this.props.data.field_name;
-
+        props.value = this.props.value;
+        if(this.props.value===undefined || this.props.value==="")
+        {
+            props.value=(this.props.data.defaultValue===undefined || this.props.data.defaultValue===""?"":this.props.data.defaultValue)
+        }
         if (this.props.read_only) {
             props.disabled = "disabled";
-        }
-
-        if (this.props.mutable) {
-            props.defaultValue = this.props.defaultValue;
-            // props.ref = this.inputField;
         }
 
         let baseClasses = getElementsClass(this.props.data);
 
         return (
-            <div className={baseClasses}>
-                { !this.props.mutable &&
-                <div>
-                    { this.props.data.pageBreakBefore &&
-                    <div className="preview-page-break">Page Break</div>
-                    }
-                    <HeaderBar parent={this.props.parent} editModeOn={this.props.editModeOn} data={this.props.data}
-                               onDestroy={this.props._onDestroy} onEdit={this.props.onEdit}
-                               static={this.props.data.static}
-                               required={this.props.data.required}/>
-                </div>
-                }
-                <InlineLayout inline={this.props.data.inline} compWidth={12}
+            <div className={baseClasses} id={"div_form_item_"+this.props.data.field_name}>
+                <HeaderBarPanel {...this.props} />
+                <InlineLayout inline={this.props.data.inline} compWidth={this.props.data.compWidth}
+                              labelWidth={this.props.data.labelWidth} inputWidth={this.props.data.inputWidth}
                     label={ <label style={this.props.data.inline ? {verticalAlign: 'top'} : {}}
                                    className={(!this.props.data.inline ? "form-label" : "")+isRequired(this.props)}>
                         <span dangerouslySetInnerHTML={{__html: myxss.process(this.props.data.label)}}/>
                     </label> } >
-                    <textarea {...props} style={{width:'100%'}} onClick={() => {
+                    <textarea {...props} value={props.value} style={{width:'100%'}} onClick={() => {
                         if (this.props.data.supportJS && this.props.data.hasOwnProperty('onClickStr')
                             && !CommonUtil.isEmpty(this.props.data.onClickStr)) {
                             eval(this.props.data.onClickStr)
                         }
-                    }} onChange={(e) => {
-                        if (this.props.data.supportJS && this.props.data.hasOwnProperty('onChangeStr')
-                            && !CommonUtil.isEmpty(this.props.data.onChangeStr)) {
-                            let target = e && e.target ? e.target : e;
-                            let name = target.name;
-                            let value = target.value;
-                            let onChangeStr = this.props.data.onChangeStr;
-                            onChangeStr = onChangeStr.replace(/'name'/g, name);
-                            onChangeStr = onChangeStr.replace(/'value'/g, value);
-                            eval(onChangeStr)
-                        }
-                    }} onBlur={() => {
+                    }} onChange={(e)=>{this.props.handleChange(e,this.props.data)}}
+                    onBlur={() => {
                         if (this.props.data.supportJS && this.props.data.hasOwnProperty('onBlurStr')
                             && !CommonUtil.isEmpty(this.props.data.onBlurStr)) {
                             eval(this.props.data.onBlurStr)
@@ -404,20 +304,14 @@ export class TextArea extends React.Component {
 }
 
 export class TimePicker extends React.Component {
-    constructor(props) {
-        super(props);
-        this.inputField = "child_ref_" + this.props.data.field_name;//React.createRef();
-
-        this.state = {
-            value: "",
-            placeholder: 'HH:mm',
-        };
-    }
-
-    handleChange = (value) => {
-        this.setState({
+    handleChange = (timevalue) => {
+        let name = this.props.data.field_name;
+        let value = !CommonUtil.isEmpty(timevalue) ? (moment.isMoment(timevalue) ? timevalue.format("HH:mm") : timevalue) : null;
+        let target = {
+            name,
             value
-        })
+        }
+        this.props.handleChange(target,this.props.data)
     };
 
     render() {
@@ -425,46 +319,25 @@ export class TimePicker extends React.Component {
         props.type = "time";
         props.className = "";
         props.name = this.props.data.field_name;
-        props.value = this.state.value;
-        if (this.props.mutable) {
-            props.defaultValue = this.props.defaultValue;
-            props.ref = this.inputField;
-        }
+        props.value = this.props.value;
 
+        props.disabled=false;
+        let readOnly=this.props.read_only || this.props.data.readOnly?true:false;
         if (this.props.read_only) {
-            props.disabled = "disabled";
+            props.disabled = true;
         }
-
         let baseClasses = getElementsClass(this.props.data);
         return (
-            <div className={baseClasses}>
-                { !this.props.mutable &&
-                <div>
-                    { this.props.data.pageBreakBefore &&
-                    <div className="preview-page-break">Page Break</div>
-                    }
-                    <HeaderBar parent={this.props.parent} editModeOn={this.props.editModeOn} data={this.props.data}
-                               onDestroy={this.props._onDestroy} onEdit={this.props.onEdit}
-                               static={this.props.data.static}
-                               required={this.props.data.required}/>
-                </div>
-                }
+            <div className={baseClasses} id={"div_form_item_"+this.props.data.field_name}>
+                <HeaderBarPanel {...this.props} />
                 <InlineLayout inline={this.props.data.inline}  compWidth={this.props.data.compWidth}
-                    label={ <label className={(!this.props.data.inline ? "form-label" : "")+isRequired(this.props)}>
+                              labelWidth={this.props.data.labelWidth} inputWidth={this.props.data.inputWidth}
+                              label={ <label className={(!this.props.data.inline ? "form-label" : "")+isRequired(this.props)}>
                         <span dangerouslySetInnerHTML={{__html: myxss.process(this.props.data.label)}}/>
                     </label>} >
-                    <div style={this.props.data.inline ? {display: 'inline-flex'} : {}}>
-                        { this.props.data.readOnly &&
-                        <input type="text"
-                               name={props.name}
-                               ref={props.ref}
-                               readOnly="true"
-                               dateFormat="HH:mm"
-                               placeholder={this.state.placeholder}
-                               value={this.state.value}
-                               className="form-control"/>
-                        }
-                        <HourMinSelect {...props} onChangeHandler={this.handleChange}/>
+                    <div style={this.props.data.inline ? {display: 'flex'} : {}}>
+                        { readOnly ?<input type="text" {...props} readOnly="true" placeholder= 'HH:mm'value={props.value}/>
+                        :<HourMinSelect {...props} onChangeHandler={this.handleChange}/>}
                     </div>
                 </InlineLayout>
             </div>
@@ -482,9 +355,8 @@ export class DatePicker extends React.Component {
             value = moment().format('MM/DD/YYYY');
             internalValue = moment();
         } else {
-            value = props.defaultValue;
-
-            if (props.defaultValue !== '' && props.defaultValue !== undefined) {
+            value = props.value;
+            if (props.value !== '' && props.value !== undefined) {
                 internalValue = moment(value, 'MM/DD/YYYY');
             }
         }
@@ -497,6 +369,22 @@ export class DatePicker extends React.Component {
         };
     }
 
+    componentWillReceiveProps(nextProps) {
+        let value = "", internalValue = undefined;
+        if (nextProps.data.defaultToday && !this.state.defaultToday) {
+            value = moment().format('MM/DD/YYYY');
+            internalValue = moment(this.state.value);
+        }else {
+            value = nextProps.value;
+            if (nextProps.value !== '' && nextProps.value !== undefined) {
+                internalValue = moment(value, 'MM/DD/YYYY');
+            }
+        }
+        this.setState({
+            value, internalValue, defaultToday: nextProps.data.defaultToday
+        })
+    }
+
     handleChange = (dt) => {
         if (dt && dt.target) {
 
@@ -507,6 +395,8 @@ export class DatePicker extends React.Component {
                 value: formattedDate,
                 internalValue: formattedDate,
                 placeholder: placeholder
+            },()=>{
+                this.props.handleChange(dt.target,this.props.data)
             });
 
         } else {
@@ -514,20 +404,13 @@ export class DatePicker extends React.Component {
                 value: (dt) ? dt.format('MM/DD/YYYY') : '',
                 internalValue: dt,
                 placeholder: placeholder
+            },()=>{
+                let name = this.props.data.field_name;
+                this.props.handleChange({name,value:this.state.value},this.props.data)
             });
         }
     };
 
-    componentWillReceiveProps(nextProps) {
-        let value = "", internalValue = undefined;
-        if (this.props.data.defaultToday && !this.state.defaultToday) {
-            value = moment().format('MM/DD/YYYY');
-            internalValue = moment(this.state.value);
-        }
-        this.setState({
-            value, internalValue, defaultToday: this.props.data.defaultToday
-        })
-    }
 
     render() {
         let props = {};
@@ -536,75 +419,53 @@ export class DatePicker extends React.Component {
         props.name = this.props.data.field_name;
 
         var iOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-
-        if (this.props.mutable) {
-            props.defaultValue = this.props.defaultValue;
-            props.ref = this.inputField;
-        }
-
+        props.disabled=false;
         if (this.props.read_only) {
-            props.disabled = "disabled";
+            props.disabled = true;
         }
+        let readOnly=this.props.read_only || this.props.data.readOnly?true:false;
         props.value=this.state.value
         let baseClasses = getElementsClass(this.props.data);
-
-        const dataDiv = <div >
-            {/*<FA name="calendar" style={{marginRight: '3px', marginLeft: '3px', marginTop: '3px', marginBottom: '3px'}}/>*/}
-            <img src={datePickerIcon} style={{marginRight: '3px', marginLeft: '3px', marginTop: '3px', marginBottom: '3px'}} alt=""/>
-            <input type="text" className='widget-date-input' style={{width: '131px', background: 'white'}} id={props.name}
+        const dataDiv = <div style={{width:'100%',display:'flex'}}>
+            <img src={datePickerIcon} style={{margin: '3px'}} alt=""/>
+            <input type="text" className='widget-date-input' style={{width: '100%', background: 'white'}} id={props.name}
                    name={props.name} disabled={true} value={this.state.value} />
         </div>;
         return (
-            <div className={baseClasses}>
-                { !this.props.mutable &&
-                <div>
-                    { this.props.data.pageBreakBefore &&
-                    <div className="preview-page-break">Page Break</div>
-                    }
-                    <HeaderBar parent={this.props.parent} editModeOn={this.props.editModeOn} data={this.props.data}
-                               onDestroy={this.props._onDestroy} onEdit={this.props.onEdit}
-                               static={this.props.data.static}
-                               required={this.props.data.required}/>
-                </div>
-                }
+            <div className={baseClasses} id={"div_form_item_"+this.props.data.field_name}>
+                <HeaderBarPanel {...this.props} />
                 <InlineLayout inline={this.props.data.inline}  compWidth={this.props.data.compWidth}
+                              labelWidth={this.props.data.labelWidth} inputWidth={this.props.data.inputWidth}
                               label={ <label className={(!this.props.data.inline ? "form-label" : "")+isRequired(this.props)}>
                     <span dangerouslySetInnerHTML={{__html: myxss.process(this.props.data.label)}}/>
                 </label>} >
-                    <div style={this.props.data.inline ? {display: 'inline-flex'} : {}} className="commonInput">
-                        { this.props.data.readOnly &&
+                    <div style={this.props.data.inline ? {display: 'inline-flex',width:"100%"} : {}} className="commonInput">
+                        { readOnly &&
                         <input type="text"
                                name={props.name}
-                               ref={props.ref}
                                readOnly="true"
-                               dateFormat="MM/DD/YYYY"
-                               placeholder={this.state.placeholder}
                                value={this.state.value}
-                               className="form-control"/>
-                        }
-                        { iOS && !this.props.data.readOnly &&
+                               />
+                        }{/*className="form-control"*/}
+                        { iOS && !readOnly &&
                         <input type="date"
                                name={props.name}
-                               ref={props.ref}
                                onChange={this.handleChange}
-                               dateFormat="MM/DD/YYYY"
+
                                placeholder={this.state.placeholder}
                                value={this.state.value}
-                               className="form-control"/>
+                               />
                         }
-                        { !iOS && !this.props.data.readOnly &&
+                        { !iOS && !readOnly &&
                         <ReactDatePicker customInput={dataDiv}
-                                         name={props.name}
                                          onChange={this.handleChange}
                                          selected={this.state.internalValue}
                                          minDate={this.props.hasOwnProperty("disabledPastDate") && this.props.disabledPastDate === false ? null : moment()}
-                                         todayButton={'Today'}
-                                         isClearable={true}
                                          dateFormat="MM/DD/YYYY"
                                          placeholderText={this.state.placeholder}/>
                         }
-                        { !iOS && !this.props.data.readOnly &&
-                        <input type="hidden" ref={props.ref} name={props.name} value={this.state.value} /> }
+                        { !iOS && !readOnly &&
+                        <input type="hidden" name={props.name} value={this.state.value} /> }
                     </div>
                 </InlineLayout>
             </div>
@@ -615,65 +476,76 @@ export class DatePicker extends React.Component {
 export class Dropdown extends React.Component {
     constructor(props) {
         super(props);
-        this.inputField = "child_ref_" + this.props.data.field_name;//React.createRef();
-    }
 
+        this.state = {
+            value: props.value?props.value:this.props.data.defaultValue===undefined || this.props.data.defaultValue===""?"":this.props.data.defaultValue,
+        };
+    }
+    componentWillReceiveProps(nextprops) {
+        this.setState({
+            value: nextprops.value
+        });
+    }
     render() {
         let props = {};
-        props.className = "form-control";
         props.name = this.props.data.field_name;
-
-        if (this.props.mutable) {
-            props.defaultValue = this.props.defaultValue;
-            props.ref = this.inputField;
-        }
+        props.value=this.state.value;
         props.creatable = this.props.data.creatable;
         props.clearable = this.props.data.clearable;
         props.multi = this.props.data.multiple;
-        props.options = this.props.data.options;
+        props.options = []
+        if(this.props.options && this.props.options.length >0){
+            let option = this.props.options;
+            for(let i=0;i<option.length;i++)
+            {
+                if(option[i].label!="")
+                {
+                    props.options.push(option[i]);
+                }
+            }
+
+        }
+        if(this.props.data.options && this.props.data.options.length >0){
+            let option = this.props.data.options;
+            for(let j=0;j<option.length;j++)
+            {
+                if(option[j].label!="")
+                {
+                    props.options.push(option[j]);
+                }
+            }
+        }
+        props.disabled=false;
         if (this.props.read_only) {
-            props.disabled = "disabled";
+            props.disabled = true;
         }
 
         let baseClasses = getElementsClass(this.props.data);
 
         return (
-            <div className={baseClasses}>
-                { !this.props.mutable &&
-                <div>
-                    { this.props.data.pageBreakBefore &&
-                    <div className="preview-page-break">Page Break</div>
-                    }
-                    <HeaderBar parent={this.props.parent} editModeOn={this.props.editModeOn} data={this.props.data}
-                               onDestroy={this.props._onDestroy} onEdit={this.props.onEdit}
-                               static={this.props.data.static}
-                               required={this.props.data.required}/>
-                </div>
-                }
+            <div className={baseClasses} id={"div_form_item_"+this.props.data.field_name}>
+                <HeaderBarPanel {...this.props} />
 
                 <InlineLayout inline={this.props.data.inline}  compWidth={this.props.data.compWidth}
+                              labelWidth={this.props.data.labelWidth} inputWidth={this.props.data.inputWidth}
                               label={ <label className={(!this.props.data.inline ? "form-label" : "")+isRequired(this.props)}>
                     <span dangerouslySetInnerHTML={{__html: myxss.process(this.props.data.label)}}/>
                 </label>} >
-                    <div style={this.props.data.inline ? {display: 'inline-flex'} : {}}>
+                    <div style={this.props.data.inline ? {display: 'inline-flex',width:'100%',textAlign:"left"} : {}}>
                         <SelectWidget {...props}
                             onClick={() => {
                                 if (this.props.data.supportJS && this.props.data.hasOwnProperty('onClickStr')
                                     && !CommonUtil.isEmpty(this.props.data.onClickStr)) {
                                     eval(this.props.data.onClickStr)
                                 }
-                            }} onChange={(e) => {
-                                let target = e && e.target ? e.target : e;
-                                let name = target.name;
-                                let value = target.value;
-                                if (this.props.data.supportJS && this.props.data.hasOwnProperty('onChangeStr')
-                                    && !CommonUtil.isEmpty(this.props.data.onChangeStr)) {
-                                    let onChangeStr = this.props.data.onChangeStr;
-                                    onChangeStr = onChangeStr.replace(/'name'/g, name);
-                                    onChangeStr = onChangeStr.replace(/'value'/g, value);
-                                    eval(onChangeStr)
-                                }
-                            }} onBlur={() => {
+                            }} onChange={(e)=>{
+                                    this.setState({value: e},()=>{
+                                        let name = this.props.data.field_name;
+                                        let value = this.state.value;
+                                        this.props.handleChange({name,value},this.props.data)
+                                    });
+                                }}
+                            onBlur={() => {
                                 if (this.props.data.supportJS && this.props.data.hasOwnProperty('onBlurStr')
                                     && !CommonUtil.isEmpty(this.props.data.onBlurStr)) {
                                     eval(this.props.data.onBlurStr)
@@ -690,41 +562,41 @@ export class Dropdown extends React.Component {
 export class AsyncDropdown extends React.Component {
     constructor(props) {
         super(props);
-        this.inputField = "child_ref_" + this.props.data.field_name;//React.createRef();
+        this.state = {value: this.props.value !== undefined ? this.props.value : ""};
     }
 
-    state = {value: this.props.defaultValue !== undefined ? this.props.defaultValue.split(",") : []};
-
     handleChange = (e) => {
-        this.setState({value: e});
-        if (this.props.data.supportJS && this.props.data.hasOwnProperty('onChangeStr')
-            && !CommonUtil.isEmpty(this.props.data.onChangeStr)) {
-            let target = e && e.target ? e.target : e;
-            let name = target.name;
-            let value = target.value;
-            let onChangeStr = this.props.data.onChangeStr;
-            onChangeStr = onChangeStr.replace(/'name'/g, name);
-            onChangeStr = onChangeStr.replace(/'value'/g, value);
-            eval(onChangeStr)
-        }
+        this.setState({value: e},()=>{
+            let name = this.props.data.field_name;
+            let value = this.state.value;
+            this.props.handleChange({name,value},this.props.data)
+        });
     };
+
     loadOptionsHandle = (input) => {
         let {loadOptionUrl, responseFeild, labelFeild, valueFeild,needAuthorization} = this.props.data;
-        let token = this.props.token
-        let api_url = loadOptionUrl + input
-        let authorization = {};
-        if(needAuthorization){
-            authorization = {Authorization: `${token.tokenType} ${token.accessToken}`}
+        if(loadOptionUrl && !CommonUtil.isEmpty(loadOptionUrl)){
+            let token = this.props.token
+            let api_url = loadOptionUrl + input
+            let authorization = {};
+            if(needAuthorization){
+                authorization = {Authorization: `${token.tokenType} ${token.accessToken}`}
+            }
+            return HttpUtil.get(api_url, {}, undefined, false, false,authorization).then(json => {
+                var items = json.response[responseFeild] && json.response[responseFeild].map((item) => {
+                        return {
+                            "value": item[valueFeild],
+                            "label": item[labelFeild]
+                        };
+                    });
+                return {options: items};
+            })
+        }else {
+            return new Promise((resolve, reject)=>{
+                let options = this.props.options &&this.props.options.filter((option)=>{return option.label.indexOf(input)>=0 ||option.value.indexOf(input)>=0  })
+                return resolve({ options: options })
+            })
         }
-        return HttpUtil.get(api_url, {}, undefined, false, false,authorization).then(json => {
-            var items = json.response[responseFeild] && json.response[responseFeild].map((item) => {
-                    return {
-                        "value": item[valueFeild],
-                        "label": item[labelFeild]
-                    };
-                });
-            return {options: items};
-        })
     }
 
     render() {
@@ -736,41 +608,30 @@ export class AsyncDropdown extends React.Component {
         props.creatable = this.props.data.creatable;
         props.clearable = this.props.data.clearable;
         props.multi = this.props.data.multiple;
-
-        if (!this.props.mutable) {
-            // props.value = options[0].text
-        } // to show a sample of what tags looks like
-        if (this.props.mutable) {
-            props.ref = this.inputField;
+        props.disabled=false;
+        if (this.props.read_only) {
+            props.disabled = true;
         }
+
         props.value = this.state.value;
 
         let baseClasses = getElementsClass(this.props.data);
         return (
-            <div className={baseClasses}>
-                { !this.props.mutable &&
-                <div>
-                    { this.props.data.pageBreakBefore &&
-                    <div className="preview-page-break">Page Break</div>
-                    }
-                    <HeaderBar parent={this.props.parent} editModeOn={this.props.editModeOn} data={this.props.data}
-                               onDestroy={this.props._onDestroy} onEdit={this.props.onEdit}
-                               static={this.props.data.static}
-                               required={this.props.data.required}/>
-                </div>
-                }
+            <div className={baseClasses} id={"div_form_item_"+this.props.data.field_name}>
+                <HeaderBarPanel {...this.props} />
                 <InlineLayout inline={this.props.data.inline} compWidth={this.props.data.compWidth}
+                              labelWidth={this.props.data.labelWidth} inputWidth={this.props.data.inputWidth}
                               label={ <label className={(!this.props.data.inline ? "form-label" : "")+isRequired(this.props)}>
                     <span dangerouslySetInnerHTML={{__html: myxss.process(this.props.data.label)}}/>
                 </label>} >
-                    <div style={this.props.data.inline ? {display: 'inline-flex'} : {}}>
+                    <div style={this.props.data.inline ? {display: 'inline-flex',width:"100%"} : {}}>
                         <SelectAsync {...props} loadOptions={this.loadOptionsHandle}
-                                     onClick={() => {
-                                         if (this.props.data.supportJS && this.props.data.hasOwnProperty('onClickStr')
-                                             && !CommonUtil.isEmpty(this.props.data.onClickStr)) {
-                                             eval(this.props.data.onClickStr)
-                                         }
-                                     }} onBlur={() => {
+                             onClick={() => {
+                                 if (this.props.data.supportJS && this.props.data.hasOwnProperty('onClickStr')
+                                     && !CommonUtil.isEmpty(this.props.data.onClickStr)) {
+                                     eval(this.props.data.onClickStr)
+                                 }
+                             }} onBlur={() => {
                             if (this.props.data.supportJS && this.props.data.hasOwnProperty('onBlurStr')
                                 && !CommonUtil.isEmpty(this.props.data.onBlurStr)) {
                                 eval(this.props.data.onBlurStr)
@@ -786,22 +647,32 @@ export class AsyncDropdown extends React.Component {
 export class Checkboxes extends React.Component {
     constructor(props) {
         super(props);
-        this.options = {};
         this.state={
-            value:[]
+            value:props.value ?props.value:((this.props.data.defaultValue===undefined || this.props.data.defaultValue===""?[]:this.props.data.defaultValue))
         }
     }
+
+    componentWillReceiveProps(nextProps) {
+        this.setState({
+            value:nextProps.value ?nextProps.value:((nextProps.data.defaultValue===undefined || nextProps.data.defaultValue===""?[]:nextProps.data.defaultValue))
+        })
+    }
+
     onChange = (value)=>{
         let stateValue = this.state.value
-        if(stateValue.indexOf(value) >=0 ){
+        if(stateValue && stateValue.indexOf(value) >=0 ){
             stateValue = update(this.state.value,{$splice:[[stateValue.indexOf(value),1]]})
         }else{
             stateValue = update(this.state.value,{$push:[value]})
         }
         this.setState({
             value:stateValue
+        },()=>{
+            let name = this.props.data.field_name;
+            this.props.handleChange({name,value:this.state.value},this.props.data)
         })
     }
+
     render() {
         let self = this;
         let classNames = 'checkbox-label';
@@ -812,55 +683,59 @@ export class Checkboxes extends React.Component {
         let baseClasses = getElementsClass(this.props.data);
 
         return (
-            <div className={baseClasses}>
-                { !this.props.mutable &&
-                <div>
-                    { this.props.data.pageBreakBefore &&
-                    <div className="preview-page-break">Page Break</div>
-                    }
-                    <HeaderBar parent={this.props.parent} editModeOn={this.props.editModeOn} data={this.props.data}
-                               onDestroy={this.props._onDestroy} onEdit={this.props.onEdit}
-                               static={this.props.data.static}
-                               required={this.props.data.required}/>
-                </div>
-                }
+            <div className={baseClasses} id={"div_form_item_"+this.props.data.field_name}>
+                <HeaderBarPanel {...this.props} />
                 <InlineLayout inline={this.props.data.inline} compWidth={this.props.data.compWidth}
+                              labelWidth={this.props.data.labelWidth} inputWidth={this.props.data.inputWidth}
                               label={ <label className={(!this.props.data.inline ? "form-label" : "")+isRequired(this.props)}  style={this.props.data.inline ? {verticalAlign: 'top'} : {}}>
                     <span dangerouslySetInnerHTML={{__html: myxss.process(this.props.data.label)}}/>
                 </label>} >
                     <div style={this.props.data.inline ? {display: 'inline-block',textAlign:'left'} : {}}>
                         <input name={this.props.data.field_name} type="hidden" value={this.state.value} />
-                        {this.props.data.options.map((option) => {
-                            let this_key = 'preview_' + option.key;
+                        {this.props.options && this.props.options.map((option,index) => {
                             let props = {};
-                            props.name = self.props.data.field_name;// 'option_' + option.key;
+                            props.name = self.props.data.field_name;
                             props.type = "checkbox"
                             props.value = option.value;
-                            if (self.props.mutable) {
-                                props.defaultChecked = self.props.defaultValue.indexOf(option.value) > -1 ? true : false;
+                            props.disabled=false;
+                            if (self.props.read_only) {
+                                props.disabled =true;
                             }
+                            let this_key = 'previewcheckbox_' + props.name+index;
                             return (
                                 <label className={classNames} key={this_key}>
-                                    <input ref={c => {
-                                        if (c && self.props.mutable) {
-                                            self.options[`child_ref_${option.key}`] = c;
-                                        }
-                                    } } {...props} checked={this.state.value.indexOf(option.value)>=0} onClick={() => {
+                                    <input {...props} checked={this.state.value && this.state.value.indexOf(option.value)>=0} onClick={() => {
                                         this.onChange(option.value)
                                         if (this.props.data.supportJS && this.props.data.hasOwnProperty('onClickStr')
                                             && !CommonUtil.isEmpty(this.props.data.onClickStr)) {
                                             eval(this.props.data.onClickStr)
                                         }
-                                    }} onChange={(e) => {
-                                        if (this.props.data.supportJS && this.props.data.hasOwnProperty('onChangeStr')
-                                            && !CommonUtil.isEmpty(this.props.data.onChangeStr)) {
-                                            let target = e && e.target ? e.target : e;
-                                            let name = target.name;
-                                            let value = target.value;
-                                            let onChangeStr = this.props.data.onChangeStr;
-                                            onChangeStr = onChangeStr.replace(/'name'/g, name);
-                                            onChangeStr = onChangeStr.replace(/'value'/g, value);
-                                            eval(onChangeStr)
+                                    }} onBlur={() => {
+                                        if (this.props.data.supportJS && this.props.data.hasOwnProperty('onBlurStr')
+                                            && !CommonUtil.isEmpty(this.props.data.onBlurStr)) {
+                                            eval(this.props.data.onBlurStr)
+                                        }
+                                    }}/> {option.label}
+                                </label>
+                            )
+                        })}
+                        {this.props.data.options && this.props.data.options.map((option) => {
+                            let this_key = 'preview_' + option.key;
+                            let props = {};
+                            props.name = self.props.data.field_name;// 'option_' + option.key;
+                            props.type = "checkbox"
+                            props.value = option.value;
+                            props.disabled=false;
+                            if (self.props.read_only) {
+                                props.disabled =true;
+                            }
+                            return (
+                                <label className={classNames} key={this_key}>
+                                    <input {...props} checked={this.state.value && this.state.value.indexOf(option.value)>=0} onClick={() => {
+                                        this.onChange(option.value)
+                                        if (this.props.data.supportJS && this.props.data.hasOwnProperty('onClickStr')
+                                            && !CommonUtil.isEmpty(this.props.data.onClickStr)) {
+                                            eval(this.props.data.onClickStr)
                                         }
                                     }} onBlur={() => {
                                         if (this.props.data.supportJS && this.props.data.hasOwnProperty('onBlurStr')
@@ -881,9 +756,25 @@ export class Checkboxes extends React.Component {
 export class RadioButtons extends React.Component {
     constructor(props) {
         super(props);
-        this.options = {};
+        this.state={
+            value:props.value?props.value:(this.props.data.defaultValue===undefined || this.props.data.defaultValue===""?"":this.props.data.defaultValue)
+        }
     }
 
+    componentWillReceiveProps(nextProps) {
+        this.setState({
+            value:nextProps.value?nextProps.value:(nextProps.data.defaultValue===undefined || nextProps.data.defaultValue===""?"":nextProps.data.defaultValue)
+        })
+    }
+
+    onChange = (value)=>{
+        this.setState({
+            value
+        },()=>{
+            let name = this.props.data.field_name;
+            this.props.handleChange({name,value:this.state.value},this.props.data)
+        })
+    }
     render() {
         let self = this;
         let classNames = 'radio-label';
@@ -894,55 +785,59 @@ export class RadioButtons extends React.Component {
         let baseClasses = getElementsClass(this.props.data);
 
         return (
-            <div className={baseClasses}>
-                { !this.props.mutable &&
-                <div>
-                    { this.props.data.pageBreakBefore &&
-                    <div className="preview-page-break">Page Break</div>
-                    }
-                    <HeaderBar parent={this.props.parent} editModeOn={this.props.editModeOn} data={this.props.data}
-                               onDestroy={this.props._onDestroy} onEdit={this.props.onEdit}
-                               static={this.props.data.static}
-                               required={this.props.data.required}/>
-                </div>
-                }
+            <div className={baseClasses} id={"div_form_item_"+this.props.data.field_name}>
+                <HeaderBarPanel {...this.props} />
 
                 <InlineLayout inline={this.props.data.inline}  compWidth={this.props.data.compWidth}
+                              labelWidth={this.props.data.labelWidth} inputWidth={this.props.data.inputWidth}
                               label={ <label className={(!this.props.data.inline ? "form-label" : "")+isRequired(this.props)}  style={this.props.data.inline ? {verticalAlign: 'top'} : {}}>
                     <span dangerouslySetInnerHTML={{__html: myxss.process(this.props.data.label)}}/>
                 </label>} >
                     <div style={this.props.data.inline ? {display: 'inline-block',textAlign:'left'} : {}}>
-                        {this.props.data.options.map((option) => {
-                            let this_key = 'preview_' + option.key;
+                        {this.props.options && this.props.options.map((option,index) => {
                             let props = {};
                             props.name = self.props.data.field_name;
-
                             props.type = "radio"
                             props.value = option.value;
-                            if (self.props.mutable) {
-                                props.defaultChecked = (self.props.defaultValue !== undefined && self.props.defaultValue.indexOf(option.value) > -1) ? true : false;
+                            props.disabled=false;
+                            if (self.props.read_only) {
+                                props.disabled =true;
                             }
+                            let this_key = 'preview_' + props.name+index;
                             return (
                                 <label className={classNames} key={this_key} style={{whiteSpace:'nowrap'}}>
-                                    <input ref={c => {
-                                        if (c && self.props.mutable) {
-                                            self.options[`child_ref_${option.key}`] = c;
-                                        }
-                                    } } {...props} onClick={() => {
+                                    <input {...props}  checked={this.state.value === option.value } onClick={() => {
+                                        this.onChange(option.value)
                                         if (this.props.data.supportJS && this.props.data.hasOwnProperty('onClickStr')
                                             && !CommonUtil.isEmpty(this.props.data.onClickStr)) {
                                             eval(this.props.data.onClickStr)
                                         }
-                                    }} onChange={(e) => {
-                                        if (this.props.data.supportJS && this.props.data.hasOwnProperty('onChangeStr')
-                                            && !CommonUtil.isEmpty(this.props.data.onChangeStr)) {
-                                            let target = e && e.target ? e.target : e;
-                                            let name = target.name;
-                                            let value = target.value;
-                                            let onChangeStr = this.props.data.onChangeStr;
-                                            onChangeStr = onChangeStr.replace(/'name'/g, name);
-                                            onChangeStr = onChangeStr.replace(/'value'/g, value);
-                                            eval(onChangeStr)
+                                    }} onBlur={() => {
+                                        if (this.props.data.supportJS && this.props.data.hasOwnProperty('onBlurStr')
+                                            && !CommonUtil.isEmpty(this.props.data.onBlurStr)) {
+                                            eval(this.props.data.onBlurStr)
+                                        }
+                                    }}/> {option.label}
+                                </label>
+                            )
+                        })}
+                        {this.props.data.options && this.props.data.options.map((option) => {
+                            let this_key = 'preview_' + option.key;
+                            let props = {};
+                            props.name = self.props.data.field_name;
+                            props.type = "radio"
+                            props.value = option.value;
+                            props.disabled=false;
+                            if (self.props.read_only) {
+                                props.disabled = true;
+                            }
+                            return (
+                                <label className={classNames} key={this_key} style={{whiteSpace:'nowrap'}}>
+                                    <input {...props}  checked={this.state.value === option.value } onClick={() => {
+                                        this.onChange(option.value)
+                                        if (this.props.data.supportJS && this.props.data.hasOwnProperty('onClickStr')
+                                            && !CommonUtil.isEmpty(this.props.data.onClickStr)) {
+                                            eval(this.props.data.onClickStr)
                                         }
                                     }} onBlur={() => {
                                         if (this.props.data.supportJS && this.props.data.hasOwnProperty('onBlurStr')
@@ -964,16 +859,10 @@ export class Image extends React.Component {
     // mixins: [SortableItemMixin],
     render() {
         var style = (this.props.data.center) ? {textAlign: 'center'} : {};
-
         let baseClasses = getElementsClass(this.props.data);
-
         return (
             <div className={baseClasses} style={style}>
-                { !this.props.mutable &&
-                <HeaderBar parent={this.props.parent} editModeOn={this.props.editModeOn} data={this.props.data}
-                           onDestroy={this.props._onDestroy} onEdit={this.props.onEdit}
-                           required={this.props.data.required}/>
-                }
+                <HeaderBarPanel {...this.props} />
                 { this.props.data.src &&
                 <img src={this.props.data.src} width={this.props.data.width} height={this.props.data.height} alt="" />
                 }
@@ -986,39 +875,21 @@ export class Image extends React.Component {
 }
 
 export class Rating extends React.Component {
-    constructor(props) {
-        super(props);
-        this.inputField = "child_ref_" + this.props.data.field_name;//React.createRef();
-    }
-
     render() {
         let props = {};
         props.name = this.props.data.field_name;
         props.ratingAmount = 5;
+        props.rating = (this.props.value !== undefined && this.props.value.length) ? parseFloat(this.props.value, 10) : 0;
 
-        if (this.props.mutable) {
-            props.rating = (this.props.defaultValue !== undefined && this.props.defaultValue.length) ? parseFloat(this.props.defaultValue, 10) : 0;
-            props.editing = true;
-            props.ref = this.inputField;
-        }
 
         let baseClasses = getElementsClass(this.props.data);
 
         return (
             <div className={baseClasses}>
-                { !this.props.mutable &&
-                <div>
-                    { this.props.data.pageBreakBefore &&
-                    <div className="preview-page-break">Page Break</div>
-                    }
-                    <HeaderBar parent={this.props.parent} editModeOn={this.props.editModeOn} data={this.props.data}
-                               onDestroy={this.props._onDestroy} onEdit={this.props.onEdit}
-                               static={this.props.data.static}
-                               required={this.props.data.required}/>
-                </div>
-                }
+                <HeaderBarPanel {...this.props} />
 
                 <InlineLayout inline={this.props.data.inline}  compWidth={this.props.data.compWidth}
+                              labelWidth={this.props.data.labelWidth} inputWidth={this.props.data.inputWidth}
                               label={ <label className={(!this.props.data.inline ? "form-label" : "")+isRequired(this.props)} >
                     <span dangerouslySetInnerHTML={{__html: myxss.process(this.props.data.label)}}/>
                 </label>} >
@@ -1038,20 +909,11 @@ export class HyperLink extends React.Component {
 
         return (
             <div className={baseClasses}>
-                { !this.props.mutable &&
-                <div>
-                    { this.props.data.pageBreakBefore &&
-                    <div className="preview-page-break">Page Break</div>
-                    }
-                    <HeaderBar parent={this.props.parent} editModeOn={this.props.editModeOn} data={this.props.data}
-                               onDestroy={this.props._onDestroy} onEdit={this.props.onEdit}
-                               static={this.props.data.static}
-                               required={this.props.data.required}/>
-                </div>
-                }
+                <HeaderBarPanel {...this.props} />
                 <div className="form-group">
                     <a target="_blank" href={this.props.data.href}>
-                        <span style={{color:'blue',textDecoration:'underline',cursor:'hand'}} dangerouslySetInnerHTML={{__html: myxss.process(this.props.data.content)}}/>
+                        <span style={{color:'blue',textDecoration:'underline',cursor:'hand'}}
+                            dangerouslySetInnerHTML={{__html: myxss.process(this.props.data.content)}}/>
                     </a>
                 </div>
             </div>
@@ -1066,20 +928,11 @@ export class Download extends React.Component {
 
         return (
             <div className={baseClasses}>
-                { !this.props.mutable &&
-                <div>
-                    { this.props.data.pageBreakBefore &&
-                    <div className="preview-page-break">Page Break</div>
-                    }
-                    <HeaderBar parent={this.props.parent} editModeOn={this.props.editModeOn} data={this.props.data}
-                               onDestroy={this.props._onDestroy} onEdit={this.props.onEdit}
-                               static={this.props.data.static}
-                               required={this.props.data.required}/>
-                </div>
-                }
+                <HeaderBarPanel {...this.props} />
                 <div className="form-group">
                     <a href={this.props.data.file_path}>
-                        <span style={{color:'blue',cursor:'hand'}} dangerouslySetInnerHTML={{__html: myxss.process(this.props.data.content)}}/>
+                        <span style={{color:'blue',cursor:'hand'}}
+                            dangerouslySetInnerHTML={{__html: myxss.process(this.props.data.content)}}/>
                     </a>
                 </div>
             </div>
@@ -1087,30 +940,125 @@ export class Download extends React.Component {
     }
 }
 
+export class DayMonYearPicker extends React.Component {
+    constructor(props) {
+        super(props);
+        let value = props.value;
+        let day ="", month ="", year ="";
+        if(!CommonUtil.isEmpty(value)){
+            let arr = value.split('/');
+            if(arr.length === 3){
+                day = arr[0];
+                month = arr[1];
+                year = arr[2];
+            }
+        }
+        this.state={
+            day,
+            month,
+            year
+        }
+    }
+
+    handleFieldChange = (event, fieldName) => {
+        let target = event.target ? event.target : event;
+        let name = fieldName ? fieldName : target.name;
+        let value = target.value;
+        let newState = update(this.state, {
+            [name]: {$set: value}
+        });
+
+        this.setState(newState,()=>{
+            let newValue = !CommonUtil.isEmpty(this.state.month)&&!CommonUtil.isEmpty(this.state.day) &&!CommonUtil.isEmpty(this.state.year) ? (this.state.month+'/'+this.state.day+'/'+this.state.year) : '';
+            if(!CommonUtil.isEmpty(newValue)){
+                let name = this.props.data.field_name;
+                this.props.handleChange({name,value:newValue},this.props.data);
+            }
+        })
+    }
+
+    getOptions = (begin, end) =>{
+        let options = [];
+        for(let i=begin; i<=end; i++){
+            options.push({value:i,label:i});
+        }
+        return options;
+    }
+
+    render() {
+        let minYear = this.props.data.minYear?parseInt(this.props.data.minYear,10):(new Date().getYear()+1900-80);
+        let maxYear = this.props.data.maxYear?parseInt(this.props.data.maxYear,10):(new Date().getYear()+1900);
+        if( maxYear < minYear ){
+            maxYear = new Date().getYear()+1900;
+        }
+        if(maxYear < minYear){
+            minYear = new Date().getYear()+1900-80;
+        }
+        let baseClasses = getElementsClass(this.props.data);
+        let readOnly=this.props.data.readOnly || this.props.read_only?true:false;
+        let value = !CommonUtil.isEmpty(this.state.month)&&!CommonUtil.isEmpty(this.state.day)&&!CommonUtil.isEmpty(this.state.year)?
+                (this.state.month+'/'+this.state.day+'/'+this.state.year):'';
+        return (
+            <div className={baseClasses} id={"div_form_item_"+this.props.data.field_name}>
+                <HeaderBarPanel {...this.props} />
+                <InlineLayout inline={this.props.data.inline} compWidth={this.props.data.compWidth}
+                              labelWidth={this.props.data.labelWidth} inputWidth={this.props.data.inputWidth}
+                              label={ <label className={(!this.props.data.inline ? "form-label" : "")+isRequired(this.props)}  style={this.props.data.inline ? {verticalAlign: 'top'} : {}}>
+                                  <span dangerouslySetInnerHTML={{__html: myxss.process(this.props.data.label)}}/>
+                              </label>} >
+                    <div style={this.props.data.inline ? {display: 'inline-block',textAlign:'left',width:"100%"} : {}}>
+                        <input type="hidden" name={this.props.data.field_name} value={value}/>
+                        <Col xs={4} style={{paddingLeft:"0px"}}><SelectWidget options={this.getOptions(1, 31)}
+                                                  value={this.state.day}
+                                                  onChange={(event)=>{this.handleFieldChange(event, "day");}}
+                                                  clearable={false}
+                                                  disabled={readOnly}
+                                                  placeholder="Day"/></Col>
+                        <Col xs={4} style={{paddingLeft:"0px"}}><SelectWidget options={this.getOptions(1, 12)}
+                                                  value={this.state.month}
+                                                  onChange={(event)=>{this.handleFieldChange(event, "month");}}
+                                                  clearable={false}
+                                                  disabled={readOnly}
+                                                  placeholder="Month"/></Col>
+                        <Col xs={4} style={{paddingLeft:"0px",paddingRight:"0px"}}><SelectWidget options={this.getOptions(minYear, maxYear)}
+                                                  value={this.state.year}
+                                                  onChange={(event)=>{this.handleFieldChange(event, "year");}}
+                                                  clearable={false}
+                                                  disabled={readOnly}
+                                                  placeholder="Year"/></Col>
+                    </div>
+                </InlineLayout>
+            </div>
+        );
+    }
+}
 
 export class UploadFile extends React.Component {
+    handleFieldChange = (data) => {
+        let value="";
+        if(data===null || data==="null" || data.length<=0 || data===[])
+        {
+            value="";
+        }
+        else
+        {
+            value=data.length;
+        }
+        let name = this.props.data.field_name;
+        this.props.handleChange({name,value},this.props.data);
+    }
     render() {
         let baseClasses = getElementsClass(this.props.data);
-
         return (
-            <div className={baseClasses}>
-                { !this.props.mutable &&
-                <div>
-                    { this.props.data.pageBreakBefore &&
-                    <div className="preview-page-break">Page Break</div>
-                    }
-                    <HeaderBar parent={this.props.parent} editModeOn={this.props.editModeOn} data={this.props.data}
-                               onDestroy={this.props._onDestroy} onEdit={this.props.onEdit}
-                               static={this.props.data.static}
-                               required={this.props.data.required}/>
-                </div>
-                }
+            <div className={baseClasses} id={"div_form_item_"+this.props.data.field_name}>
+                <HeaderBarPanel {...this.props} />
                 <InlineLayout inline={this.props.data.inline} compWidth={this.props.data.compWidth}
+                              labelWidth={this.props.data.labelWidth} inputWidth={this.props.data.inputWidth}
                               label={ <label className={(!this.props.data.inline ? "form-label" : "")+isRequired(this.props)} >
                     <span dangerouslySetInnerHTML={{__html: myxss.process(this.props.data.label)}}/>
                 </label>} >
                     <div style={{textAlign:'left'}}>
-                        <FineUploader {...this.props } {...this.props.data } isRequiredClassName={isRequired(this.props)} />
+                        <FineUploader {...this.props } {...this.props.data } addFileText={this.props.data.addFileText} onCloseCallback={(data)=>{this.handleFieldChange(data)}} isRequiredClassName={isRequired(this.props)} />
                     </div>
                 </InlineLayout>
             </div>
@@ -1152,18 +1100,9 @@ export class Camera extends React.Component {
 
         return (
             <div className={baseClasses}>
-                { !this.props.mutable &&
-                <div>
-                    { this.props.data.pageBreakBefore &&
-                    <div className="preview-page-break">Page Break</div>
-                    }
-                    <HeaderBar parent={this.props.parent} editModeOn={this.props.editModeOn} data={this.props.data}
-                               onDestroy={this.props._onDestroy} onEdit={this.props.onEdit}
-                               static={this.props.data.static}
-                               required={this.props.data.required}/>
-                </div>
-                }
+                <HeaderBarPanel {...this.props} />
                 <InlineLayout inline={this.props.data.inline}  compWidth={this.props.data.compWidth}
+                              labelWidth={this.props.data.labelWidth} inputWidth={this.props.data.inputWidth}
                               label={ <label className={(!this.props.data.inline ? "form-label" : "")+isRequired(this.props)} >
                     <span dangerouslySetInnerHTML={{__html: myxss.process(this.props.data.label)}}/>
                 </label>} >
@@ -1208,7 +1147,7 @@ export class Range extends React.Component {
         props.step = this.props.step !== undefined ? parseInt(this.props.step, 10) : parseInt(this.props.data.step, 10);
         ;
 
-        props.defaultValue = this.props.defaultValue !== undefined ? parseInt(this.props.defaultValue, 10) : parseInt(this.props.data.default_value, 10);
+        props.defaultValue = this.props.defaultValue !== undefined ? parseInt(this.props.defaultValue, 10) : parseInt(this.props.data.defaultValue, 10);
 
         if (this.props.mutable) {
             props.ref = this.inputField;
@@ -1241,18 +1180,9 @@ export class Range extends React.Component {
 
         return (
             <div className={baseClasses}>
-                { !this.props.mutable &&
-                <div>
-                    { this.props.data.pageBreakBefore &&
-                    <div className="preview-page-break">Page Break</div>
-                    }
-                    <HeaderBar parent={this.props.parent} editModeOn={this.props.editModeOn} data={this.props.data}
-                               onDestroy={this.props._onDestroy} onEdit={this.props.onEdit}
-                               static={this.props.data.static}
-                               required={this.props.data.required}/>
-                </div>
-                }
+                <HeaderBarPanel {...this.props} />
                 <InlineLayout inline={this.props.data.inline}  compWidth={this.props.data.compWidth}
+                              labelWidth={this.props.data.labelWidth} inputWidth={this.props.data.inputWidth}
                               label={ <label className={(!this.props.data.inline ? "form-label" : "")+isRequired(this.props)}  style={this.props.data.inline ? {verticalAlign: 'top'} : {}}>
                     <span dangerouslySetInnerHTML={{__html: myxss.process(this.props.data.label)}}/>
                 </label>} >
@@ -1282,6 +1212,8 @@ export class Range extends React.Component {
     }
 }
 
+
+
 let FormElements = {};
 FormElements.Header = Header;
 FormElements.Paragraph = Paragraph;
@@ -1303,5 +1235,6 @@ FormElements.Camera = Camera;
 FormElements.Image = Image;
 FormElements.Rating = Rating;
 FormElements.Range = Range;
+FormElements.DayMonYearPicker = DayMonYearPicker;
 
 export default FormElements;

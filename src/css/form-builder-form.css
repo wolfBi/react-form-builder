@@ -24,10 +24,15 @@ input[type="date"]:before {
 .react-form-builder-form {
     position: relative;
     max-height: 700px;
-    min-height: 300px;
-    overflow: auto;
+    min-height: 100px;
+    margin-bottom: 15px;
+    text-align: initial;
 }
-
+.react-form-builder-form .rfb-item {
+    padding-right: 5px !important;
+    padding-left: 5px !important;
+    margin-bottom: 10px !important;
+}
 .react-form-builder-form .rfb-item.alwaysbreak {
     page-break-before: always;
 }
@@ -77,15 +82,23 @@ input[type="date"]:before {
 .react-form-builder-form .rfb-item .form-group input[type='date'] {
     height: 42px;
 }
-.react-form-builder-form .rfb-item .form-group input[type='date'] {
-    width: 100%;
+.react-form-builder-form .rfb-item .form-group div input {
+    width: 100% !important;
+    border-radius:0px !important;
 }
-
+.react-form-builder-form .rfb-item .form-group div input[type='checkbox'] {
+    width: auto !important;
+}
+.react-form-builder-form .rfb-item .form-group div input[type='radio'] {
+    width: auto !important;
+}
 .react-form-builder-form .rfb-item .form-group .m-signature-pad {
     position: relative;
     width: auto;
 }
-
+.react-form-builder-form .rfb-item .form-group div .Select {
+    width: 100% !important;
+}
 .react-form-builder-form .rfb-item .form-group .react-star-rating {
     display: block;
 }
@@ -99,4 +112,13 @@ input[type="date"]:before {
     margin-left: 5px;
 }
 
+.react-form-builder-form .rfb-item .form-group .react-datepicker-wrapper .react-datepicker__input-container {
+    display: flex !important;
+}
+.react-form-builder-form .rfb-item .form-group .react-datepicker-wrapper {
+    display: block !important;
+}
+.react-form-builder-form .form-item-hidden {
+    display: none !important;
+}
 /*# sourceMappingURL=form-builder-form.css.css.map */

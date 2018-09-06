@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
 import TimePicker from 'rc-time-picker';
-import * as CommonUtil from '../../utils/CommonUtil';
+import * as CommonUtil from '../../../../utils/CommonUtil';
 import moment from 'moment';
-import '../../css/timePicker.css';
+import '../../../../components/timePicker.css';
 
 const format = 'hh:mm a';
 
@@ -45,6 +45,7 @@ class HourMinSelect extends Component {
                         showSecond={false}
                         onChange={this.fieldChange}
                         format={format}
+                        style={{width:'100%'}}
                         defaultOpenValue={moment()}
                         disabledMinutes={this.disabledMinutes}
                         hideDisabledOptions={this.state.hideDisabledOptions}

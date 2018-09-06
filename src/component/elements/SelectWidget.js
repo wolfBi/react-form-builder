@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
 import Select, {Creatable} from 'react-select';
 import PropTypes from "prop-types";
-import '../../css/react-select.css';
+import '../../../../components/react-select.css';
+import arrowIcon from '../../../../images/arrow.png';
 
 class SelectWidget extends Component {
     constructor(props) {
@@ -22,18 +23,19 @@ class SelectWidget extends Component {
 
     arrowRenderer = () => {
         return (<div style={{height: '30px', width: '29px', 'paddingRight': '0'}}>
+            <img src={arrowIcon} alt=""/>
         </div>);
     }
     onChangeHandle = (e) => {
         let target = e;
-        let {onChange, name} = this.props;
+        let {onChange} = this.props;
         if (target === null) {
             if (onChange) {
-                onChange({name, value: "", label: ""});
+                onChange({value: "", label: ""});
             }
         } else {
             if (onChange) {
-                onChange(target);
+                onChange({...target});
             }
         }
         this.setState({
@@ -44,7 +46,7 @@ class SelectWidget extends Component {
     render() {
         let {name, styles, multi, creatable, clearable, placeholder, disabled} = this.props;
         let {value, options} = this.state;
-        return (  <div>
+        return (  <div style={{width:'100%'}}>
             {creatable ?<Creatable name={name} style={styles} options={options} disabled={disabled} multi={multi}
                            clearable={clearable} value={value} onChange={this.onChangeHandle}
                            placeholder={placeholder} arrowRenderer={this.arrowRenderer}/>
@@ -52,7 +54,7 @@ class SelectWidget extends Component {
                         clearable={clearable} value={value} onChange={this.onChangeHandle}
                         placeholder={placeholder} arrowRenderer={this.arrowRenderer}/>
              }
-            <input type="hidden" name={name} value={this.state.value}/>
+            { name ? <input type="hidden" name={name} value={this.state.value}/> : false }
          </div>
     );
     }

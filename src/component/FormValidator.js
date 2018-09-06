@@ -3,8 +3,9 @@
  */
 
 import React from 'react';
-import FA from 'react-fontawesome'
 import xss from 'xss';
+import MessagePopup from '../../../MessagePopup.js';
+
 
 let myxss = new xss.FilterXSS({
     whiteList: {
@@ -30,47 +31,30 @@ export default class FormValidator extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            errors: []
+            errors: [],
+            showTips:false
         }
     }
 
     componentWillMount() {
         this.subscription = this.props.emitter.addListener('formValidation', errors => {
-            this.setState({errors: errors});
+            this.setState({errors: errors,showTips: errors.length>0?true:false});
         });
     }
-
     componentWillUnmount() {
         this.subscription.remove();
     }
 
-    dismissModal(e) {
-        e.preventDefault();
-        this.setState({errors: []});
+    dismissModal=()=> {
+        this.setState({errors: [],showTips:false});
     }
 
     render() {
         let errors = this.state.errors.map((error, index) => {
             return <li key={'error_' + index} style={{whiteSpace:'nowrap'}} dangerouslySetInnerHTML={{__html: myxss.process(error)}}/>
         })
-
         return (
-            <div>
-                { this.state.errors.length > 0 &&
-                <div className="alert alert-danger validation-error">
-                    <div className="clearfix">
-                        <FA name="exclamation-triangle" className="pull-left"/>
-                        <ul className="pull-left">
-                            {errors}
-                        </ul>
-                    </div>
-                    <div className="clearfix">
-                        <a className="pull-right btn btn-default btn-sm btn-danger"
-                           onClick={this.dismissModal.bind(this)}>Dismiss</a>
-                    </div>
-                </div>
-                }
-            </div>
+            <MessagePopup show={this.state.showTips} body={errors} closeErrorMsg={this.dismissModal}/>
         )
     }
 }
